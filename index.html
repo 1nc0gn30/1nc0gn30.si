@@ -4,85 +4,401 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>1nc0gn30 · hooded builder @ nullai</title>
-<meta name="description" content="1nc0gn30 builds free tools at nullai: zoth studio (71 tools), zothos (43 workstations), hermes-zoth. everything free, tips optional.">
+<meta name="description" content="1nc0gn30 builds 100% free, zero-telemetry tools at NullAI: Zoth Studio (72 tools: 53 browser + 19 CLI), ZothOS (43 workstations · 23 loopback daemons), and hermes-zoth v1.1.4. Interactive Unicode U+2800 Braille & Ordered Bayer 4x4 Dither lab.">
 <link rel="canonical" href="https://1nc0gn30.si/">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://1nc0gn30.si/">
 <meta property="og:title" content="1nc0gn30 · hooded builder @ nullai">
-<meta property="og:description" content="zoth studio · zothos · hermes-zoth · nullai. everything free.">
+<meta property="og:description" content="zoth studio (72 tools: 53 browser + 19 cli) · zothos (43 workstations · 23 loopback daemons) · hermes-zoth v1.1.4 · nullai. everything free.">
 <meta property="og:image" content="https://1nc0gn30.si/assets/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="1nc0gn30 character board: a faceless hooded pixel-art hacker in gold on black">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@1nc0gn30">
+<meta name="twitter:creator" content="@1nc0gn30">
+<meta name="twitter:title" content="1nc0gn30 · hooded builder @ nullai">
+<meta name="twitter:description" content="zoth studio (72 tools) · zothos (43 workstations) · hermes-zoth · nullai. everything free, tips optional.">
 <meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="assets/avatar.jpg">
 <link rel="stylesheet" href="style.css">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"1nc0gn30","url":"https://1nc0gn30.si/","affiliation":{"@type":"Organization","name":"NullAI","url":"https://nullai.tech"},"sameAs":["https://x.com/1nc0gn30","https://github.com/1nc0gn30","https://github.com/NullAITech"]}</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://1nc0gn30.si/#person",
+      "name": "1nc0gn30",
+      "alternateName": "@1nc0gn30",
+      "url": "https://1nc0gn30.si/",
+      "image": "https://1nc0gn30.si/assets/og.jpg",
+      "jobTitle": "Hooded Builder",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "NullAI",
+        "url": "https://nullai.tech"
+      },
+      "sameAs": [
+        "https://x.com/1nc0gn30",
+        "https://github.com/1nc0gn30",
+        "https://github.com/NullAITech"
+      ]
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://1nc0gn30.si/#webapp",
+      "name": "1nc0gn30 · Unicode Braille & Bayer Dither Character Lab",
+      "url": "https://1nc0gn30.si/",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser, Linux, macOS, Windows",
+      "creator": { "@id": "https://1nc0gn30.si/#person" },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://1nc0gn30.si/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does 1nc0gn30 build at NullAI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "1nc0gn30 builds 100% free, zero-telemetry developer and AI systems under NullAI, including Zoth Studio (72 tools: 53 in-browser tools and 19 CLI binaries), ZothOS (43 sovereign workstations and 23 loopback daemons), ZothOS-Lite, and the hermes-zoth community plugin."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the 1nc0gn30.si Braille Lattice and Ordered Bayer Dither engine work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Everything on 1nc0gn30.si is rendered in pure vanilla HTML, CSS, and JavaScript with zero external dependencies. The 3D perspective lattice and 9-pose character board use 4x4 Ordered Bayer dithering packed into Unicode U+2800 2x4 sub-pixel Braille cells at 30fps directly in your browser."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are Zoth Studio and ZothOS free and private?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every tool across NullAI, Zoth Studio, and ZothOS is 100% free and unlocked by default with no accounts, no paywalls, and no telemetry. Optional tips are supported via Buy Us a Coffee (Stripe) or Solana."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">skip to content</a>
 <div class="crt" aria-hidden="true"></div>
 <header class="bar">
   <a href="#top" class="logo glitch" data-t="1nc0gn30">1nc0gn30</a>
-  <nav aria-label="sections"><a href="#build">build</a><a href="#links">links</a><button id="termBtn" type="button" aria-label="open terminal">&gt;_</button></nav>
+  <nav aria-label="sections">
+    <a href="#rig">rig</a>
+    <a href="#build">build</a>
+    <a href="#dispatches">dispatches</a>
+    <a href="#links">links</a>
+    <button id="termBtn" type="button" aria-label="open terminal">&gt;_</button>
+  </nav>
 </header>
+
 <main id="main">
 <section id="top" class="hero">
   <pre id="lattice" class="lattice" aria-hidden="true"></pre>
   <div class="hero-copy">
-    <p class="kicker">⣿ hooded builder @ nullai</p>
+    <p class="kicker">⣿ hooded builder @ nullai · zero telemetry · vanilla js</p>
     <h1 class="glitch" data-t="1nc0gn30">1nc0gn30</h1>
     <p class="lede">i build free tools. no accounts, no telemetry. tips optional.</p>
-    <p class="cta"><a class="btn" href="https://zoth.nullai.tech">open zoth studio</a> <a class="btn ghost" href="#build">what i build ↓</a></p>
+    <div class="stat-pills" aria-label="ecosystem telemetry">
+      <span><b>72</b> tools (53 web · 19 cli)</span>
+      <span><b>43</b> zothos stations</span>
+      <span><b>23</b> loopback daemons</span>
+      <span><b>141</b> mcp tools</span>
+    </div>
+    <p class="cta">
+      <a class="btn" href="https://zoth.nullai.tech">open zoth studio</a>
+      <a class="btn ghost" href="#rig">character &amp; braille lab ↓</a>
+      <a class="btn ghost" href="#build">what i build ↓</a>
+    </p>
   </div>
-  <figure class="sprite">
-    <pre id="ghost" class="trail" aria-hidden="true"></pre>
-    <img id="spriteImg" src="assets/hero.jpg" width="231" height="344" alt="1nc0gn30: a faceless hooded figure in a long dark coat, pixel-art style">
-  </figure>
+  <div class="hero-stage">
+    <figure class="sprite" id="heroFigure">
+      <pre id="ghost" class="trail" aria-hidden="true"></pre>
+      <img id="spriteImg" src="assets/hero.jpg" width="268" height="398" alt="1nc0gn30: a faceless hooded figure in a long dark coat, pixel-art style">
+    </figure>
+    <div class="stage-bar" role="group" aria-label="hero render mode and pose controls">
+      <div class="mode-row">
+        <button type="button" class="chip active" data-mode="braille">⣿ braille u+2800</button>
+        <button type="button" class="chip" data-mode="ascii"># bayer ascii</button>
+        <button type="button" class="chip" data-mode="dither">▦ bayer 2× pixel</button>
+        <button type="button" class="chip" data-mode="pixel">▣ raw pixel</button>
+      </div>
+      <div class="pose-row">
+        <button type="button" class="chip-sm active" data-pose="hero">hero</button>
+        <button type="button" class="chip-sm" data-pose="type">type</button>
+        <button type="button" class="chip-sm" data-pose="walk">walk</button>
+        <button type="button" class="chip-sm" data-pose="dissolve">dissolve</button>
+        <button type="button" class="chip-sm" data-pose="idle">idle</button>
+        <button type="button" class="chip-sm" data-pose="front">front</button>
+        <button type="button" class="chip-sm" data-pose="three-quarter">3/4</button>
+        <button type="button" class="chip-sm" data-pose="side">side</button>
+        <button type="button" class="chip-sm" data-pose="back">back</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rig" class="rig-section">
+  <div class="sec-head">
+    <div>
+      <h2><span aria-hidden="true">⣿ </span>character board &amp; braille / bayer dither lab</h2>
+      <p class="sec-sub">9-pose pixel turnaround &amp; action rig compiled in real time into Unicode <code>U+2800</code> 2×4 sub-pixel Braille &amp; Ordered Bayer 4×4 ASCII.</p>
+    </div>
+    <div class="sec-actions">
+      <button type="button" class="btn ghost sm" id="openBoardBtn">view master board (16:9)</button>
+      <button type="button" class="btn ghost sm" id="openSpecimenBtn">view unicode specimen sheet</button>
+    </div>
+  </div>
+
+  <div class="rig-grid">
+    <div class="rig-panel">
+      <div class="panel-bar">
+        <span>01 · 9-POSE TURNAROUND &amp; ACTION SELECTOR</span>
+        <span class="palette-dots" title="Canonical 4-Tone Palette: #F2EAD6 · #F5B82E · #8A6514 · #000000">
+          <i style="background:#f2ead6"></i><i style="background:#f5b82e"></i><i style="background:#8a6514"></i><i style="background:#000;border-color:#f5b82e"></i>
+        </span>
+      </div>
+      <div class="pose-grid" id="poseGrid">
+        <button type="button" class="pose-card active" data-pose="hero">
+          <img src="assets/hero.jpg" alt="1nc0gn30 hero pose: hooded bust with hands in coat pockets" loading="lazy" width="134" height="199">
+          <span>HERO</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="type">
+          <img src="assets/type.jpg" alt="1nc0gn30 type pose: mid-stride typing on glowing gold laptop" loading="lazy" width="163" height="149">
+          <span>TYPE</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="walk">
+          <img src="assets/walk.jpg" alt="1nc0gn30 walk pose: striding forward with particle trail" loading="lazy" width="132" height="158">
+          <span>WALK</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="dissolve">
+          <img src="assets/dissolve.jpg" alt="1nc0gn30 dissolve pose: sprinting into gold voxel stream" loading="lazy" width="247" height="148">
+          <span>DISSOLVE</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="idle">
+          <img src="assets/idle.jpg" alt="1nc0gn30 idle pose: close-up hooded portrait" loading="lazy" width="144" height="128">
+          <span>IDLE</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="front">
+          <img src="assets/front.jpg" alt="1nc0gn30 front turnaround pose" loading="lazy" width="142" height="373">
+          <span>FRONT</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="three-quarter">
+          <img src="assets/three-quarter.jpg" alt="1nc0gn30 three-quarter turnaround pose" loading="lazy" width="135" height="373">
+          <span>3/4</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="side">
+          <img src="assets/side.jpg" alt="1nc0gn30 profile side turnaround pose" loading="lazy" width="122" height="373">
+          <span>SIDE</span>
+        </button>
+        <button type="button" class="pose-card" data-pose="back">
+          <img src="assets/back.jpg" alt="1nc0gn30 rear turnaround pose" loading="lazy" width="135" height="373">
+          <span>BACK</span>
+        </button>
+      </div>
+      <div class="lab-controls">
+        <label class="ctrl">
+          <span>bayer dither gain <b id="gainVal">3.0×</b></span>
+          <input type="range" id="gainRange" min="1.2" max="5.0" step="0.2" value="3.0">
+        </label>
+        <label class="ctrl">
+          <span>columns <b id="colsVal">42</b></span>
+          <input type="range" id="colsRange" min="28" max="64" step="2" value="42">
+        </label>
+      </div>
+    </div>
+
+    <div class="rig-panel specimen-panel">
+      <div class="panel-bar">
+        <span>02 · LIVE SPECIMEN OUTPUT (<span id="activePoseLabel">HERO</span>)</span>
+        <div class="copy-btns">
+          <button type="button" class="chip-sm" id="copyBrailleBtn">copy u+2800 braille</button>
+          <button type="button" class="chip-sm" id="copyAsciiBtn">copy bayer ascii</button>
+        </div>
+      </div>
+      <div class="specimen-tabs" role="tablist" aria-label="specimen format">
+        <button type="button" class="tab active" data-spec="split" role="tab" aria-selected="true">split (braille + ascii)</button>
+        <button type="button" class="tab" data-spec="braille" role="tab" aria-selected="false">u+2800 braille only</button>
+        <button type="button" class="tab" data-spec="ascii" role="tab" aria-selected="false">bayer 4×4 ascii only</button>
+        <button type="button" class="tab" data-spec="dither" role="tab" aria-selected="false">2× bayer pixel dither</button>
+      </div>
+      <div class="specimen-stage" id="specimenStage">
+        <div class="spec-box" id="specBrailleBox">
+          <div class="spec-tag">U+2800 2×4 SUB-PIXEL BRAILLE</div>
+          <pre id="labBrailleOut" class="spec-pre" aria-label="Unicode Braille output"></pre>
+        </div>
+        <div class="spec-box" id="specAsciiBox">
+          <div class="spec-tag">ORDERED BAYER 4×4 ASCII</div>
+          <pre id="labAsciiOut" class="spec-pre ascii" aria-label="Ordered Bayer ASCII output"></pre>
+        </div>
+        <div class="spec-box hidden" id="specDitherBox">
+          <div class="spec-tag">ORDERED BAYER 4×4 PIXEL SPRITE (4-TONE)</div>
+          <img id="labDitherImg" src="assets/dither-hero.png" alt="Ordered Bayer 4x4 dithered sprite preview" width="268" height="398">
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="build" class="build">
   <h2><span aria-hidden="true">⣀⣤⣶⣿ </span>what i build</h2>
   <ul class="cards">
-    <li class="card mosh"><h3>zoth studio</h3><p class="n">71 tools</p><p>54 run in the browser, 17 on the cli. free.</p><a href="https://zoth.nullai.tech">zoth.nullai.tech →</a></li>
-    <li class="card mosh"><h3>zothos</h3><p class="n">43 workstations</p><p>23 loopback daemons. local first, nothing leaves the box.</p><a href="https://zothos.nullai.tech">zothos.nullai.tech →</a></li>
-    <li class="card mosh"><h3>hermes-zoth</h3><p class="n">community plugin</p><p>zoth tools inside hermes agent. independent, not affiliated with nous research.</p><a href="https://github.com/1nc0gn30/hermes-zoth">github →</a></li>
-    <li class="card mosh"><h3>nullai</h3><p class="n">the umbrella</p><p>where it all ships. everything free.</p><a href="https://nullai.tech">nullai.tech →</a></li>
-    <!-- coming soon (repos private for now): skillcheck, ctxmap, agent-skills-atlas
-    <li class="card mosh"><h3>skillcheck</h3><p>lint agent skill folders before you share them.</p><a href="https://github.com/NullAITech/skillcheck">github →</a></li>
-    <li class="card mosh"><h3>ctxmap</h3><p>see which files eat an agent's context window.</p><a href="https://github.com/NullAITech/ctxmap">github →</a></li>
-    <li class="card mosh"><h3>agent-skills-atlas</h3><p>uncommon mit-licensed agent skills.</p><a href="https://github.com/NullAITech/agent-skills-atlas">github →</a></li>
-    -->
+    <li class="card mosh">
+      <div class="card-top"><h3>zoth studio</h3><span class="badge">v2.2.0</span></div>
+      <p class="n">72 tools</p>
+      <p>53 run in the browser, 19 on the cli. zero paywalls, zero signups, free forever.</p>
+      <a href="https://zoth.nullai.tech">zoth.nullai.tech →</a>
+    </li>
+    <li class="card mosh">
+      <div class="card-top"><h3>zothos</h3><span class="badge">v3.4.0</span></div>
+      <p class="n">43 workstations</p>
+      <p>23 loopback daemons + 141 mcp tools across 11 servers. local first, nothing leaves the box.</p>
+      <a href="https://zothos.nullai.tech">zothos.nullai.tech →</a>
+    </li>
+    <li class="card mosh">
+      <div class="card-top"><h3>hermes-zoth</h3><span class="badge">v1.1.4</span></div>
+      <p class="n">community plugin</p>
+      <p>zoth tools inside hermes agent. independent, not affiliated with nous research.</p>
+      <a href="https://github.com/1nc0gn30/hermes-zoth">github →</a>
+    </li>
+    <li class="card mosh">
+      <div class="card-top"><h3>nullai</h3><span class="badge">umbrella</span></div>
+      <p class="n">the foundry</p>
+      <p>where zoth studio, zothos, zothos-lite, and open research ship. everything free.</p>
+      <a href="https://nullai.tech">nullai.tech →</a>
+    </li>
   </ul>
-  <div class="strip" aria-label="recent posts">
-    <img src="assets/post-01.jpg" alt="1nc0gn30 intro still" loading="lazy" width="512" height="512">
-    <img src="assets/post-02.jpg" alt="zoth studio still" loading="lazy" width="512" height="512">
-    <img src="assets/post-03.jpg" alt="zothos still" loading="lazy" width="512" height="512">
-    <img src="assets/post-07.jpg" alt="build in public still" loading="lazy" width="512" height="512">
+
+  <div class="explorer" aria-label="shipped index explorer">
+    <div class="explorer-head">
+      <div class="filter-pills" role="group" aria-label="filter shipped systems">
+        <button type="button" class="chip active" data-cat="all">all shipped (115)</button>
+        <button type="button" class="chip" data-cat="web">zoth studio web (53)</button>
+        <button type="button" class="chip" data-cat="cli">zoth studio cli (19)</button>
+        <button type="button" class="chip" data-cat="os">zothos stations (43)</button>
+      </div>
+      <input type="search" id="toolSearch" class="search-in" placeholder="filter 72 tools + 43 stations (e.g.braille, kernel, rag, synth)..." aria-label="search tools and workstations">
+    </div>
+    <div class="index-grid" id="indexGrid" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="dispatches" class="dispatches">
+  <h2><span aria-hidden="true">▦ </span>field dispatches &amp; specimen sheets</h2>
+  <div class="strip" aria-label="recent dispatches">
+    <figure class="post-card" data-zoom="assets/post-01.jpg" tabindex="0" role="button" aria-label="zoom 1nc0gn30 online dispatch">
+      <img src="assets/post-01.jpg" alt="1nc0gn30 dispatch 01: hooded pixel-art builder surrounded by gold particles with online status" loading="lazy" width="512" height="512">
+      <figcaption><span>01 · ⣿ online</span><span>hooded builder @ nullai</span></figcaption>
+    </figure>
+    <figure class="post-card" data-zoom="assets/post-02.jpg" tabindex="0" role="button" aria-label="zoom 72 tools dispatch">
+      <img src="assets/post-02.jpg" alt="1nc0gn30 dispatch 02: 72 tools (53 browser + 19 cli, free) with hooded builder typing on glowing laptop" loading="lazy" width="512" height="512">
+      <figcaption><span>02 · 72 tools</span><span>53 browser + 19 cli · free</span></figcaption>
+    </figure>
+    <figure class="post-card" data-zoom="assets/post-03.jpg" tabindex="0" role="button" aria-label="zoom zothos 43 workstations dispatch">
+      <img src="assets/post-03.jpg" alt="1nc0gn30 dispatch 03: ZothOS 43 workstations and 23 loopback daemons" loading="lazy" width="512" height="512">
+      <figcaption><span>03 · zothos</span><span>43 workstations · 23 daemons</span></figcaption>
+    </figure>
+    <figure class="post-card" data-zoom="assets/post-07.jpg" tabindex="0" role="button" aria-label="zoom changelog dispatch">
+      <img src="assets/post-07.jpg" alt="1nc0gn30 dispatch 04: build log showing fixed ref pinning, shipped hermes-zoth 1.1.4, next test every tool" loading="lazy" width="512" height="512">
+      <figcaption><span>04 · changelog</span><span>hermes-zoth 1.1.4 · ref pinning</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="banner-strip" aria-label="high-res specimen sheets">
+    <figure class="post-card wide" data-zoom="assets/unicode-ascii-dither-sheet.png" tabindex="0" role="button" aria-label="zoom master unicode braille and bayer dither specimen sheet">
+      <img src="assets/unicode-ascii-dither-sheet.png" alt="1nc0gn30 master character board and Unicode U+2800 Braille / Ordered Bayer Dither specimen sheet" loading="lazy" width="960" height="540">
+      <figcaption><span>MASTER SPECIMEN SHEET (1920×1080)</span><span>click to inspect full resolution →</span></figcaption>
+    </figure>
+    <figure class="post-card wide" data-zoom="assets/1nc0gn30-si-hero-16x9.png" tabindex="0" role="button" aria-label="zoom 1nc0gn30 16x9 hero turnaround card">
+      <img src="assets/1nc0gn30-si-hero-16x9.png" alt="1nc0gn30 16:9 turnaround hero banner with Braille lattice and canonical stats" loading="lazy" width="960" height="540">
+      <figcaption><span>TURNAROUND &amp; LATTICE DECK (1920×1080)</span><span>click to inspect full resolution →</span></figcaption>
+    </figure>
   </div>
 </section>
 
 <section id="links" class="links">
-  <h2><span aria-hidden="true">⣿ </span>links</h2>
-  <ul>
+  <h2><span aria-hidden="true">⣿ </span>links &amp; optional tip jar</h2>
+  <ul class="link-list">
     <li><a href="https://x.com/1nc0gn30">x.com/1nc0gn30</a></li>
     <li><a href="https://github.com/1nc0gn30">github.com/1nc0gn30</a></li>
     <li><a href="https://github.com/NullAITech">github.com/NullAITech</a></li>
     <li><a href="https://nullai.tech">nullai.tech</a></li>
     <li><a href="https://zoth.nullai.tech">zoth.nullai.tech</a></li>
     <li><a href="https://zothos.nullai.tech">zothos.nullai.tech</a></li>
+    <li><a href="https://zothos-lite.nullai.tech">zothos-lite.nullai.tech</a></li>
+    <li><a href="assets/braille-character-board.txt" download>braille-character-board.txt ↓</a></li>
   </ul>
-  <p class="hint">psst: press <kbd>`</kbd> for a shell.</p>
+
+  <div class="tip-box" aria-label="optional support">
+    <div class="tip-copy">
+      <h3>☕ buy us a coffee · tips 100% optional</h3>
+      <p>every tool across nullai, zoth studio, and zothos is 100% free and unlocked by default. if a tool saved you an hour, you can toss a coffee or sol tip below.</p>
+    </div>
+    <div class="tip-actions">
+      <a class="btn" href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee (stripe)</a>
+      <button type="button" class="btn ghost" id="copySolBtn" data-sol="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK" title="Copy Solana tip address">
+        ◎ sol: <code>GG2eQbVh...dXoK</code> [copy]
+      </button>
+    </div>
+  </div>
+
+  <div class="faq-grid" aria-label="frequently asked questions">
+    <details class="faq-item" open>
+      <summary>what does 1nc0gn30 build at nullai?</summary>
+      <p>100% free, local-first developer &amp; sovereign AI systems: <b>Zoth Studio</b> (72 tools: 53 in-browser + 19 CLI binaries), <b>ZothOS</b> (43 workstations &amp; 23 loopback daemons), <b>ZothOS-Lite</b>, and <b>hermes-zoth v1.1.4</b>.</p>
+    </details>
+    <details class="faq-item">
+      <summary>how does the braille lattice &amp; bayer dither engine work?</summary>
+      <p>zero external libraries. the 3d perspective cube and 9-pose character board are sampled on an offscreen canvas, quantized with a 4×4 ordered bayer matrix, and packed into Unicode <code>U+2800</code> 2×4 sub-pixel braille cells at 30fps.</p>
+    </details>
+    <details class="faq-item">
+      <summary>are there any accounts, paywalls, or telemetry?</summary>
+      <p>never. no analytics scripts, no web font trackers, no login modals, and zero paywalls. everything runs in your browser or on your local machine.</p>
+    </details>
+  </div>
+
+  <p class="hint">psst: press <kbd>`</kbd> (backtick) or click <kbd>&gt;_</kbd> for an interactive shell (try <code>help</code>, <code>braille hero</code>, <code>ascii type</code>, <code>zoth</code>).</p>
 </section>
 </main>
-<footer><p>© nullai (1nc0gn30) · everything free · <a href="credits.html">credits</a></p></footer>
+
+<footer>
+  <p>© nullai (1nc0gn30) · <a href="https://github.com/1nc0gn30">@1nc0gn30</a> · <a href="https://nullai.tech">nullai.tech</a> · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X">☕ buy us a coffee</a> · <a href="credits.html">credits</a></p>
+</footer>
 
 <dialog id="term" aria-label="terminal">
+  <div class="dlg-bar">
+    <span>1nc0gn30@nullai:~ (braille-sh)</span>
+    <button type="button" id="termCloseBtn" aria-label="close terminal">× close</button>
+  </div>
   <pre id="termOut" aria-live="polite"></pre>
-  <form id="termForm" method="dialog"><label for="termIn">$</label><input id="termIn" autocomplete="off" spellcheck="false" aria-label="command"></form>
+  <form id="termForm" method="dialog"><label for="termIn">$</label><input id="termIn" autocomplete="off" spellcheck="false" aria-label="command" placeholder="type help, braille hero, ascii type, zoth, exit..."></form>
 </dialog>
+
+<dialog id="lightbox" class="lightbox" aria-label="image specimen viewer">
+  <div class="dlg-bar">
+    <span id="lightboxTitle">1nc0gn30 specimen viewer</span>
+    <button type="button" id="lightboxClose" aria-label="close viewer">× close [esc]</button>
+  </div>
+  <div class="lightbox-body">
+    <img id="lightboxImg" src="assets/unicode-ascii-dither-sheet.png" alt="Full resolution 1nc0gn30 specimen">
+  </div>
+</dialog>
+
 <script src="main.js" defer></script>
 </body>
 </html>
