@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>1nc0gn30 · builder @ nullai</title>
-<meta name="description" content="1nc0gn30 builds free, local-first tools at NullAI: Zoth Studio (72 tools: 53 browser + 19 CLI), ZothOS (43 workstations · 23 loopback daemons), and hermes-zoth. Everything free, tips optional.">
+<title>1nc0gn30 · free tools for ai, security &amp; the web</title>
+<meta name="description" content="1nc0gn30 builds free browser tools, CLI utilities, and ZothOS (a Debian Linux distro for local AI and security). No accounts, no telemetry, open source.">
 <link rel="canonical" href="https://1nc0gn30.si/">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://1nc0gn30.si/">
-<meta property="og:title" content="1nc0gn30 · builder @ nullai">
+<meta property="og:title" content="1nc0gn30 · free tools for ai, security &amp; the web">
 <meta property="og:description" content="zoth studio (72 tools: 53 browser + 19 cli) · zothos (43 workstations) · hermes-zoth · nullai. everything free.">
 <meta property="og:image" content="https://1nc0gn30.si/assets/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@1nc0gn30">
 <meta name="twitter:creator" content="@1nc0gn30">
-<meta name="twitter:title" content="1nc0gn30 · builder @ nullai">
+<meta name="twitter:title" content="1nc0gn30 · free tools for ai, security &amp; the web">
 <meta name="twitter:description" content="zoth studio · zothos · hermes-zoth · nullai. everything free, tips optional.">
 <meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="assets/avatar.jpg">
@@ -64,18 +64,18 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What does 1nc0gn30 build at NullAI?",
+          "name": "What does 1nc0gn30 build?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "1nc0gn30 builds 100% free, zero-telemetry developer and AI systems under NullAI, including Zoth Studio (72 tools: 53 in-browser tools and 19 CLI binaries), ZothOS (43 workstations and 23 loopback daemons), and the hermes-zoth community plugin."
+            "text": "1nc0gn30 builds free, local-first software at NullAI: Zoth Studio (72 tools: 53 in-browser utilities and 19 CLI binaries), ZothOS (a Debian 13 Linux live system with 43 workstations and 23 local daemons), and the hermes-zoth plugin."
           }
         },
         {
           "@type": "Question",
-          "name": "Are Zoth Studio and ZothOS free and private?",
+          "name": "Do any of these tools require an account or subscription?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Every tool across NullAI, Zoth Studio, and ZothOS is 100% free and unlocked by default with no accounts, no paywalls, and no telemetry."
+            "text": "No. Every tool runs either directly in your browser or on your own machine with zero signups, zero telemetry, and zero paywalls."
           }
         }
       ]
@@ -90,7 +90,8 @@
 <header class="bar">
   <a href="#top" class="logo glitch" data-t="1nc0gn30">1nc0gn30</a>
   <nav aria-label="sections">
-    <a href="#build">build</a>
+    <a href="#build">projects</a>
+    <a href="#tools">tools</a>
     <a href="#links">links</a>
     <button id="termBtn" type="button" aria-label="open terminal">&gt;_</button>
   </nav>
@@ -103,71 +104,86 @@
   <div class="hero-copy">
     <p class="kicker">⣿ @1nc0gn30 · nullai</p>
     <h1 class="glitch" data-t="1nc0gn30">1nc0gn30</h1>
-    <p class="lede">i build free tools. no accounts, no telemetry. tips optional.</p>
+    <p class="lede">free browser tools, cli utilities, and a local linux distro for ai &amp; security work. no accounts, no telemetry, tips optional.</p>
     <p class="cta">
-      <a class="btn" href="https://zoth.nullai.tech">open zoth studio</a>
-      <a class="btn ghost" href="#build">what i build ↓</a>
+      <a class="btn" href="https://zoth.nullai.tech">open zoth studio (72 tools)</a>
+      <a class="btn ghost" href="#tools">try a tool ↓</a>
     </p>
   </div>
 
   <div class="hero-stage">
-    <figure class="sprite-stage" id="spriteStage">
+    <figure class="sprite-stage" id="spriteStage" title="Click character to step to next pose">
       <canvas id="charCanvas" width="760" height="720" aria-label="1nc0gn30 animated character loop with live Braille, Bayer dither, ASCII, and 3D lattice effects"></canvas>
-      <div class="hud-tag" id="hudTag" aria-live="polite">LOOP · HERO → TYPE → WALK → DISSOLVE · HYBRID</div>
     </figure>
 
-    <div class="stage-controls" role="group" aria-label="character animation and effect controls">
-      <div class="ctrl-row" role="group" aria-label="visual effect mode">
-        <span class="ctrl-label">fx</span>
-        <button type="button" class="chip active" data-fx="hybrid">⣿ hybrid</button>
-        <button type="button" class="chip" data-fx="braille">⠿ braille</button>
-        <button type="button" class="chip" data-fx="dither">▦ dither</button>
-        <button type="button" class="chip" data-fx="ascii"># ascii</button>
-        <button type="button" class="chip" data-fx="lattice">⬡ lattice</button>
-      </div>
-      <div class="ctrl-row" role="group" aria-label="motion sequence">
-        <span class="ctrl-label">motion</span>
-        <button type="button" class="chip-sm active" data-seq="cycle">∞ full loop</button>
-        <button type="button" class="chip-sm" data-seq="spin">↻ 360° turn</button>
-        <button type="button" class="chip-sm" data-seq="action">⚡ action</button>
-        <button type="button" class="chip-sm" data-seq="hero">hero</button>
-        <button type="button" class="chip-sm" data-seq="type">type</button>
-        <button type="button" class="chip-sm" data-seq="walk">walk</button>
-        <button type="button" class="chip-sm" data-seq="dissolve">dissolve</button>
-        <button type="button" class="chip-sm" data-seq="idle">idle</button>
-      </div>
+    <div class="fx-bar" role="group" aria-label="character shader effect">
+      <button type="button" class="chip active" data-fx="hybrid">⣿ hybrid</button>
+      <button type="button" class="chip" data-fx="braille">⠿ braille</button>
+      <button type="button" class="chip" data-fx="dither">▦ dither</button>
+      <button type="button" class="chip" data-fx="ascii"># ascii</button>
+      <button type="button" class="chip" data-fx="lattice">⬡ lattice</button>
+      <button type="button" class="chip pose-step" id="stepPoseBtn" title="Cycle motion / pose">↻ <span id="poseBtnLabel">auto loop</span></button>
     </div>
   </div>
 </section>
 
 <section id="build" class="build">
-  <h2><span aria-hidden="true">⣀⣤⣶⣿ </span>what i build</h2>
+  <h2><span aria-hidden="true">⣀⣤⣶⣿ </span>the 4 projects</h2>
   <ul class="cards">
     <li class="card mosh">
-      <h3>zoth studio</h3>
-      <p class="n">72 tools</p>
-      <p>53 run in the browser, 19 on the cli. free.</p>
-      <a href="https://zoth.nullai.tech">zoth.nullai.tech →</a>
+      <div class="card-head"><h3>zoth studio</h3><span>53 web · 19 cli</span></div>
+      <p class="n">72 free tools</p>
+      <p>browser utilities for jwt/csp/yara security checks, mcp debugging, ascii/braille shaders, and 3d scenes. nothing uploaded to a server.</p>
+      <div class="card-links">
+        <a href="https://zoth.nullai.tech">open zoth.nullai.tech →</a>
+      </div>
     </li>
     <li class="card mosh">
-      <h3>zothos</h3>
+      <div class="card-head"><h3>zothos</h3><span>debian 13 live iso</span></div>
       <p class="n">43 workstations</p>
-      <p>23 loopback daemons. local first, nothing leaves the box.</p>
-      <a href="https://zothos.nullai.tech">zothos.nullai.tech →</a>
+      <p>bootable linux system with 23 local loopback daemons, local ollama, ghidra/hexstrike security tools, and an in-browser lite desktop.</p>
+      <div class="card-links">
+        <a href="https://zothos.nullai.tech">zothos.nullai.tech →</a>
+        <a href="https://zothos-lite.nullai.tech" class="sub-link">try browser desktop →</a>
+      </div>
     </li>
     <li class="card mosh">
-      <h3>hermes-zoth</h3>
-      <p class="n">community plugin</p>
-      <p>zoth tools inside hermes agent. independent, not affiliated with nous research.</p>
-      <a href="https://github.com/1nc0gn30/hermes-zoth">github →</a>
+      <div class="card-head"><h3>hermes-zoth</h3><span>v1.1.4 · mit</span></div>
+      <p class="n">hermes agent plugin</p>
+      <p>plugs zoth cli tools into hermes agent. independent community project, not affiliated with nous research.</p>
+      <div class="card-links">
+        <a href="https://github.com/1nc0gn30/hermes-zoth">github repo →</a>
+        <button type="button" class="copy-cmd" data-copy="git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh">copy install cmd</button>
+      </div>
     </li>
     <li class="card mosh">
-      <h3>nullai</h3>
-      <p class="n">the umbrella</p>
-      <p>where it all ships. everything free.</p>
-      <a href="https://nullai.tech">nullai.tech →</a>
+      <div class="card-head"><h3>nullai</h3><span>open source</span></div>
+      <p class="n">standalone repos</p>
+      <p>every tool also lives in its own github repo so you can fork it, read the source, or run it offline.</p>
+      <div class="card-links">
+        <a href="https://github.com/1nc0gn30">github.com/1nc0gn30 →</a>
+        <a href="https://nullai.tech" class="sub-link">nullai.tech →</a>
+      </div>
     </li>
   </ul>
+</section>
+
+<section id="tools" class="tools-sec">
+  <div class="tools-head">
+    <div>
+      <h2><span aria-hidden="true">▦ </span>pick a tool &amp; open it</h2>
+      <p class="sec-note">runs directly in your browser. no login, no paywall.</p>
+    </div>
+    <div class="cat-tabs" role="tablist" aria-label="tool categories">
+      <button type="button" class="chip active" data-cat="popular">★ popular (8)</button>
+      <button type="button" class="chip" data-cat="security">security &amp; net (8)</button>
+      <button type="button" class="chip" data-cat="ai">ai &amp; mcp (8)</button>
+      <button type="button" class="chip" data-cat="creative">ascii, 3d &amp; media (8)</button>
+      <button type="button" class="chip" data-cat="dev">web &amp; dev (8)</button>
+    </div>
+  </div>
+
+  <div class="tool-grid" id="toolGrid" aria-live="polite"></div>
 
   <div class="strip" aria-label="recent dispatches">
     <img src="assets/post-01.jpg" alt="1nc0gn30 online still" loading="lazy" width="512" height="512">
@@ -178,7 +194,7 @@
 </section>
 
 <section id="links" class="links">
-  <h2><span aria-hidden="true">⣿ </span>links</h2>
+  <h2><span aria-hidden="true">⣿ </span>links &amp; optional tip jar</h2>
   <ul class="link-list">
     <li><a href="https://x.com/1nc0gn30">x.com/1nc0gn30</a></li>
     <li><a href="https://github.com/1nc0gn30">github.com/1nc0gn30</a></li>
@@ -186,6 +202,7 @@
     <li><a href="https://nullai.tech">nullai.tech</a></li>
     <li><a href="https://zoth.nullai.tech">zoth.nullai.tech</a></li>
     <li><a href="https://zothos.nullai.tech">zothos.nullai.tech</a></li>
+    <li><a href="https://zothos-lite.nullai.tech">zothos-lite.nullai.tech</a></li>
     <li><a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a></li>
     <li><button type="button" class="link-btn" id="copySolBtn" data-sol="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK">◎ sol: GG2eQbVh...dXoK [copy]</button></li>
   </ul>

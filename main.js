@@ -1,5 +1,5 @@
 // 1nc0gn30.si — vanilla JS, zero deps.
-// 3D perspective Braille lattice + Infinite Animated 9-Pose 1nc0gn30 Character Loop (Hybrid, Braille U+2800, Bayer 4x4 Dither, ASCII, 3D Lattice).
+// 3D perspective Braille lattice + Infinite Animated 9-Pose 1nc0gn30 Character Loop + Digestible Tool Picker.
 (() => {
   'use strict';
 
@@ -97,53 +97,53 @@
   // ---- 2. Infinite Animated 1nc0gn30 Character Engine ----
   const canvas = document.getElementById('charCanvas');
   const ctx = canvas ? canvas.getContext('2d') : null;
-  const hudTag = document.getElementById('hudTag');
+  const poseBtnLabel = document.getElementById('poseBtnLabel');
 
   const POSE_NAMES = ['hero', 'idle', 'front', 'three-quarter', 'side', 'back', 'walk', 'type', 'dissolve'];
-  const SEQUENCES = {
-    cycle: [
-      { pose: 'hero', flip: false, hold: 2200, label: 'HERO' },
-      { pose: 'type', flip: false, hold: 2100, label: 'TYPE' },
-      { pose: 'walk', flip: false, hold: 1900, label: 'WALK' },
-      { pose: 'dissolve', flip: false, hold: 2100, label: 'DISSOLVE' },
-      { pose: 'front', flip: false, hold: 1400, label: 'FRONT' },
-      { pose: 'three-quarter', flip: false, hold: 1300, label: '3/4' },
-      { pose: 'side', flip: false, hold: 1300, label: 'SIDE' },
-      { pose: 'back', flip: false, hold: 1400, label: 'BACK' },
-      { pose: 'idle', flip: false, hold: 1900, label: 'IDLE' }
-    ],
-    spin: [
-      { pose: 'front', flip: false, hold: 950, label: '0° FRONT' },
-      { pose: 'three-quarter', flip: false, hold: 950, label: '45° 3/4 R' },
-      { pose: 'side', flip: false, hold: 950, label: '90° PROFILE R' },
-      { pose: 'back', flip: false, hold: 950, label: '180° BACK' },
-      { pose: 'side', flip: true, hold: 950, label: '270° PROFILE L' },
-      { pose: 'three-quarter', flip: true, hold: 950, label: '315° 3/4 L' }
-    ],
-    action: [
-      { pose: 'idle', flip: false, hold: 1600, label: 'IDLE' },
-      { pose: 'walk', flip: false, hold: 1700, label: 'WALK' },
-      { pose: 'type', flip: false, hold: 1900, label: 'TYPE' },
-      { pose: 'dissolve', flip: false, hold: 1900, label: 'DISSOLVE' },
-      { pose: 'hero', flip: false, hold: 1900, label: 'HERO' }
-    ],
-    hero: [{ pose: 'hero', flip: false, hold: 999999, label: 'HERO' }],
-    type: [{ pose: 'type', flip: false, hold: 999999, label: 'TYPE' }],
-    walk: [{ pose: 'walk', flip: false, hold: 999999, label: 'WALK' }],
-    dissolve: [{ pose: 'dissolve', flip: false, hold: 999999, label: 'DISSOLVE' }],
-    idle: [{ pose: 'idle', flip: false, hold: 999999, label: 'IDLE' }]
-  };
+  const LOOP_STEPS = [
+    { pose: 'hero', flip: false, hold: 2200, label: 'hero' },
+    { pose: 'type', flip: false, hold: 2100, label: 'type' },
+    { pose: 'walk', flip: false, hold: 1900, label: 'walk' },
+    { pose: 'dissolve', flip: false, hold: 2100, label: 'dissolve' },
+    { pose: 'front', flip: false, hold: 1200, label: 'front' },
+    { pose: 'three-quarter', flip: false, hold: 1100, label: '3/4' },
+    { pose: 'side', flip: false, hold: 1100, label: 'side' },
+    { pose: 'back', flip: false, hold: 1200, label: 'back' },
+    { pose: 'side', flip: true, hold: 1100, label: 'side L' },
+    { pose: 'three-quarter', flip: true, hold: 1100, label: '3/4 L' },
+    { pose: 'idle', flip: false, hold: 1800, label: 'idle' }
+  ];
+
+  // Mode options when clicking "↻ auto loop": auto -> 360 spin -> hero -> type -> walk -> dissolve -> idle
+  const POSE_MODES = [
+    { id: 'auto', label: 'auto loop', steps: LOOP_STEPS },
+    {
+      id: 'spin',
+      label: '360° spin',
+      steps: [
+        { pose: 'front', flip: false, hold: 900 },
+        { pose: 'three-quarter', flip: false, hold: 900 },
+        { pose: 'side', flip: false, hold: 900 },
+        { pose: 'back', flip: false, hold: 900 },
+        { pose: 'side', flip: true, hold: 900 },
+        { pose: 'three-quarter', flip: true, hold: 900 }
+      ]
+    },
+    { id: 'hero', label: 'pose: hero', steps: [{ pose: 'hero', flip: false, hold: 999999 }] },
+    { id: 'type', label: 'pose: type', steps: [{ pose: 'type', flip: false, hold: 999999 }] },
+    { id: 'walk', label: 'pose: walk', steps: [{ pose: 'walk', flip: false, hold: 999999 }] },
+    { id: 'dissolve', label: 'pose: dissolve', steps: [{ pose: 'dissolve', flip: false, hold: 999999 }] },
+    { id: 'idle', label: 'pose: idle', steps: [{ pose: 'idle', flip: false, hold: 999999 }] }
+  ];
 
   let activeFx = 'hybrid'; // 'hybrid' | 'braille' | 'dither' | 'ascii' | 'lattice'
-  let activeSeq = 'cycle';
+  let poseModeIdx = 0;
   let seqIndex = 0;
   let seqSwitchTime = performance.now();
-  const TRANSITION_MS = 480;
+  const TRANSITION_MS = 460;
 
-  // Pre-processed pose data cache
   const poseBank = new Map();
   const CW = 760, CH = 720;
-  // Fine 6x9 cell grid for high-density Braille/ASCII/Lattice rendering
   const CELL_W = 6, CELL_H = 9;
   const GCOLS = Math.floor(CW / CELL_W);
   const GROWS = Math.floor(CH / CELL_H);
@@ -167,7 +167,6 @@
     const raw = octx.getImageData(0, 0, CW, CH);
     const d = raw.data;
 
-    // 1. Key out near-black background & build 4-tone Ordered Bayer 4x4 Dither canvas
     const ditherOff = document.createElement('canvas');
     ditherOff.width = CW;
     ditherOff.height = CH;
@@ -175,7 +174,6 @@
     const dImg = dctx.createImageData(CW, CH);
     const dd = dImg.data;
 
-    // 2. Pre-render high-res U+2800 Sub-Pixel Dot-Matrix Canvas (`brailleOff`)
     const brailleOff = document.createElement('canvas');
     brailleOff.width = CW;
     brailleOff.height = CH;
@@ -211,7 +209,6 @@
     octx.putImageData(raw, 0, 0);
     dctx.putImageData(dImg, 0, 0);
 
-    // Draw crisp 2x4 sub-pixel Braille dot matrix onto `brailleOff` at 3px pitch
     const DOT_STEP = 3;
     for (let y = 0; y < CH; y += DOT_STEP) {
       for (let x = 0; x < CW; x += DOT_STEP) {
@@ -227,14 +224,12 @@
       }
     }
 
-    // 3. Pre-render high-density ASCII Matrix Canvas (`asciiOff`) + particle cells
     const asciiOff = document.createElement('canvas');
     asciiOff.width = CW;
     asciiOff.height = CH;
     const actx = asciiOff.getContext('2d');
     actx.font = 'bold 9px ui-monospace, "JetBrains Mono", monospace';
 
-    // 4. Pre-render 3D Wireframe Lattice Contour Canvas (`latticeOff`)
     const latticeOff = document.createElement('canvas');
     latticeOff.width = CW;
     latticeOff.height = CH;
@@ -271,7 +266,6 @@
           actx.fillStyle = color;
           actx.fillText(asciiCh, gc * CELL_W, gr * CELL_H);
 
-          // Lattice horizontal/vertical contour mesh
           if ((gr % 2 === 0 || gc % 2 === 0) && avgLum > 0.08) {
             lctx.fillStyle = color;
             lctx.fillRect(gc * CELL_W, gr * CELL_H, avgLum > 0.32 ? 3 : 2, avgLum > 0.32 ? 3 : 2);
@@ -307,22 +301,11 @@
     return { off, ditherOff, brailleOff, asciiOff, latticeOff, dx, dy, dw, dh, cells };
   }
 
-  // Load all 9 poses
   POSE_NAMES.forEach(name => {
     const im = new Image();
-    im.onload = () => {
-      poseBank.set(name, buildPoseEntry(name, im));
-    };
+    im.onload = () => poseBank.set(name, buildPoseEntry(name, im));
     im.src = `assets/${name}.jpg`;
   });
-
-  function updateHudLabel() {
-    if (!hudTag) return;
-    const seq = SEQUENCES[activeSeq] || SEQUENCES.cycle;
-    const cur = seq[seqIndex % seq.length];
-    const modeLabel = activeSeq === 'cycle' ? '∞ FULL LOOP' : activeSeq === 'spin' ? '↻ 360° TURN' : activeSeq === 'action' ? '⚡ ACTION LOOP' : 'LOCKED';
-    hudTag.textContent = `${modeLabel} · ${cur.label} · FX: ${activeFx.toUpperCase()}`;
-  }
 
   function renderPoseLayer(entry, flip, alpha, t, morphAmt) {
     if (!entry || !ctx) return;
@@ -333,11 +316,9 @@
     ctx.save();
     ctx.globalAlpha = alpha;
 
-    // 1. HYBRID MODE: High-def pixel character on left/center dissolving into glowing U+2800 Braille & Bayer embers on the right
     if (activeFx === 'hybrid') {
       const dissolveFront = 0.56 + 0.16 * Math.sin(t * 0.0016) - morphAmt * 0.35;
 
-      // Draw pixel sprite clipped with a soft gradient mask up to the dissolve front
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -345,7 +326,6 @@
       }
       ctx.drawImage(entry.off, tiltX * 0.5, bobY + tiltY * 0.5);
 
-      // Erase right side of pixel sprite smoothly so Braille particles take over seamlessly
       ctx.globalCompositeOperation = 'destination-in';
       const gradX0 = entry.dx + entry.dw * (dissolveFront - 0.12);
       const gradX1 = entry.dx + entry.dw * (dissolveFront + 0.22);
@@ -356,7 +336,6 @@
       ctx.fillRect(0, 0, CW, CH);
       ctx.restore();
 
-      // Overlay Braille U+2800 contour & dissolving wake particles
       ctx.font = 'bold 13px ui-monospace, "JetBrains Mono", monospace';
       for (let i = 0; i < entry.cells.length; i++) {
         const c = entry.cells[i];
@@ -373,10 +352,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillText(c.ch, baseX + driftX + tiltX * 0.5, c.y + driftY + tiltY * 0.5);
       }
-    }
-
-    // 2. BRAILLE MODE: High-density 3px sub-pixel Braille dot matrix + live U+2800 dissolving particle wake
-    else if (activeFx === 'braille') {
+    } else if (activeFx === 'braille') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -400,10 +376,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillText(c.ch, baseX + dx + tiltX * 0.5, c.y + dy + tiltY * 0.5);
       }
-    }
-
-    // 3. DITHER MODE: Crisp 4-tone Ordered Bayer 4x4 Pixel Dither + animated voxel wake
-    else if (activeFx === 'dither') {
+    } else if (activeFx === 'dither') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -424,10 +397,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillRect(vx | 0, vy | 0, 4, 4);
       }
-    }
-
-    // 4. ASCII MODE: High-density 4-tone Bayer ASCII Matrix + streaming code wake
-    else if (activeFx === 'ascii') {
+    } else if (activeFx === 'ascii') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -449,10 +419,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillText(glyph, baseX + dx + tiltX * 0.5, c.y + dy + tiltY * 0.5);
       }
-    }
-
-    // 5. LATTICE VOXEL MODE: 3D wireframe contour mesh + extruded perspective voxel cloud
-    else if (activeFx === 'lattice') {
+    } else if (activeFx === 'lattice') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -482,14 +449,14 @@
     if (!ctx) return;
     ctx.clearRect(0, 0, CW, CH);
 
-    const seq = SEQUENCES[activeSeq] || SEQUENCES.cycle;
+    const mode = POSE_MODES[poseModeIdx];
+    const seq = mode.steps;
     const step = seq[seqIndex % seq.length];
     const elapsed = t - seqSwitchTime;
 
     if (seq.length > 1 && elapsed >= step.hold) {
       seqIndex = (seqIndex + 1) % seq.length;
       seqSwitchTime = t;
-      updateHudLabel();
     }
 
     const curStep = seq[seqIndex % seq.length];
@@ -502,37 +469,130 @@
       const prevEntry = poseBank.get(prevStep.pose);
       const u = curElapsed / TRANSITION_MS;
       const ease = u * u * (3 - 2 * u);
-      if (prevEntry) {
-        renderPoseLayer(prevEntry, prevStep.flip, 1 - ease, t, ease);
-      }
+      if (prevEntry) renderPoseLayer(prevEntry, prevStep.flip, 1 - ease, t, ease);
       renderPoseLayer(curEntry, curStep.flip, ease, t, 1 - ease);
     } else {
       renderPoseLayer(curEntry, curStep.flip, 1, t, 0);
     }
   }
 
-  // Bind FX & Motion controls
   document.querySelectorAll('[data-fx]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-fx]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeFx = btn.dataset.fx;
-      updateHudLabel();
     });
   });
 
-  document.querySelectorAll('[data-seq]').forEach(btn => {
+  function cyclePoseMode() {
+    poseModeIdx = (poseModeIdx + 1) % POSE_MODES.length;
+    seqIndex = 0;
+    seqSwitchTime = performance.now();
+    if (poseBtnLabel) poseBtnLabel.textContent = POSE_MODES[poseModeIdx].label;
+  }
+
+  const stepPoseBtn = document.getElementById('stepPoseBtn');
+  const spriteStage = document.getElementById('spriteStage');
+  if (stepPoseBtn) stepPoseBtn.addEventListener('click', cyclePoseMode);
+  if (spriteStage) spriteStage.addEventListener('click', cyclePoseMode);
+
+  // ---- 3. Digestible 8-Tool Picker (Real Tools from Zoth Studio) ----
+  const TOOLS_BY_CAT = {
+    popular: [
+      ['Zoth ASCII Magic', 'image / video → braille & ascii', 'Convert images, video, or 3D models into sub-pixel Unicode Braille and 24-bit ANSI/HTML/SVG.', 'zoth-ascii-magic', 'zoth-ascii-magic'],
+      ['JWT Inspector Guard', 'auth & crypto', 'Decode JWTs client-side, verify signatures, test HS256 weak secrets, and inspect DPoP claims.', 'jwt-inspector-guard', 'jwt-inspector-guard'],
+      ['MCP Lens', 'mcp debugger', 'Inspect Model Context Protocol JSON-RPC traffic, validate tool schemas, and measure token weight.', 'mcp-lens', 'mcp-lens'],
+      ['YARA-X & Sigma Forge', 'threat rules', 'Write and test YARA-X & Sigma detection rules with a byte-offset entropy radar and ATT&CK mapping.', 'yara-sigma-forge', 'yara-sigma-forge'],
+      ['Nexus 3D Scene Studio', 'webgl & stl/obj', 'Generate mathematical 3D meshes, 4D tesseracts, and parametric surfaces with OBJ/STL export.', 'nexus-3d-scene-studio', 'nexus-3d-scene-studio'],
+      ['Agent Prompt Firewall', 'llm defense', 'Test system prompts against prompt injection, jailbreaks, and PII leakage in the browser.', 'agent-prompt-firewall', 'agent-prompt-firewall'],
+      ['Regex Droid', 'ast & redos check', 'Build regular expressions visually with railroad diagrams, multi-language codegen, and ReDoS checks.', 'regex-droid-builder', 'regex-droid-builder'],
+      ['AudioCipher Stego', 'audio steganography', 'Hide encrypted payloads in WAV PCM LSB audio, decode DTMF tones, and synthesize Morse.', 'audiocipher-stego-engine', 'audiocipher-stego-engine']
+    ],
+    security: [
+      ['Web Security Guard', 'headers & csp', 'Audit HTTP security headers, build strict CSP Level 3 policies, and compute SHA-384 SRI hashes.', 'web-security-guard', 'web-security-guard'],
+      ['Payload Entropy Studio', 'binary analysis', 'Visualize 32-byte sliding-window Shannon entropy to spot packed, encrypted, or obfuscated sections.', 'payload-entropy-studio', 'payload-entropy-studio'],
+      ['EnvGuard Secrets Vault', 'aes-256-gcm', 'Encrypt .env files in-browser with Argon2id + AES-256-GCM and split keys with Shamir quorum.', 'envguard-secrets-vault', 'envguard-secrets-vault'],
+      ['Domain Intel OSINT Scout', 'dns & ct logs', 'Check Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture for any domain.', 'osint-scout-skill', 'osint-scout-skill'],
+      ['Agent Egress Sentinel', 'network policy', 'Design outbound firewall rules, SSRF guards, and TLS SNI allowlists for autonomous agents.', 'agent-egress-sentinel', 'agent-egress-sentinel'],
+      ['Agent Capsule Jail', 'sandbox policy', 'Generate seccomp syscall filters, cgroup quotas, and sandbox profiles for local AI agents.', 'agent-capsule-jail', 'agent-capsule-jail'],
+      ['Agent Policy Auditor', 'least privilege', 'Audit MCP tool permissions and generate least-privilege capability manifests.', 'agent-policy-auditor', 'agent-policy-auditor'],
+      ['SubSweep Lead Scanner', 'passive recon', 'Run passive DNS discovery and tech-stack fingerprinting in the browser with zero cloud storage.', 'subsweep-lead-scanner', 'subsweep-lead-scanner']
+    ],
+    ai: [
+      ['Vector Search Studio', 'hnsw + bm25', 'Run HNSW skip-graph vector search, IVF clustering, and BM25 + RRF hybrid ranking in your browser.', 'vector-search-engine', 'vector-search-engine'],
+      ['PromptMaster Studio', 'prompt linter', 'Lint, structure, and compare prompts across Claude, GPT, and Gemini with token cost breakdowns.', 'promptmaster-studio', 'promptmaster-studio'],
+      ['DeepSearch Agent', 'cited research', 'Run multi-source research workflows with inline citations and consensus matrices.', 'deepsearch-research-agent', 'deepsearch-research-agent'],
+      ['Agent Flight Recorder', 'trace forensics', 'Scrub through hash-chained agent execution logs, tool calls, and memory state changes.', 'agent-flight-recorder', 'agent-flight-recorder'],
+      ['Agent Budget Sentinel', 'token circuit breaker', 'Simulate multi-agent token spend and set hard circuit-breaker limits to stop runaway loops.', 'agent-budget-sentinel', 'agent-budget-sentinel'],
+      ['Agent Mock Twin', 'offline ci mock', 'Replay deterministic LLM and OpenAPI tool responses offline so CI tests cost $0 in tokens.', 'agent-mock-twin', 'agent-mock-twin'],
+      ['Agent Gods Eye', 'dag topology', 'Visualize multi-agent DAG dependencies, message bottlenecks, and cyclic deadlocks.', 'agent-gods-eye', 'agent-gods-eye'],
+      ['WebMCP Protocol Suite', 'json-rpc 2.0', 'Test MCP server tool calls, prompts, and resources directly from a browser workbench.', 'webmcp-protocol-inspector', 'webmcp-protocol-inspector']
+    ],
+    creative: [
+      ['Datamosh Glitch Studio', 'h.264 & crt fx', 'Corrupt video I-frames, apply chromatic aberration and Bayer dither, and export glitch clips.', 'datamosh-glitch-studio', 'datamosh-glitch-studio'],
+      ['Cyber Turtle Studio', 'l-systems & g-code', 'Generate L-system fractals and vector turtle plots with SVG and CNC G-code export.', 'cyber-turtle-studio', 'cyber-turtle-studio'],
+      ['UFO Sacred Geometry', 'parametric cad', 'Synthesize cymatic patterns and Metatron geometry with clean SVG, DXF, and OBJ exports.', 'ufo-sacred-geometry', 'ufo-sacred-geometry'],
+      ['Reality Shader Forge', 'glsl & kde themes', 'Customize 60fps WebGL shaders and export matching KDE Plasma .colors, Alacritty, and CSS themes.', 'reality-shader-forge', 'reality-shader-forge'],
+      ['Badge3D Coin Forge', '3d relief stl', 'Turn 2D SVG/PNG logos into watertight 3D relief coins and medallions ready for 3D printing.', 'badge3d-coin-generator', 'badge3d-coin-generator'],
+      ['Vision Gesture Control', '21-joint hand track', 'Track 3D hand joints via webcam in the browser for touchless drawing and MIDI/MCP triggers.', 'vision-gesture-control', 'vision-gesture-control'],
+      ['Zoth Scene Foundry', 'bayer pixel scenes', 'Browse and customize 1,000 deterministic ASCII and Bayer-dithered pixel-art scenes.', 'zoth-scene-foundry', 'zoth-scene-foundry'],
+      ['Digital Asset Forge', '300 dpi print packs', 'Resize and package artwork into 300 DPI multi-ratio print ZIPs (2:3, 3:4, 4:5, ISO) in-browser.', 'digital-asset-forge', 'digital-asset-forge']
+    ],
+    dev: [
+      ['Schema Illustrator', 'sql / prisma / ts', 'Draw database ER diagrams and transpile between SQL DDL, Prisma, TypeScript, Pydantic, and GraphQL.', 'schema-illustrator-studio', 'schema-illustrator-studio'],
+      ['CronRhythm Studio', 'cron transpiler', 'Parse cron expressions, view a 24×7 run heatmap, and convert between systemd, K8s, and GitHub Actions.', 'cron-rhythm-studio', 'cron-rhythm-studio'],
+      ['Polyglot Scaffolder', '13 frameworks', 'Convert UI components across React, Vue, Svelte, Astro, and Solid and download a ready ZIP.', 'polyglot-framework-exporter', 'polyglot-framework-exporter'],
+      ['AEO Graph Engine', 'schema.org json-ld', 'Build and validate Schema.org @graph JSON-LD for WebApplication, FAQPage, and LocalBusiness.', 'aeo-graph-engine', 'aeo-graph-engine'],
+      ['Robots.txt Auditor', 'rfc 9309 & ai bots', 'Test robots.txt rules against Googlebot, GPTBot, ClaudeBot, and PerplexityBot.', 'robots-txt-auditor', 'robots-txt-auditor'],
+      ['CWV Speed Engine', 'core web vitals', 'Analyze DOM layout shifts, render-blocking assets, and generate optimized resource hints.', 'cwv-speed-engine', 'cwv-speed-engine'],
+      ['PWA Manifest Studio', 'service worker zip', 'Generate manifest.json, offline ServiceWorker scripts, and app icon bundles in one click.', 'pwa-manifest-builder', 'pwa-manifest-builder'],
+      ['Zoth WebGen', 'local site foundry', 'Scaffold static sites locally and deploy straight to Netlify from the command line or browser.', 'zoth-webgen', 'zoth-webgen']
+    ]
+  };
+
+  const toolGrid = document.getElementById('toolGrid');
+  function renderTools(cat) {
+    if (!toolGrid) return;
+    const list = TOOLS_BY_CAT[cat] || TOOLS_BY_CAT.popular;
+    toolGrid.innerHTML = list.map(([name, tag, desc, id, repo]) => `
+      <article class="tool-item">
+        <div>
+          <div class="tool-top">
+            <h3>${name}</h3>
+            <span class="tool-tag">${tag}</span>
+          </div>
+          <p>${desc}</p>
+        </div>
+        <div class="tool-foot">
+          <a href="https://zoth.nullai.tech/tools/${id}">open in browser →</a>
+          <a class="repo-link" href="https://github.com/1nc0gn30/${repo}">github ↗</a>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  document.querySelectorAll('.cat-tabs [data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-seq]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.cat-tabs [data-cat]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeSeq = btn.dataset.seq;
-      seqIndex = 0;
-      seqSwitchTime = performance.now();
-      updateHudLabel();
+      renderTools(btn.dataset.cat);
+    });
+  });
+  renderTools('popular');
+
+  // Copy install command buttons
+  document.querySelectorAll('.copy-cmd[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(btn.dataset.copy).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓ copied command';
+        setTimeout(() => { btn.textContent = orig; }, 1600);
+      }).catch(() => {});
     });
   });
 
-  // ---- 3. Animation Loop (~30fps, paused when hidden) ----
+  // ---- 4. Animation Loop (~30fps, paused when hidden) ----
   let visible = true, last = 0;
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
 
@@ -546,7 +606,6 @@
   }
 
   setupLattice();
-  updateHudLabel();
   let rt;
   addEventListener('resize', () => {
     clearTimeout(rt);
@@ -557,7 +616,7 @@
   });
   requestAnimationFrame(frame);
 
-  // ---- 4. Solana Tip Copy & Shell (`>_` / backtick) ----
+  // ---- 5. Solana Tip Copy & Shell (`>_` / backtick) ----
   const copySolBtn = document.getElementById('copySolBtn');
   if (copySolBtn) {
     copySolBtn.addEventListener('click', () => {
@@ -574,33 +633,21 @@
   const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
   const say = s => { out.textContent += s + '\n'; out.scrollTop = out.scrollHeight; };
   const CMD = {
-    help: () => 'cmds: whoami ls fx <hybrid|braille|dither|ascii|lattice> loop <cycle|spin|action> zoth zothos hermes nullai links tip clear exit',
-    whoami: () => '1nc0gn30 · builder @ nullai.',
-    ls: () => 'zoth-studio/  zothos/  hermes-zoth/  nullai/',
+    help: () => 'cmds: whoami ls fx <hybrid|braille|dither|ascii|lattice> zoth zothos hermes nullai links tip clear exit',
+    whoami: () => '1nc0gn30 · free tools for ai, security & the web.',
+    ls: () => 'zoth-studio/ (72 tools)  zothos/ (43 stations)  hermes-zoth/  nullai/',
     fx: arg => {
       if (['hybrid', 'braille', 'dither', 'ascii', 'lattice'].includes(arg)) {
         activeFx = arg;
         document.querySelectorAll('[data-fx]').forEach(b => b.classList.toggle('active', b.dataset.fx === arg));
-        updateHudLabel();
         return 'fx switched to ' + arg;
       }
       return 'usage: fx <hybrid|braille|dither|ascii|lattice>';
     },
-    loop: arg => {
-      if (SEQUENCES[arg]) {
-        activeSeq = arg;
-        seqIndex = 0;
-        seqSwitchTime = performance.now();
-        document.querySelectorAll('[data-seq]').forEach(b => b.classList.toggle('active', b.dataset.seq === arg));
-        updateHudLabel();
-        return 'motion switched to ' + arg;
-      }
-      return 'usage: loop <cycle|spin|action|hero|type|walk|dissolve|idle>';
-    },
-    zoth: () => 'zoth studio: 72 tools. 53 in-browser, 19 cli. → zoth.nullai.tech',
-    zothos: () => 'zothos: 43 workstations, 23 loopback daemons. → zothos.nullai.tech',
-    hermes: () => 'hermes-zoth: community plugin for hermes agent. not affiliated.',
-    nullai: () => 'nullai.tech. everything free.',
+    zoth: () => 'zoth studio: 72 tools (53 in-browser, 19 cli) → https://zoth.nullai.tech',
+    zothos: () => 'zothos: debian 13 live iso · 43 workstations · 23 local daemons → https://zothos.nullai.tech',
+    hermes: () => 'hermes-zoth v1.1.4: git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
+    nullai: () => 'https://nullai.tech · everything free.',
     links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech',
     tip: () => 'stripe: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X · sol: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK',
     sudo: () => 'nice try.',
