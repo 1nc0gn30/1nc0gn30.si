@@ -119,13 +119,16 @@ h1 {
 .sprite-stage {
   position: relative;
   margin: 0;
-  width: min(460px, 44vw);
-  aspect-ratio: 760 / 720;
+  width: min(520px, 46vw);
+  aspect-ratio: 920 / 860;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
 }
+.sprite-stage:active { cursor: grabbing; }
 #charCanvas {
   width: 100%;
   height: 100%;
@@ -135,11 +138,18 @@ h1 {
 .fx-bar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   padding: 6px 10px;
-  background: rgba(5, 4, 2, .85);
+  background: rgba(5, 4, 2, .88);
   border: 1px solid var(--border);
+}
+.fx-sep {
+  width: 1px;
+  height: 16px;
+  background: #2e230c;
+  margin: 0 3px;
 }
 .chip {
   background: #080602;
@@ -160,6 +170,37 @@ h1 {
 .chip.pose-step {
   border-color: var(--g2);
   color: var(--g);
+}
+
+.pose-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 5px 8px;
+  background: rgba(5, 4, 2, .72);
+  border: 1px solid #1c1507;
+  border-top: 0;
+}
+.pose-chip {
+  background: #060502;
+  color: #b8af9c;
+  border: 1px solid #1e1708;
+  font: .68rem/1.2 var(--mono);
+  padding: 4px 7px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.pose-chip:hover {
+  border-color: var(--g2);
+  color: var(--bone);
+}
+.pose-chip.active {
+  border-color: var(--g);
+  color: var(--g);
+  background: rgba(245, 184, 46, .12);
+  font-weight: 700;
 }
 
 /* Sections */

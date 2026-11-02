@@ -112,17 +112,34 @@
   </div>
 
   <div class="hero-stage">
-    <figure class="sprite-stage" id="spriteStage" title="Click character to step to next pose">
-      <canvas id="charCanvas" width="760" height="720" aria-label="1nc0gn30 animated character loop with live Braille, Bayer dither, ASCII, and 3D lattice effects"></canvas>
+    <figure class="sprite-stage" id="spriteStage" title="Drag horizontally to spin 360° · Click to trigger vortex morph">
+      <canvas id="charCanvas" width="920" height="860" aria-label="1nc0gn30 interactive 360° volumetric character loop with live Braille, Bayer dither, ASCII, and 3D lattice shaders"></canvas>
     </figure>
 
-    <div class="fx-bar" role="group" aria-label="character shader effect">
+    <div class="fx-bar" role="group" aria-label="character shader and motion controls">
       <button type="button" class="chip active" data-fx="hybrid">⣿ hybrid</button>
       <button type="button" class="chip" data-fx="braille">⠿ braille</button>
       <button type="button" class="chip" data-fx="dither">▦ dither</button>
       <button type="button" class="chip" data-fx="ascii"># ascii</button>
-      <button type="button" class="chip" data-fx="lattice">⬡ lattice</button>
-      <button type="button" class="chip pose-step" id="stepPoseBtn" title="Cycle motion / pose">↻ <span id="poseBtnLabel">auto loop</span></button>
+      <button type="button" class="chip" data-fx="lattice">⬡ 3d voxel</button>
+      <span class="fx-sep" aria-hidden="true"></span>
+      <button type="button" class="chip active" data-seq="auto">∞ showreel</button>
+      <button type="button" class="chip" data-seq="spin">↻ 360° spin</button>
+      <button type="button" class="chip" data-seq="action">⚡ action</button>
+    </div>
+
+    <div class="pose-bar" id="poseBar" role="group" aria-label="360 degree turntable angles and poses">
+      <button type="button" class="pose-chip active" data-goto-pose="front" data-goto-flip="0" data-goto-deg="0">0° front</button>
+      <button type="button" class="pose-chip" data-goto-pose="three-quarter" data-goto-flip="0" data-goto-deg="45">45° 3/4 R</button>
+      <button type="button" class="pose-chip" data-goto-pose="side" data-goto-flip="0" data-goto-deg="90">90° side R</button>
+      <button type="button" class="pose-chip" data-goto-pose="back" data-goto-flip="0" data-goto-deg="180">180° back</button>
+      <button type="button" class="pose-chip" data-goto-pose="side" data-goto-flip="1" data-goto-deg="270">270° side L</button>
+      <button type="button" class="pose-chip" data-goto-pose="three-quarter" data-goto-flip="1" data-goto-deg="315">315° 3/4 L</button>
+      <span class="fx-sep" aria-hidden="true"></span>
+      <button type="button" class="pose-chip" data-goto-pose="type" data-goto-flip="0" data-goto-deg="35">⌨ type</button>
+      <button type="button" class="pose-chip" data-goto-pose="walk" data-goto-flip="0" data-goto-deg="65">→ walk</button>
+      <button type="button" class="pose-chip" data-goto-pose="dissolve" data-goto-flip="0" data-goto-deg="90">✦ dissolve</button>
+      <button type="button" class="pose-chip" id="pauseLoopBtn" aria-label="pause or resume auto loop" title="Pause / resume auto loop">⏸</button>
     </div>
   </div>
 </section>
