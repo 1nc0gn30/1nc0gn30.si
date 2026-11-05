@@ -1091,14 +1091,55 @@
     dlg.showModal();
     inp.focus();
   }
-  document.getElementById('termBtn').addEventListener('click', openTerm);
+  const termBtn = document.getElementById('termBtn');
+  if (termBtn) termBtn.addEventListener('click', openTerm);
   addEventListener('keydown', e => {
     if (e.key === '`' && document.activeElement !== inp) {
       e.preventDefault();
       openTerm();
     }
   });
-  document.getElementById('termForm').addEventListener('submit', e => {
+
+  // ---- Dynamic Braille Scramble & Kinetic Glow on Nav Tabs ----
+  const BRAILLE_CHARS = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠋⠙▦⬡⠿⠾⠽⠻';
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    const glyphEl = tab.querySelector('.tab-glyph');
+    const labelEl = tab.querySelector('.tab-label');
+    const origGlyph = glyphEl ? glyphEl.textContent : '';
+    const origText = tab.getAttribute('data-txt') || (labelEl ? labelEl.textContent : '');
+    let scrambleInterval = null;
+
+    tab.addEventListener('mouseenter', () => {
+      let step = 0;
+      clearInterval(scrambleInterval);
+      scrambleInterval = setInterval(() => {
+        step++;
+        if (glyphEl) {
+          const randBraille = BRAILLE_CHARS[Math.floor(Math.random() * BRAILLE_CHARS.length)];
+          glyphEl.textContent = randBraille;
+        }
+        if (labelEl && origText) {
+          labelEl.textContent = origText.split('').map((ch, idx) => {
+            if (idx < step / 2) return origText[idx];
+            return BRAILLE_CHARS[Math.floor(Math.random() * BRAILLE_CHARS.length)];
+          }).join('');
+        }
+        if (step > 12) {
+          clearInterval(scrambleInterval);
+          if (glyphEl) glyphEl.textContent = origGlyph;
+          if (labelEl) labelEl.textContent = origText;
+        }
+      }, 35);
+    });
+
+    tab.addEventListener('mouseleave', () => {
+      clearInterval(scrambleInterval);
+      if (glyphEl) glyphEl.textContent = origGlyph;
+      if (labelEl) labelEl.textContent = origText;
+    });
+  });
+  const termForm = document.getElementById('termForm');
+  if (termForm) termForm.addEventListener('submit', e => {
     e.preventDefault();
     const v = inp.value.trim().toLowerCase();
     inp.value = '';
