@@ -21,6 +21,9 @@
 <meta name="twitter:description" content="zoth studio · zothos · hermes-zoth · nullai. everything free, tips optional.">
 <meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="assets/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">
 {
@@ -162,22 +165,35 @@
 </section>
 
 <section id="build" class="build">
-  <h2><span aria-hidden="true">⣀⣤⣶⣿ </span>the projects &amp; standards</h2>
-  <ul class="cards">
-    <li class="card mosh card-highlight" id="game">
-      <div class="card-head"><h3>world of zoth</h3><span>v0.2 · 3d rpg</span></div>
-      <p class="n">lattice cyber-rpg · android apk &amp; web</p>
-      <p>a 3d lattice rpg set in the 1nc0gn30 universe. 5 acts, 18 main missions, 21 crew members, timed parry combat, and 100% offline gameplay.</p>
-      <div class="card-media" style="margin: 6px 0 12px; border: 1px solid rgba(245, 184, 46, 0.35); border-radius: 4px; overflow: hidden; background: #000;">
-        <img src="assets/world-of-zoth-gameplay.gif" alt="World of Zoth Gameplay Preview" loading="lazy" style="width: 100%; height: auto; display: block;">
+  <div class="sec-header">
+    <h2><span aria-hidden="true">⣀⣤⣶⣿ </span>the projects &amp; standards</h2>
+    <p class="sec-note">sovereign, local-first tools and physical ai foundations engineered by 1nc0gn30.</p>
+  </div>
+
+  <div class="cards-bento">
+    <!-- Featured Hero Card: World of Zoth -->
+    <article class="card card-featured card-highlight mosh" id="game">
+      <div class="card-featured-content">
+        <div class="card-head">
+          <h3>world of zoth</h3>
+          <span class="badge-accent">v0.2 · 3d lattice rpg</span>
+        </div>
+        <p class="n">lattice cyber-rpg · android apk &amp; in-browser</p>
+        <p class="desc">a full 3d lattice rpg set in the 1nc0gn30 universe. 5 acts, 18 main missions, 21 companion agents, active timed parry combat, and 100% offline gameplay with zero telemetry.</p>
+        <div class="card-ctas">
+          <a href="/world-of-zoth.apk" download="world-of-zoth.apk" class="apk-download-btn">⚡ download apk (1.9 mb)</a>
+          <a href="/game.html" class="btn ghost-gold">play in browser →</a>
+          <a href="https://github.com/1nc0gn30/world-of-zoth" target="_blank" rel="noopener noreferrer" class="sub-link">github repo →</a>
+        </div>
       </div>
-      <div class="card-links">
-        <a href="/world-of-zoth.apk" download="world-of-zoth.apk" class="apk-download-btn" style="background: var(--g); color: #000; font-weight: 700; padding: 6px 12px; border-radius: 3px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--g);">⚡ download apk (1.9 mb)</a>
-        <a href="/game.html" class="sub-link">play in browser →</a>
-        <a href="https://github.com/1nc0gn30/world-of-zoth" target="_blank" rel="noopener noreferrer" class="sub-link">github repo →</a>
+      <div class="card-featured-media">
+        <img src="assets/world-of-zoth-gameplay.gif" alt="World of Zoth Gameplay Preview" loading="lazy">
+        <span class="media-caption">100% offline · 3d lattice engine</span>
       </div>
-    </li>
-    <li class="card mosh">
+    </article>
+
+    <!-- FieldKit Card -->
+    <article class="card mosh">
       <div class="card-head"><h3>fieldkit</h3><span>framework &amp; term</span></div>
       <p class="n">physical ai standard</p>
       <p>terminology and architectural framework invented by 1nc0gn30 to guide developers in bridging multimodal ai into hands-free physical reality.</p>
@@ -185,16 +201,20 @@
         <a href="/fieldkit.html">explore fieldkit spec →</a>
         <a href="https://github.com/NullAITech/fieldkit" class="sub-link">github standard →</a>
       </div>
-    </li>
-    <li class="card mosh">
+    </article>
+
+    <!-- Zoth Studio Card -->
+    <article class="card mosh">
       <div class="card-head"><h3>zoth studio</h3><span>53 web · 19 cli</span></div>
       <p class="n">72 free tools</p>
       <p>browser utilities for jwt/csp/yara security checks, mcp debugging, ascii/braille shaders, and 3d scenes. nothing uploaded to a server.</p>
       <div class="card-links">
         <a href="https://zoth.nullai.tech">open zoth.nullai.tech →</a>
       </div>
-    </li>
-    <li class="card mosh">
+    </article>
+
+    <!-- ZothOS Card -->
+    <article class="card mosh">
       <div class="card-head"><h3>zothos</h3><span>debian 13 live iso</span></div>
       <p class="n">43 workstations</p>
       <p>bootable linux system with 23 local loopback daemons, local ollama, ghidra/hexstrike security tools, and an in-browser lite desktop.</p>
@@ -202,8 +222,10 @@
         <a href="https://zothos.nullai.tech">zothos.nullai.tech →</a>
         <a href="https://zothos-lite.nullai.tech" class="sub-link">try browser desktop →</a>
       </div>
-    </li>
-    <li class="card mosh">
+    </article>
+
+    <!-- Hermes-Zoth Card -->
+    <article class="card mosh">
       <div class="card-head"><h3>hermes-zoth</h3><span>v1.1.4 · mit</span></div>
       <p class="n">hermes agent plugin</p>
       <p>plugs zoth cli tools into hermes agent. independent community project, not affiliated with nous research.</p>
@@ -211,8 +233,10 @@
         <a href="https://github.com/1nc0gn30/hermes-zoth">github repo →</a>
         <button type="button" class="copy-cmd" data-copy="git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh">copy install cmd</button>
       </div>
-    </li>
-    <li class="card mosh">
+    </article>
+
+    <!-- NullAI Card -->
+    <article class="card mosh">
       <div class="card-head"><h3>nullai</h3><span>open source</span></div>
       <p class="n">standalone repos</p>
       <p>every tool also lives in its own github repo so you can fork it, read the source, or run it offline.</p>
@@ -220,8 +244,8 @@
         <a href="https://github.com/1nc0gn30">github.com/1nc0gn30 →</a>
         <a href="https://nullai.tech" class="sub-link">nullai.tech →</a>
       </div>
-    </li>
-  </ul>
+    </article>
+  </div>
 </section>
 
 <section id="tools" class="tools-sec">
