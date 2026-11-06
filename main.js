@@ -1053,9 +1053,21 @@
   const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
   const say = s => { out.textContent += s + '\n'; out.scrollTop = out.scrollHeight; };
   const CMD = {
-    help: () => 'cmds: whoami ls fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos hermes nullai links tip clear exit',
+    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos hermes nullai links tip clear exit',
     whoami: () => '1nc0gn30 · free tools for ai, security & the web.',
-    ls: () => 'zoth-studio/ (72 tools)  zothos/ (43 stations)  hermes-zoth/  nullai/',
+    apk: () => {
+      window.location.href = '/world-of-zoth.apk';
+      return 'downloading world-of-zoth.apk (1.9MB)...';
+    },
+    game: () => {
+      window.location.href = '/game.html';
+      return 'launching world-of-zoth in browser...';
+    },
+    rpg: () => {
+      window.location.href = '/world-of-zoth.apk';
+      return 'World of Zoth v0.2: 3D lattice RPG (5 acts, 18 missions, 21 crew) → downloading APK...';
+    },
+    ls: () => 'world-of-zoth.apk (1.9MB)  zoth-studio/ (72 tools)  zothos/ (43 stations)  hermes-zoth/  nullai/',
     fx: arg => {
       if (['hybrid', 'braille', 'dither', 'ascii', 'lattice'].includes(arg)) {
         activeFx = arg;

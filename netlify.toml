@@ -2,11 +2,28 @@
   publish = "."
 
 [[headers]]
+  for = "/*.apk"
+  [headers.values]
+    Content-Type = "application/vnd.android.package-archive"
+    Content-Disposition = "attachment; filename=\"world-of-zoth.apk\""
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/world-of-zoth.apk"
+  to = "/world-of-zoth.apk"
+  status = 200
+
+[[redirects]]
+  from = "/game"
+  to = "/game.html"
+  status = 200
 
 [[redirects]]
   from = "/*"
