@@ -1053,21 +1053,21 @@
   const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
   const say = s => { out.textContent += s + '\n'; out.scrollTop = out.scrollHeight; };
   const CMD = {
-    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos hermes nullai links tip clear exit',
-    whoami: () => '1nc0gn30 · free tools for ai, security & the web.',
+    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos lite zothnet hermes nullai links tip clear exit',
+    whoami: () => '1nc0gn30 (@1nc0gn30) · NullAI Platform · free tools for ai, security & the web.',
     apk: () => {
       window.location.href = '/world-of-zoth.apk';
-      return 'downloading world-of-zoth.apk (1.9MB)...';
+      return 'downloading world-of-zoth.apk (2.1MB)...';
     },
     game: () => {
       window.location.href = '/game.html';
-      return 'launching world-of-zoth in browser...';
+      return 'launching world-of-zoth v2.0 in browser...';
     },
     rpg: () => {
       window.location.href = '/world-of-zoth.apk';
-      return 'World of Zoth v0.2: 3D lattice RPG (5 acts, 18 missions, 21 crew) → downloading APK...';
+      return 'World of Zoth v2.0: 3D lattice RPG (6 acts, 20 districts, 22 crew, 22 mini-games) → downloading APK...';
     },
-    ls: () => 'world-of-zoth.apk (1.9MB)  zoth-studio/ (72 tools)  zothos/ (43 stations)  hermes-zoth/  nullai/',
+    ls: () => 'world-of-zoth.apk (2.1MB)  zoth-studio-v2/ (77 tools)  zothos-v3.4/ (77 cli)  zothos-lite-v1.2/  zothnet/  hermes-zoth/  nullai/',
     fx: arg => {
       if (['hybrid', 'braille', 'dither', 'ascii', 'lattice'].includes(arg)) {
         activeFx = arg;
@@ -1086,10 +1086,12 @@
       }
       return 'usage: loop <auto|spin|action>';
     },
-    zoth: () => 'zoth studio: 72 tools (53 in-browser, 19 cli) → https://zoth.nullai.tech',
-    zothos: () => 'zothos: debian 13 live iso · 43 workstations · 23 local daemons → https://zothos.nullai.tech',
-    hermes: () => 'hermes-zoth v1.1.4: git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
-    nullai: () => 'https://nullai.tech · everything free.',
+    zoth: () => 'zoth studio v2: 77 free tools (55 in-browser, 22 cli/daemon, all 77 public repos) → https://zoth.nullai.tech',
+    zothos: () => 'zothos v3.4.0: debian 13 (trixie) · kde plasma 6 · 77 cli tools · agent bridge (:8102) · neuro-memory (:8094) → https://zothos.nullai.tech',
+    lite: () => 'zothos-lite v1.2: tails-style amnesic toram os · 48+ models · 8 providers · zothnet p2p mesh → https://zothos-lite.nullai.tech',
+    zothnet: () => 'zothnet: zero-cloud encrypted mesh & 3-hop sphinx mixnet → https://zothnet.nullai.tech',
+    hermes: () => 'hermes-zoth: git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
+    nullai: () => 'https://nullai.tech · NullAI Platform · everything free.',
     links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech',
     tip: () => 'stripe: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X · sol: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK',
     sudo: () => 'nice try.',

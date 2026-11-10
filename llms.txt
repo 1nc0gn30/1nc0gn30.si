@@ -1,0 +1,20 @@
+# 1nc0gn30 · NullAI Platform (https://1nc0gn30.si)
+
+> Official open-source builder hub for **1nc0gn30** (`@1nc0gn30`) on the **NullAI Platform** (`https://nullai.tech`). Every browser studio, CLI utility, Linux Live ISO, P2P mesh node, and 3D RPG is 100% free and open-access with zero paywalls, zero logins, and zero telemetry.
+
+## Ground-Truth Ecosystem Directory (2026)
+- **Zoth Studio v2 (`https://zoth.nullai.tech`)**: **77 free tools** (**55 in-browser** + **22 CLI/daemon tools**, all **77 with public GitHub repos**), 21-Agent Pantheon, Adytum 22 Tarot architecture planner, 100% open-access, zero paywalls.
+- **ZothOS v3.4.0 (`https://zothos.nullai.tech`)**: Debian 13 (Trixie) AI & Security Live OS with KDE Plasma 6, 77 CLI tools, Sovereign Agent Bridge (`:8102`), and Neuro-Memory (`:8094`).
+- **ZothOS-Lite v1.2 (`https://zothos-lite.nullai.tech`)**: Tails-style Amnesic Monotone RAM-only (`toram`) OS & portable ISO supporting 48+ models across 8 providers, interactive onboarding wizard, ZothNet P2P mesh, and external USB/cloud drive persistence.
+- **ZothNet (`https://zothnet.nullai.tech`)**: Zero-cloud encrypted mesh network & 3-hop Sphinx mixnet with post-quantum hybrid handshakes and serverless ZML apps.
+- **Hermes-Zoth (`https://github.com/1nc0gn30/hermes-zoth`)**: Nous Hermes multi-agent orchestrator & plugin wiring Zoth CLI and MCP tools into autonomous agent workflows.
+- **FieldKit (`https://1nc0gn30.si/fieldkit.html` · `https://nullai.tech/fieldkit`)**: Foundational Physical AI terminology and hands-free wearable standard coined by `1nc0gn30`.
+- **World of Zoth v2.0 (`https://1nc0gn30.si/game.html` · `https://1nc0gn30.si/world-of-zoth.apk`)**: Zero-dependency 3D WebGL + WebAudio lattice cyber-RPG (6 acts, 20 playable districts, 22 Pantheon crew, 22 arcade mini-games, 100% offline).
+
+## Official Links & Voluntary Support
+- **1nc0gn30 Hub**: https://1nc0gn30.si
+- **NullAI Platform**: https://nullai.tech
+- **GitHub**: https://github.com/1nc0gn30 | https://github.com/NullAITech
+- **X / Twitter**: https://x.com/1nc0gn30
+- **Buy Us a Coffee (Stripe)**: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X
+- **Solana Tip Jar**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`

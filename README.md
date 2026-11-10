@@ -1,12 +1,12 @@
 # 1nc0gn30.si
 
-static site for 1nc0gn30. vanilla html/css/js, no build, no deps.
+Official static hub for **1nc0gn30** (`@1nc0gn30`) · **NullAI Platform** (`https://nullai.tech`). Vanilla HTML/CSS/JS, zero dependencies, zero telemetry.
 
-- live 3d lattice rendered as braille with bayer dither
-- character sprite dissolving into braille trails (mouse + scroll)
-- crt scanlines, datamosh hover, `` ` `` opens a shell
-- reduced-motion: static frame + plain sprite
+- Live 60fps 360° 3D volumetric character turntable rendered in Unicode U+2800 Braille, Ordered Bayer 4×4 Dither, ASCII, and 3D Voxel Lattice
+- Direct entry to **Zoth Studio v2** (77 free tools: 55 in-browser + 22 CLI/daemon tools, all 77 with public GitHub repos), **ZothOS v3.4.0**, **ZothOS-Lite v1.2**, **ZothNet**, **Hermes-Zoth**, **FieldKit**, and **World of Zoth v2.0**
+- CRT scanlines, datamosh hover, `` ` `` interactive shell (`help`, `zoth`, `zothos`, `lite`, `zothnet`, `hermes`, `game`, `apk`)
+- Full `prefers-reduced-motion` support & Schema.org `@graph` + `llms.txt` AEO discovery
 
-preview: `python3 -m http.server 8080` then open http://localhost:8080
+Preview: `python3 -m http.server 4331` then open `http://127.0.0.1:4331`
 
-credits: see credits.html. © nullai (1nc0gn30).
+Engineered by 1nc0gn30 (`@1nc0gn30`) · NullAI Platform.

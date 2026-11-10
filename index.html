@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>1nc0gn30 · free tools for ai, security &amp; the web</title>
-<meta name="description" content="1nc0gn30 builds free browser tools, CLI utilities, and ZothOS (a Debian Linux distro for local AI and security). No accounts, no telemetry, open source.">
+<meta name="description" content="1nc0gn30 (@1nc0gn30) at NullAI builds 77 free open-source browser &amp; CLI tools (Zoth Studio v2), ZothOS v3.4.0, ZothOS-Lite v1.2, ZothNet P2P mixnet, Hermes-Zoth, and FieldKit. Zero paywalls, zero telemetry.">
 <link rel="canonical" href="https://1nc0gn30.si/">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://1nc0gn30.si/">
 <meta property="og:title" content="1nc0gn30 · free tools for ai, security &amp; the web">
-<meta property="og:description" content="zoth studio (72 tools: 53 browser + 19 cli) · zothos (43 workstations) · hermes-zoth · nullai. everything free.">
+<meta property="og:description" content="zoth studio v2 (77 tools: 55 browser + 22 cli) · zothos v3.4.0 · zothos-lite v1.2 · zothnet · hermes-zoth · nullai. everything free.">
 <meta property="og:image" content="https://1nc0gn30.si/assets/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="1nc0gn30: faceless hooded pixel-art builder in gold on black">
@@ -18,7 +18,7 @@
 <meta name="twitter:site" content="@1nc0gn30">
 <meta name="twitter:creator" content="@1nc0gn30">
 <meta name="twitter:title" content="1nc0gn30 · free tools for ai, security &amp; the web">
-<meta name="twitter:description" content="zoth studio · zothos · hermes-zoth · nullai. everything free, tips optional.">
+<meta name="twitter:description" content="zoth studio v2 (77 free tools) · zothos v3.4.0 · zothos-lite v1.2 · zothnet · hermes-zoth · nullai. everything free, tips optional.">
 <meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="assets/avatar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,24 +36,36 @@
       "alternateName": "@1nc0gn30",
       "url": "https://1nc0gn30.si/",
       "image": "https://1nc0gn30.si/assets/og.jpg",
-      "affiliation": {
-        "@type": "Organization",
-        "name": "NullAI",
-        "url": "https://nullai.tech"
-      },
+      "affiliation": { "@id": "https://nullai.tech/#org" },
       "sameAs": [
         "https://x.com/1nc0gn30",
         "https://github.com/1nc0gn30",
-        "https://github.com/NullAITech"
+        "https://github.com/NullAITech",
+        "https://1nc0gn30.github.io/",
+        "https://nullai.tech"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://nullai.tech/#org",
+      "name": "NullAI Platform",
+      "alternateName": "NullAI",
+      "url": "https://nullai.tech",
+      "founder": { "@id": "https://1nc0gn30.si/#person" },
+      "sameAs": [
+        "https://github.com/NullAITech",
+        "https://github.com/1nc0gn30",
+        "https://1nc0gn30.si/"
       ]
     },
     {
       "@type": "SoftwareApplication",
       "@id": "https://1nc0gn30.si/#worldofzoth",
       "name": "World of Zoth",
+      "softwareVersion": "2.0",
       "applicationCategory": "GameApplication",
       "operatingSystem": "Android, Web Browser, Linux, macOS, Windows",
-      "description": "A 3D lattice cyber-RPG set in the 1nc0gn30 universe. 6 acts, 14 districts, 20 main missions, 22 Pantheon crew members, 5 Protocol Affinities, 16 Null Academy cyber-range labs, 99-floor Infinite Stack rogue-lite, and 100% offline gameplay.",
+      "description": "A 3D lattice cyber-RPG set in the 1nc0gn30 universe. 6 acts, 20 playable 3D districts, 22 Pantheon crew members, 22 built-in arcade mini-games, 5 Protocol Affinities, 16 Null Academy cyber-range labs, 99-floor Infinite Stack rogue-lite, and 100% offline gameplay.",
       "downloadUrl": "https://1nc0gn30.si/world-of-zoth.apk",
       "creator": { "@id": "https://1nc0gn30.si/#person" },
       "offers": {
@@ -65,7 +77,7 @@
     {
       "@type": "WebApplication",
       "@id": "https://1nc0gn30.si/#webapp",
-      "name": "1nc0gn30 · NullAI",
+      "name": "1nc0gn30 · NullAI Platform",
       "url": "https://1nc0gn30.si/",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web Browser, Linux, macOS, Windows",
@@ -82,18 +94,26 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What does 1nc0gn30 build?",
+          "name": "What does 1nc0gn30 build at NullAI?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "1nc0gn30 builds free, local-first software at NullAI: Zoth Studio (72 tools: 53 in-browser utilities and 19 CLI binaries), ZothOS (a Debian 13 Linux live system with 43 workstations and 23 local daemons), and the hermes-zoth plugin."
+            "text": "1nc0gn30 (@1nc0gn30) builds free, local-first software on the NullAI Platform: Zoth Studio v2 (77 free tools: 55 in-browser utilities and 22 CLI/daemon tools, all 77 with public GitHub repos), ZothOS v3.4.0 (Debian 13 Trixie AI & Security Live OS with KDE Plasma 6, 77 CLI tools, Sovereign Agent Bridge :8102, and Neuro-Memory :8094), ZothOS-Lite v1.2 (Tails-style Amnesic Monotone RAM-only toram OS supporting 48+ models across 8 providers with ZothNet P2P mesh and USB/cloud persistence), ZothNet (zero-cloud encrypted mesh & 3-hop Sphinx mixnet), Hermes-Zoth multi-agent orchestrator, FieldKit Physical AI standard, and the World of Zoth 3D cyber-RPG."
           }
         },
         {
           "@type": "Question",
-          "name": "Do any of these tools require an account or subscription?",
+          "name": "Do any of these tools require an account, login, or subscription?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Every tool runs either directly in your browser or on your own machine with zero signups, zero telemetry, and zero paywalls."
+            "text": "No. Every tool across Zoth Studio v2, ZothOS v3.4.0, ZothOS-Lite v1.2, ZothNet, and 1nc0gn30.si is 100% open-access with zero signups, zero telemetry, and zero paywalls. Optional voluntary support is available via Buy Us a Coffee on Stripe or Solana tip."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between ZothOS v3.4.0 and ZothOS-Lite v1.2?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ZothOS v3.4.0 (zothos.nullai.tech) is the full Debian 13 (Trixie) KDE Plasma 6 live workstation with 77 CLI tools, Sovereign Agent Bridge (:8102), and Neuro-Memory (:8094). ZothOS-Lite v1.2 (zothos-lite.nullai.tech) is the Tails-style Amnesic Monotone RAM-only (toram) portable ISO and browser workstation supporting 48+ models across 8 providers, interactive onboarding wizard, ZothNet P2P mesh, and optional external USB or cloud drive persistence."
           }
         }
       ]
@@ -124,9 +144,9 @@
   <div class="hero-copy">
     <p class="kicker">⣿ @1nc0gn30 · nullai</p>
     <h1 class="glitch" data-t="1nc0gn30">1nc0gn30</h1>
-    <p class="lede">free browser tools, cli utilities, and a local linux distro for ai &amp; security work. no accounts, no telemetry, tips optional.</p>
+    <p class="lede">77 free browser &amp; cli tools, local debian 13 ai/security operating systems, zero-cloud encrypted mesh networking, and open standards. no accounts, no telemetry, tips optional.</p>
     <p class="cta">
-      <a class="btn" href="https://zoth.nullai.tech">open zoth studio (72 tools)</a>
+      <a class="btn" href="https://zoth.nullai.tech">open zoth studio (77 tools)</a>
       <a class="btn ghost" href="#tools">try a tool ↓</a>
     </p>
   </div>
@@ -176,73 +196,85 @@
       <div class="card-featured-content">
         <div class="card-head">
           <h3>world of zoth</h3>
-          <span class="badge-accent">v1.0 · 6-act · 14 districts · 22-crew</span>
+          <span class="badge-accent">v2.0 · 6-act · 20 districts · 22-crew</span>
         </div>
-        <p class="n">3d lattice cyber-rpg · v1.2 director's cut · android apk &amp; in-browser</p>
-        <p class="desc">a full 3d lattice rpg set in the 1nc0gn30 universe. 6-act campaign through 15 districts (including the sub-lattice abyss, zero-knowledge citadel &amp; the null core 4d singularity), 21 main quests + 22-agent loyalty arcs, 5 protocol affinities + overdrive surge, 16 null academy ai-security labs, 99-floor infinite stack, 6-boss pantheon trial, 06:12 daily seeded runs, and 20 webaudio stems.</p>
+        <p class="n">3d lattice cyber-rpg · v2.0 sovereign edition · android apk &amp; in-browser</p>
+        <p class="desc">a full 3d lattice rpg set in the 1nc0gn30 universe. 6-act campaign across 20 playable 3d districts (sub-lattice abyss, zero-knowledge citadel, quantum loom &amp; dawn horizon), 22 pantheon crew members, 22 built-in arcade mini-games, 16 null academy ai-security labs, 99-floor infinite stack, 06:12 daily seeded runs, and 100% offline webaudio synthesis.</p>
         <div class="card-ctas">
-          <a href="/world-of-zoth.apk" download="world-of-zoth.apk" class="apk-download-btn">⚡ download apk (1.9 mb)</a>
+          <a href="/world-of-zoth.apk" download="world-of-zoth.apk" class="apk-download-btn">⚡ download apk (2.1 mb)</a>
           <a href="/game.html" class="btn ghost-gold">play in browser →</a>
           <a href="/assets/world-of-zoth-trailer.mp4" target="_blank" rel="noopener noreferrer" class="sub-link">🎬 60fps motion edit →</a>
           <a href="https://github.com/1nc0gn30/world-of-zoth" target="_blank" rel="noopener noreferrer" class="sub-link">github repo →</a>
         </div>
       </div>
       <div class="card-featured-media">
-        <video src="assets/world-of-zoth-trailer.mp4" poster="assets/motion_edit_contact_sheet.jpg" controls autoplay loop muted playsinline style="width:100%; border-radius:10px; display:block; border:1px solid rgba(245,184,46,0.35);"></video>
-        <span class="media-caption">60fps 1080p motion edit · 140 bpm dark-phonk score (unmute for audio)</span>
+        <video src="assets/world-of-zoth-trailer.mp4" poster="assets/motion_edit_contact_sheet.jpg" aria-label="World of Zoth 60fps motion edit trailer" controls autoplay loop muted playsinline style="width:100%; border-radius:10px; display:block; border:1px solid rgba(245,184,46,0.35);"></video>
+        <span class="media-caption">60fps 1080p motion edit · 140 bpm dark-phonk score</span>
       </div>
     </article>
 
-    <!-- FieldKit Card -->
+    <!-- Zoth Studio v2 Card -->
     <article class="card mosh">
-      <div class="card-head"><h3>fieldkit</h3><span>framework &amp; term</span></div>
-      <p class="n">physical ai standard</p>
-      <p>terminology and architectural framework invented by 1nc0gn30 to guide developers in bridging multimodal ai into hands-free physical reality.</p>
-      <div class="card-links">
-        <a href="/fieldkit.html">explore fieldkit spec →</a>
-        <a href="https://github.com/NullAITech/fieldkit" class="sub-link">github standard →</a>
-      </div>
-    </article>
-
-    <!-- Zoth Studio Card -->
-    <article class="card mosh">
-      <div class="card-head"><h3>zoth studio</h3><span>53 web · 19 cli</span></div>
-      <p class="n">72 free tools</p>
-      <p>browser utilities for jwt/csp/yara security checks, mcp debugging, ascii/braille shaders, and 3d scenes. nothing uploaded to a server.</p>
+      <div class="card-head"><h3>zoth studio v2</h3><span>55 web · 22 cli</span></div>
+      <p class="n">77 free tools · all public repos</p>
+      <p>55 zero-upload browser studios + 22 local cli/daemon tools for jwt/csp/yara security, mcp debugging, braille shaders, and 3d cad—all 77 with public github repos.</p>
       <div class="card-links">
         <a href="https://zoth.nullai.tech">open zoth.nullai.tech →</a>
+        <a href="https://github.com/1nc0gn30" class="sub-link">77 github repos →</a>
       </div>
     </article>
 
-    <!-- ZothOS Card -->
+    <!-- ZothOS v3.4.0 Card -->
     <article class="card mosh">
-      <div class="card-head"><h3>zothos</h3><span>debian 13 live iso</span></div>
-      <p class="n">43 workstations</p>
-      <p>bootable linux system with 23 local loopback daemons, local ollama, ghidra/hexstrike security tools, and an in-browser lite desktop.</p>
+      <div class="card-head"><h3>zothos v3.4.0</h3><span>debian 13 · plasma 6</span></div>
+      <p class="n">77 cli tools · agent bridge :8102</p>
+      <p>debian 13 (trixie) ai &amp; security live os with kde plasma 6, 77 cli tools, sovereign agent bridge (:8102), neuro-memory (:8094), and local ollama.</p>
       <div class="card-links">
         <a href="https://zothos.nullai.tech">zothos.nullai.tech →</a>
-        <a href="https://zothos-lite.nullai.tech" class="sub-link">try browser desktop →</a>
+        <a href="https://github.com/1nc0gn30/zoth-os" class="sub-link">github repo →</a>
+      </div>
+    </article>
+
+    <!-- ZothOS-Lite v1.2 Card -->
+    <article class="card mosh">
+      <div class="card-head"><h3>zothos-lite v1.2</h3><span>amnesic toram iso</span></div>
+      <p class="n">48+ models · 8 providers</p>
+      <p>tails-style amnesic monotone ram-only (toram) os &amp; portable iso with onboarding wizard, zothnet p2p mesh, and optional external usb or cloud persistence.</p>
+      <div class="card-links">
+        <a href="https://zothos-lite.nullai.tech">zothos-lite.nullai.tech →</a>
+        <a href="https://github.com/1nc0gn30/zothos-lite" class="sub-link">github repo →</a>
+      </div>
+    </article>
+
+    <!-- ZothNet Card -->
+    <article class="card mosh">
+      <div class="card-head"><h3>zothnet</h3><span>zero-cloud mesh</span></div>
+      <p class="n">3-hop sphinx mixnet</p>
+      <p>zero-cloud encrypted p2p mesh network featuring 3-hop sphinx onion routing, post-quantum hybrid handshakes, kademlia dht, and serverless zml apps.</p>
+      <div class="card-links">
+        <a href="https://zothnet.nullai.tech">zothnet.nullai.tech →</a>
+        <a href="https://github.com/1nc0gn30/zothnet" class="sub-link">github repo →</a>
       </div>
     </article>
 
     <!-- Hermes-Zoth Card -->
     <article class="card mosh">
-      <div class="card-head"><h3>hermes-zoth</h3><span>v1.1.4 · mit</span></div>
-      <p class="n">hermes agent plugin</p>
-      <p>plugs zoth cli tools into hermes agent. independent community project, not affiliated with nous research.</p>
+      <div class="card-head"><h3>hermes-zoth</h3><span>multi-agent plugin</span></div>
+      <p class="n">nous hermes orchestrator</p>
+      <p>multi-agent orchestrator &amp; plugin wiring zoth cli and mcp tools into nous hermes workflows. independent open-source project.</p>
       <div class="card-links">
         <a href="https://github.com/1nc0gn30/hermes-zoth">github repo →</a>
         <button type="button" class="copy-cmd" data-copy="git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh">copy install cmd</button>
       </div>
     </article>
 
-    <!-- NullAI Card -->
+    <!-- FieldKit & NullAI Card -->
     <article class="card mosh">
-      <div class="card-head"><h3>nullai</h3><span>open source</span></div>
-      <p class="n">standalone repos</p>
-      <p>every tool also lives in its own github repo so you can fork it, read the source, or run it offline.</p>
+      <div class="card-head"><h3>fieldkit · nullai</h3><span>physical ai · lab</span></div>
+      <p class="n">hands-free standard &amp; lab</p>
+      <p>terminology and architectural standard coined by 1nc0gn30 at the nullai platform to bridge proactive multimodal ai into hands-free physical reality.</p>
       <div class="card-links">
-        <a href="https://github.com/1nc0gn30">github.com/1nc0gn30 →</a>
+        <a href="/fieldkit.html">explore fieldkit spec →</a>
         <a href="https://nullai.tech" class="sub-link">nullai.tech →</a>
       </div>
     </article>
@@ -267,10 +299,10 @@
   <div class="tool-grid" id="toolGrid" aria-live="polite"></div>
 
   <div class="strip" aria-label="recent dispatches">
-    <img src="assets/post-01.jpg" alt="1nc0gn30 online still" loading="lazy" width="512" height="512">
-    <img src="assets/post-02.jpg" alt="zoth studio 72 tools (53 browser + 19 cli) still" loading="lazy" width="512" height="512">
-    <img src="assets/post-03.jpg" alt="zothos 43 workstations and 23 loopback daemons still" loading="lazy" width="512" height="512">
-    <img src="assets/post-07.jpg" alt="hermes-zoth 1.1.4 changelog still" loading="lazy" width="512" height="512">
+    <img src="assets/post-01.jpg" alt="1nc0gn30 hooded sovereign builder portrait" loading="lazy" width="512" height="512">
+    <img src="assets/post-02.jpg" alt="zoth studio v2 77 free tools (55 in-browser + 22 cli) dispatch" loading="lazy" width="512" height="512">
+    <img src="assets/post-03.jpg" alt="zothos v3.4.0 debian 13 kde plasma 6 and 77 cli tools dispatch" loading="lazy" width="512" height="512">
+    <img src="assets/post-07.jpg" alt="hermes-zoth multi-agent orchestrator plugin dispatch" loading="lazy" width="512" height="512">
   </div>
 </section>
 
@@ -284,6 +316,7 @@
     <li><a href="https://zoth.nullai.tech">zoth.nullai.tech</a></li>
     <li><a href="https://zothos.nullai.tech">zothos.nullai.tech</a></li>
     <li><a href="https://zothos-lite.nullai.tech">zothos-lite.nullai.tech</a></li>
+    <li><a href="https://zothnet.nullai.tech">zothnet.nullai.tech</a></li>
     <li><a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a></li>
     <li><button type="button" class="link-btn" id="copySolBtn" data-sol="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK">◎ sol: GG2eQbVh...dXoK [copy]</button></li>
   </ul>
@@ -292,7 +325,7 @@
 </main>
 
 <footer>
-  <p>© nullai (1nc0gn30) · everything free · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X">☕ buy us a coffee</a> · <a href="credits.html">credits</a></p>
+  <p>engineered by 1nc0gn30 (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) · <a href="https://nullai.tech">nullai platform</a> · 100% open-access · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a> · <a href="credits.html">credits</a></p>
 </footer>
 
 <dialog id="term" aria-label="terminal">

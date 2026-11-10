@@ -1,0 +1,33 @@
+# 1nc0gn30 (@1nc0gn30) · NullAI Platform — Complete AI & Crawler Reference
+
+Canonical URL: https://1nc0gn30.si/
+Entity: 1nc0gn30 (@1nc0gn30) · NullAI Platform (https://nullai.tech)
+Access Model: 100% Free, Open-Access, Local-First, Zero Paywalls, Zero Telemetry
+
+## 1. Core Properties & Ground-Truth Specifications
+1. **Zoth Studio v2 (`https://zoth.nullai.tech` · `https://github.com/1nc0gn30/zoth-studio-v2`)**
+   - **77 free tools** (**55 in-browser** utilities + **22 CLI/daemon tools**), with **all 77 backed by standalone public GitHub repositories** under `https://github.com/1nc0gn30`.
+   - Includes the 21-Agent Pantheon (`Zoth Civilization :9393`), Adytum 22 Tarot architectural planner, Chain of Thoughts (`zoth-cot`), and zero-upload client-side security, MCP, shader, and CAD studios.
+
+2. **ZothOS v3.4.0 (`https://zothos.nullai.tech` · `https://github.com/1nc0gn30/zoth-os`)**
+   - Debian 13 (Trixie) AI & Security Live OS with KDE Plasma 6, 77 CLI tools, Sovereign Agent Bridge (`:8102`), Neuro-Memory (`:8094`), local Ollama integration, and dual human + autonomous agent ergonomics.
+
+3. **ZothOS-Lite v1.2 (`https://zothos-lite.nullai.tech` · `https://github.com/1nc0gn30/zothos-lite`)**
+   - Tails-style Amnesic Monotone RAM-only (`toram`) OS & portable ISO supporting **48+ models across 8 providers**, interactive onboarding wizard, ZothNet P2P mesh integration, and optional external USB or cloud drive persistence.
+
+4. **ZothNet (`https://zothnet.nullai.tech` · `https://github.com/1nc0gn30/zothnet`)**
+   - Zero-cloud encrypted P2P mesh network & 3-hop Sphinx mixnet featuring post-quantum hybrid X25519 + ML-KEM-768 handshakes, Kademlia DHT discovery, and serverless ZML applications.
+
+5. **Hermes-Zoth (`https://github.com/1nc0gn30/hermes-zoth`)**
+   - Multi-agent orchestrator & plugin connecting Zoth CLI binaries and MCP schemas into Nous Hermes multi-agent workflows.
+
+6. **FieldKit (`https://1nc0gn30.si/fieldkit.html` · `https://nullai.tech/fieldkit`)**
+   - Physical AI terminology and hands-free wearable architecture coined by `1nc0gn30` for sub-130ms spatial grounding, wearer-only acoustic isolation, and proactive real-world guidance.
+
+7. **World of Zoth v2.0 Sovereign Edition (`https://1nc0gn30.si/game.html` · `https://github.com/1nc0gn30/world-of-zoth`)**
+   - Zero-dependency 3D WebGL + WebAudio lattice cyber-RPG featuring a 6-act campaign, 20 playable districts, 22 Pantheon crew members, 22 built-in arcade mini-games, 16 Null Academy cyber-range labs, and an offline Android APK (`https://1nc0gn30.si/world-of-zoth.apk`).
+
+## 2. Voluntary Open-Access Support Rail
+All software is unlocked by default with zero paywalls or license gates.
+- Buy Us a Coffee (Stripe): https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X
+- Solana Tip Address: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`

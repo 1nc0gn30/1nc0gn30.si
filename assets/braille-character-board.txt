@@ -1,7 +1,7 @@
 ================================================================================
   1nc0gn30 · HOODED BUILDER @ NULLAI · CHARACTER BOARD & BRAILLE LATTICE SPEC
   https://1nc0gn30.si · Unicode U+2800 (2x4 Sub-Pixel) + Ordered Bayer 4x4
-  Zoth Studio (72 Tools: 53 Browser + 19 CLI) · ZothOS (43 Workstations)
+  Zoth Studio v2 (77 Tools: 55 Browser + 22 CLI) · ZothOS v3.4.0 · ZothOS-Lite v1.2
 ================================================================================
 
 --- [ 3D PERSPECTIVE BRAILLE LATTICE (FRAME 0) ] ---

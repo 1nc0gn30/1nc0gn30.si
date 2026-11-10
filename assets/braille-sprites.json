@@ -9,9 +9,9 @@
     "bg": "#000000"
   },
   "stats": {
-    "zoth_studio_tools": 72,
-    "browser_tools": 53,
-    "cli_tools": 19,
+    "zoth_studio_tools": 77,
+    "browser_tools": 55,
+    "cli_tools": 22,
     "zothos_workstations": 43,
     "loopback_daemons": 23
   },
