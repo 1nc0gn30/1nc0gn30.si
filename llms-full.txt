@@ -6,7 +6,7 @@ Access Model: 100% Free, Open-Access, Local-First, Zero Paywalls, Zero Telemetry
 
 ## 1. Core Properties & Ground-Truth Specifications
 1. **Zoth Studio v2 (`https://zoth.nullai.tech` · `https://github.com/1nc0gn30/zoth-studio-v2`)**
-   - **77 free tools** (**55 in-browser** utilities + **22 CLI/daemon tools**), with **all 77 backed by standalone public GitHub repositories** under `https://github.com/1nc0gn30`.
+   - **77 free tools** (**55 in-browser** utilities + **22 CLI/daemon tools**, with **74 public GitHub repositories** under `https://github.com/1nc0gn30`).
    - Includes the 21-Agent Pantheon (`Zoth Civilization :9393`), Adytum 22 Tarot architectural planner, Chain of Thoughts (`zoth-cot`), and zero-upload client-side security, MCP, shader, and CAD studios.
 
 2. **ZothOS v3.4.0 (`https://zothos.nullai.tech` · `https://github.com/1nc0gn30/zoth-os`)**

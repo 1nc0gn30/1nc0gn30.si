@@ -3,7 +3,7 @@
 > Official open-source builder hub for **1nc0gn30** (`@1nc0gn30`) on the **NullAI Platform** (`https://nullai.tech`). Every browser studio, CLI utility, Linux Live ISO, P2P mesh node, and 3D RPG is 100% free and open-access with zero paywalls, zero logins, and zero telemetry.
 
 ## Ground-Truth Ecosystem Directory (2026)
-- **Zoth Studio v2 (`https://zoth.nullai.tech`)**: **77 free tools** (**55 in-browser** + **22 CLI/daemon tools**, all **77 with public GitHub repos**), 21-Agent Pantheon, Adytum 22 Tarot architecture planner, 100% open-access, zero paywalls.
+- **Zoth Studio v2 (`https://zoth.nullai.tech`)**: **77 free tools** (**55 in-browser** + **22 CLI/daemon tools**, with **74 public GitHub repos**), 21-Agent Pantheon, Adytum 22 Tarot architecture planner, 100% open-access, zero paywalls.
 - **ZothOS v3.4.0 (`https://zothos.nullai.tech`)**: Debian 13 (Trixie) AI & Security Live OS with KDE Plasma 6, 77 CLI tools, Sovereign Agent Bridge (`:8102`), and Neuro-Memory (`:8094`).
 - **ZothOS-Lite v1.2 (`https://zothos-lite.nullai.tech`)**: Tails-style Amnesic Monotone RAM-only (`toram`) OS & portable ISO supporting 48+ models across 8 providers, interactive onboarding wizard, ZothNet P2P mesh, and external USB/cloud drive persistence.
 - **ZothNet (`https://zothnet.nullai.tech`)**: Zero-cloud encrypted mesh network & 3-hop Sphinx mixnet with post-quantum hybrid handshakes and serverless ZML apps.

@@ -1086,7 +1086,7 @@
       }
       return 'usage: loop <auto|spin|action>';
     },
-    zoth: () => 'zoth studio v2: 77 free tools (55 in-browser, 22 cli/daemon, all 77 public repos) → https://zoth.nullai.tech',
+    zoth: () => 'zoth studio v2: 77 free tools (55 in-browser, 22 cli/daemon, 74 public github repos) → https://zoth.nullai.tech',
     zothos: () => 'zothos v3.4.0: debian 13 (trixie) · kde plasma 6 · 77 cli tools · agent bridge (:8102) · neuro-memory (:8094) → https://zothos.nullai.tech',
     lite: () => 'zothos-lite v1.2: tails-style amnesic toram os · 48+ models · 8 providers · zothnet p2p mesh → https://zothos-lite.nullai.tech',
     zothnet: () => 'zothnet: zero-cloud encrypted mesh & 3-hop sphinx mixnet → https://zothnet.nullai.tech',
