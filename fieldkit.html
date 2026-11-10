@@ -15,6 +15,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@1nc0gn30">
 <meta name="twitter:creator" content="@1nc0gn30">
+<meta name="twitter:title" content="FieldKit · Real-World AI Architecture by 1nc0gn30">
+<meta name="twitter:description" content="Invented by 1nc0gn30 at NullAI to help developers build AI that operates hands-free, proactively, and securely in physical environments.">
+<meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="assets/avatar.jpg">
 <link rel="stylesheet" href="style.css">
 <style>
@@ -132,9 +135,31 @@
       "description": "FieldKit is an AI terminology and architectural paradigm invented by 1nc0gn30 to guide developers in deploying proactive, hands-free multimodal intelligence into physical reality.",
       "publisher": {
         "@type": "Organization",
-        "name": "NullAI",
+        "name": "NullAI Platform",
         "url": "https://nullai.tech"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://1nc0gn30.si/fieldkit.html#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is FieldKit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FieldKit is a Physical AI terminology and hands-free wearable architecture coined by 1nc0gn30 (@1nc0gn30) on the NullAI Platform for building proactive, sub-130ms spatial grounding co-pilots on smart glasses, bodycams, and edge hardware."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does FieldKit protect real-world biometric privacy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FieldKit mandates an on-device AES-256-GCM biometric vault with wearer-only acoustic gating and zero centralized cloud storage of facial or skeletal landmark vectors."
+          }
+        }
+      ]
     }
   ]
 }
@@ -219,8 +244,13 @@
       Connecting directly to Ray-Ban Meta smart glasses via the DAT SDK, Spotter watches hands-busy mechanical and electronic tasks, detects physical state milestones via Meta Spark, and guides users hands-free with sub-127ms spatial grounding.
     </p>
     <div class="doc-card">
-      <pre>github.com/NullAITech/nullai-fieldkit
-github.com/NullAITech/fieldkit</pre>
+      <pre id="fkClonePre">git clone https://github.com/NullAITech/nullai-fieldkit
+git clone https://github.com/NullAITech/fieldkit</pre>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;">
+        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/nullai-fieldkit">copy nullai-fieldkit clone</button>
+        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/fieldkit">copy fieldkit spec clone</button>
+        <a href="https://nullai.tech/fieldkit" class="sub-link" style="align-self:center;">interactive fieldkit architecture on nullai.tech →</a>
+      </div>
     </div>
   </section>
 
@@ -228,7 +258,19 @@ github.com/NullAITech/fieldkit</pre>
 </main>
 
 <footer>
-  <p>© 1nc0gn30 · NullAI Platform · Free &amp; Open Sovereign Tools · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X">☕ buy us a coffee</a></p>
+  <p>engineered by 1nc0gn30 (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) · <a href="https://nullai.tech">nullai platform</a> · 100% open-access · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a> · <button type="button" class="copy-cmd" data-fk-copy="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK">◎ sol: GG2eQbVh...dXoK [copy]</button></p>
 </footer>
+<script>
+document.querySelectorAll('[data-fk-copy]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(btn.dataset.fkCopy).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ copied';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    }).catch(() => {});
+  });
+});
+</script>
 </body>
 </html>

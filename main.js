@@ -915,7 +915,38 @@
     });
   }
 
-  // ---- 6. Digestible 8-Tool Picker (Real Tools from Zoth Studio) ----
+  // ---- 5b. Ecosystem Project Filter & Quickstart Command Switcher ----
+  const projCards = Array.from(document.querySelectorAll('#projectsGrid > .card'));
+  document.querySelectorAll('[data-proj-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-proj-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.projFilter;
+      projCards.forEach(card => {
+        const match = cat === 'all' || card.dataset.pcat === cat;
+        card.hidden = !match;
+      });
+    });
+  });
+
+  const qsCode = document.getElementById('qsCode');
+  const qsCopyBtn = document.getElementById('qsCopyBtn');
+  const qsNote = document.getElementById('qsNote');
+  document.querySelectorAll('.qs-tab[data-qs-cmd]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.qs-tab[data-qs-cmd]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const cmd = tab.dataset.qsCmd;
+      if (qsCode) qsCode.textContent = '$ ' + cmd;
+      if (qsCopyBtn) {
+        qsCopyBtn.dataset.copy = cmd;
+        qsCopyBtn.textContent = 'copy cmd';
+      }
+      if (qsNote) qsNote.textContent = tab.dataset.qsNote || '';
+    });
+  });
+
+  // ---- 6. Searchable 40-Tool Picker (Real Tools from Zoth Studio v2) ----
   const TOOLS_BY_CAT = {
     popular: [
       ['Zoth ASCII Magic', 'image / video → braille & ascii', 'Convert images, video, or 3D models into sub-pixel Unicode Braille and 24-bit ANSI/HTML/SVG.', 'zoth-ascii-magic', 'zoth-ascii-magic'],
@@ -969,10 +1000,58 @@
     ]
   };
 
+  const ALL_TOOLS = Object.values(TOOLS_BY_CAT).flat();
   const toolGrid = document.getElementById('toolGrid');
-  function renderTools(cat) {
+  const toolSearch = document.getElementById('toolSearch');
+  const toolSearchClear = document.getElementById('toolSearchClear');
+  const toolCountBadge = document.getElementById('toolCountBadge');
+  let activeToolCat = 'popular';
+  let activeToolQuery = '';
+
+  function renderTools() {
     if (!toolGrid) return;
-    const list = TOOLS_BY_CAT[cat] || TOOLS_BY_CAT.popular;
+    const q = activeToolQuery.trim().toLowerCase();
+    const baseList = q
+      ? ALL_TOOLS
+      : (activeToolCat === 'all' ? ALL_TOOLS : (TOOLS_BY_CAT[activeToolCat] || TOOLS_BY_CAT.popular));
+
+    const list = q
+      ? baseList.filter(([name, tag, desc, id]) =>
+          name.toLowerCase().includes(q) ||
+          tag.toLowerCase().includes(q) ||
+          desc.toLowerCase().includes(q) ||
+          id.toLowerCase().includes(q)
+        )
+      : baseList;
+
+    if (toolSearchClear) toolSearchClear.hidden = !q;
+    if (toolCountBadge) {
+      toolCountBadge.textContent = q
+        ? `${list.length} match${list.length === 1 ? '' : 'es'} / 40`
+        : `showing ${list.length} / 40`;
+    }
+
+    if (!list.length) {
+      toolGrid.innerHTML = `
+        <div class="tool-empty">
+          <p>no featured workstation matched "<strong>${q.replace(/[<>&"]/g, '')}</strong>" — search all 77 tools directly in zoth studio v2.</p>
+          <div class="tool-empty-actions">
+            <button type="button" class="chip" id="resetToolSearchBtn">reset filter</button>
+            <a class="btn ghost-gold" href="https://zoth.nullai.tech">open all 77 tools →</a>
+          </div>
+        </div>
+      `;
+      const resetBtn = document.getElementById('resetToolSearchBtn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          activeToolQuery = '';
+          if (toolSearch) toolSearch.value = '';
+          renderTools();
+        });
+      }
+      return;
+    }
+
     toolGrid.innerHTML = list.map(([name, tag, desc, id, repo]) => `
       <article class="tool-item">
         <div>
@@ -983,21 +1062,64 @@
           <p>${desc}</p>
         </div>
         <div class="tool-foot">
-          <a href="https://zoth.nullai.tech/tools/${id}">open in browser →</a>
-          <a class="repo-link" href="https://github.com/1nc0gn30/${repo}">github ↗</a>
+          <a href="https://zoth.nullai.tech/tools/${id}">open studio →</a>
+          <div class="tool-foot-meta">
+            <button type="button" class="tool-copy-btn" data-tool-copy="https://zoth.nullai.tech/tools/${id}" title="Copy direct tool URL">copy url</button>
+            <a class="repo-link" href="https://github.com/1nc0gn30/${repo}">github ↗</a>
+          </div>
         </div>
       </article>
     `).join('');
+
+    toolGrid.querySelectorAll('.tool-copy-btn[data-tool-copy]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(btn.dataset.toolCopy).then(() => {
+          const orig = btn.textContent;
+          btn.textContent = '✓ copied';
+          setTimeout(() => { btn.textContent = orig; }, 1400);
+        }).catch(() => {});
+      });
+    });
   }
 
   document.querySelectorAll('.cat-tabs [data-cat]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.cat-tabs [data-cat]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderTools(btn.dataset.cat);
+      activeToolCat = btn.dataset.cat;
+      if (activeToolQuery) {
+        activeToolQuery = '';
+        if (toolSearch) toolSearch.value = '';
+      }
+      renderTools();
     });
   });
-  renderTools('popular');
+
+  if (toolSearch) {
+    toolSearch.addEventListener('input', () => {
+      activeToolQuery = toolSearch.value;
+      renderTools();
+    });
+  }
+  if (toolSearchClear) {
+    toolSearchClear.addEventListener('click', () => {
+      activeToolQuery = '';
+      if (toolSearch) {
+        toolSearch.value = '';
+        toolSearch.focus();
+      }
+      renderTools();
+    });
+  }
+  addEventListener('keydown', e => {
+    const tag = document.activeElement ? document.activeElement.tagName : '';
+    if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && (!dlg || !dlg.open) && toolSearch) {
+      e.preventDefault();
+      toolSearch.focus();
+    }
+  });
+  renderTools();
 
   document.querySelectorAll('.copy-cmd[data-copy]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1053,7 +1175,7 @@
   const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
   const say = s => { out.textContent += s + '\n'; out.scrollTop = out.scrollHeight; };
   const CMD = {
-    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos lite zothnet hermes nullai links tip clear exit',
+    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos lite civ zothnet hermes nullai links tip clear exit',
     whoami: () => '1nc0gn30 (@1nc0gn30) · NullAI Platform · free tools for ai, security & the web.',
     apk: () => {
       window.location.href = '/world-of-zoth.apk';
@@ -1067,7 +1189,7 @@
       window.location.href = '/world-of-zoth.apk';
       return 'World of Zoth v2.0: 3D lattice RPG (6 acts, 20 districts, 22 crew, 22 mini-games) → downloading APK...';
     },
-    ls: () => 'world-of-zoth.apk (2.1MB)  zoth-studio-v2/ (77 tools)  zothos-v3.4/ (77 cli)  zothos-lite-v1.2/  zothnet/  hermes-zoth/  nullai/',
+    ls: () => 'world-of-zoth.apk (2.1MB)  zoth-studio-v2/ (77 tools, 74 public repos)  zothos-v3.4/ (23 daemons)  zothos-lite-v1.2/ (56 models)  zoth-civilization-v3.0/ (23 pantheon)  zothnet/  hermes-zoth/  nullai/',
     fx: arg => {
       if (['hybrid', 'braille', 'dither', 'ascii', 'lattice'].includes(arg)) {
         activeFx = arg;
@@ -1087,12 +1209,13 @@
       return 'usage: loop <auto|spin|action>';
     },
     zoth: () => 'zoth studio v2: 77 free tools (55 in-browser, 22 cli/daemon, 74 public github repos) → https://zoth.nullai.tech',
-    zothos: () => 'zothos v3.4.0: debian 13 (trixie) · kde plasma 6 · 77 cli tools · agent bridge (:8102) · neuro-memory (:8094) → https://zothos.nullai.tech',
-    lite: () => 'zothos-lite v1.2: tails-style amnesic toram os · 48+ models · 8 providers · zothnet p2p mesh → https://zothos-lite.nullai.tech',
+    zothos: () => 'zothos v3.4.0: sovereign ai linux workstation · debian 13 · kde plasma 6 · 23 daemons · 77 cli tools · agent bridge (:8102) · neuro-memory (:8094) → https://zothos.nullai.tech',
+    lite: () => 'zothos-lite v1.2: amnesic monotone (#F7F7F4/#000000) live usb/iso · 56 curated models · 8 providers · toram ram-only · universal x86_64 → https://zothos-lite.nullai.tech',
+    civ: () => 'zoth civilization v3.0: 23 pantheon agents · 22-key sanctuary · imperator quests · deepseek flash × hermes agent byok → https://zoth-civilization.netlify.app',
     zothnet: () => 'zothnet: zero-cloud encrypted mesh & 3-hop sphinx mixnet → https://zothnet.nullai.tech',
-    hermes: () => 'hermes-zoth: git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
+    hermes: () => 'hermes-zoth (nous hermes + deepseek flash byok): git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
     nullai: () => 'https://nullai.tech · NullAI Platform · everything free.',
-    links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech',
+    links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech · zoth-civilization.netlify.app',
     tip: () => 'stripe: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X · sol: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK',
     sudo: () => 'nice try.',
     clear: () => { out.textContent = ''; return null; },
