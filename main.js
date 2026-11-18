@@ -1,10 +1,63 @@
 // 1nc0gn30.si — vanilla JS, zero deps.
-// 60fps Volumetric 360° Character Turntable, Vortex Particle Morphs, Dynamic Rim Lighting & 5 Shader Modes.
+// 60fps Volumetric 360° Character Turntable, Dual-Reality Switcher, Live U+2800 Braille Synth & 80-Tool Ecosystem.
 (() => {
   'use strict';
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced) document.documentElement.classList.add('reduced');
+
+  // ---- 0. Dual-Reality Switcher (Obsidian Gold <-> Editorial Vellum) ----
+  function initReality() {
+    try {
+      const q = new URLSearchParams(location.search).get('theme');
+      if (q === 'vellum' || q === 'light') return 'vellum';
+      if (q === 'obsidian' || q === 'dark') return 'obsidian';
+      const saved = localStorage.getItem('1nc0gn30-reality');
+      if (saved === 'vellum' || saved === 'obsidian') return saved;
+    } catch {
+      // ignore
+    }
+    return 'obsidian';
+  }
+
+  let currentReality = initReality();
+  function applyReality(mode) {
+    currentReality = mode === 'vellum' ? 'vellum' : 'obsidian';
+    document.documentElement.setAttribute('data-reality', currentReality);
+    const glyph = document.getElementById('realityGlyph');
+    if (glyph) glyph.textContent = currentReality === 'vellum' ? '☀' : '◐';
+    try {
+      localStorage.setItem('1nc0gn30-reality', currentReality);
+    } catch {
+      // ignore
+    }
+  }
+  applyReality(currentReality);
+
+  const realityBtn = document.getElementById('realityBtn');
+  if (realityBtn) {
+    realityBtn.addEventListener('click', () => {
+      applyReality(currentReality === 'obsidian' ? 'vellum' : 'obsidian');
+    });
+  }
+
+  // ---- Rolling Telemetry Counters ----
+  document.querySelectorAll('.t-num[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count, 10) || 0;
+    if (reduced || !target) {
+      el.textContent = String(target);
+      return;
+    }
+    const start = performance.now();
+    const dur = 850;
+    function step(now) {
+      const p = Math.min(1, (now - start) / dur);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(target * ease));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
 
   const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + 0.5) / 16);
   const BIT = [[0x01, 0x08], [0x02, 0x10], [0x04, 0x20], [0x40, 0x80]];
@@ -72,7 +125,7 @@
         if (k < N) E.push([id(i, j, k), id(i, j, k + 1)]);
       }
 
-  let turntableYaw = 0; // Synchronized with character spin
+  let turntableYaw = 0;
 
   function drawLattice(t) {
     if (!L) return;
@@ -81,7 +134,7 @@
     const ay = t * 0.00022 + (mouse.x - 0.5) * 1.1 + turntableYaw * 0.35;
     const ax = 0.48 + (mouse.y - 0.5) * 0.7 + Math.sin(t * 0.0002) * 0.18;
     const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-    const sc = Math.min(W, H) * 0.42, ox = W * 0.68, oy = H * 0.5;
+    const sc = Math.min(W, H) * 0.42, ox = W * 0.72, oy = H * 0.5;
     const pr = P.map(([x, y, z]) => {
       let X = x * cy - z * sy, Z = x * sy + z * cy, Y = y * cx - Z * sx;
       Z = y * sx + Z * cx;
@@ -110,7 +163,6 @@
 
   const POSE_NAMES = ['hero', 'idle', 'front', 'three-quarter', 'side', 'back', 'walk', 'type', 'dissolve'];
 
-  // Choreographed sequences with turntable degree angles
   const SEQUENCES = {
     auto: [
       { pose: 'hero', flip: false, hold: 2300, deg: 15, tag: 'HERO · SENTINEL' },
@@ -144,13 +196,12 @@
     ]
   };
 
-  let activeFx = 'hybrid'; // 'hybrid' | 'braille' | 'dither' | 'ascii' | 'lattice'
+  let activeFx = 'hybrid';
   let activeSeq = 'auto';
   let seqIndex = 0;
   let seqSwitchTime = performance.now();
   const TRANSITION_MS = 620;
 
-  // Ambient floating ember / glyph stream pool
   const AMBIENT_PARTICLES = Array.from({ length: 110 }, (_, i) => ({
     x: Math.random() * CW,
     y: Math.random() * (CH - 120) + 40,
@@ -187,7 +238,6 @@
     const raw = octx.getImageData(0, 0, CW, CH);
     const d = raw.data;
 
-    // 1. Key out near-black background & build 4-tone Ordered Bayer 4x4 Dither canvas + Rim-Light Specular Layer
     const ditherOff = document.createElement('canvas');
     ditherOff.width = CW;
     ditherOff.height = CH;
@@ -214,7 +264,6 @@
         }
         d[i + 3] = Math.min(255, Math.round(lum * 1450));
 
-        // Sobel horizontal/vertical gradient for golden rim highlight
         const iL = (y * CW + (x - 1)) * 4;
         const iR = (y * CW + (x + 1)) * 4;
         const iU = ((y - 1) * CW + x) * 4;
@@ -229,7 +278,6 @@
           rd[i + 3] = Math.min(255, Math.round(edgeMag * 520));
         }
 
-        // 4-tone Ordered Bayer 4x4 pixel dither
         const bx = ((x / PIX) | 0) & 3;
         const by = ((y / PIX) | 0) & 3;
         const thr = BAYER[by * 4 + bx];
@@ -249,7 +297,6 @@
     dctx.putImageData(dImg, 0, 0);
     rctx.putImageData(rImg, 0, 0);
 
-    // 2. High-density U+2800 Sub-Pixel Phosphor Matrix (`brailleOff`)
     const brailleOff = document.createElement('canvas');
     brailleOff.width = CW;
     brailleOff.height = CH;
@@ -268,7 +315,6 @@
       }
     }
 
-    // 3. Sobel Edge-Aware TrueColor ASCII Matrix (`asciiOff`) + 3D Voxel Cloud (`cells` & `voxels`)
     const asciiOff = document.createElement('canvas');
     asciiOff.width = CW;
     asciiOff.height = CH;
@@ -309,15 +355,12 @@
           actx.fillText(asciiCh, gc * CELL_W, gr * CELL_H);
 
           const cellObj = {
-            gc,
-            gr,
+            gc, gr,
             x: gc * CELL_W,
             y: gr * CELL_H,
             nx: (gc * CELL_W - dx) / Math.max(1, dw),
             ny: (gr * CELL_H - dy) / Math.max(1, dh),
-            ch,
-            asciiCh,
-            tone,
+            ch, asciiCh, tone,
             lum: avgLum,
             edge: edgeSum > 1.2,
             seed: ((gc * 73 + gr * 151) & 255) / 255
@@ -336,11 +379,10 @@
   POSE_NAMES.forEach(name => {
     const im = new Image();
     im.onload = () => poseBank.set(name, buildPoseEntry(name, im));
-    im.src = `assets/${name}.jpg`;
+    im.src = `/assets/${name}.jpg`;
   });
 
-  // ---- 3. 3D Perspective Holo-Pedestal & Orbital Telemetry Ring ----
-  function drawPedestal(t, deg, labelText, progressRatio) {
+  function drawPedestal(t, deg) {
     if (!ctx) return;
     const cx = CW * 0.46;
     const cy = CH * 0.84;
@@ -349,20 +391,16 @@
     const rot = (deg * Math.PI) / 180 + t * 0.00055 + turntableYaw;
 
     ctx.save();
-
-    // 1. Rear 3D cylindrical orbital latitude rings behind 1nc0gn30 (torso & shoulder height)
     for (const ringY of [CH * 0.34, CH * 0.56]) {
       ctx.strokeStyle = 'rgba(138, 101, 20, 0.22)';
       ctx.lineWidth = 1;
       ctx.setLineDash([6, 10]);
       ctx.beginPath();
-      // Back half of the ellipse (PI to 2*PI)
       ctx.ellipse(cx, ringY, rx * 0.92, 34, 0, Math.PI, Math.PI * 2);
       ctx.stroke();
     }
     ctx.setLineDash([]);
 
-    // 2. Ambient radial gold floor glow under boots
     const floorGlow = ctx.createRadialGradient(cx, cy, 12, cx, cy, rx * 1.18);
     floorGlow.addColorStop(0, 'rgba(245, 184, 46, 0.26)');
     floorGlow.addColorStop(0.55, 'rgba(138, 101, 20, 0.09)');
@@ -372,7 +410,6 @@
     ctx.ellipse(cx, cy, rx * 1.18, ry * 1.38, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Outer degree tick ring (36 ticks around 360°)
     for (let i = 0; i < 36; i++) {
       const a = (i / 36) * Math.PI * 2 + rot;
       const sinA = Math.sin(a), cosA = Math.cos(a);
@@ -396,7 +433,6 @@
       }
     }
 
-    // 4. Inner dashed counter-rotating ring
     ctx.strokeStyle = 'rgba(245, 184, 46, 0.38)';
     ctx.lineWidth = 1.4;
     ctx.setLineDash([10, 7]);
@@ -405,17 +441,14 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // 5. Core solid rim ellipse
     ctx.strokeStyle = 'rgba(245, 184, 46, 0.42)';
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
     ctx.stroke();
-
     ctx.restore();
   }
 
-  // Front orbital HUD arc, front pedestal progress arc, & vertical laser scanner plane drawn OVER the character
   function drawFrontOrbitalHUD(t, deg, u, labelText, progressRatio) {
     if (!ctx) return;
     const cx = CW * 0.46;
@@ -425,7 +458,6 @@
     const rot = (deg * Math.PI) / 180 + t * 0.00055 + turntableYaw;
 
     ctx.save();
-    // 1. Front waist orbital arc with rotating telemetry node
     const ringY = CH * 0.56;
     ctx.strokeStyle = 'rgba(245, 184, 46, 0.28)';
     ctx.lineWidth = 1.2;
@@ -435,7 +467,6 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Orbiting telemetry node on front arc
     const orbAngle = (t * 0.0012 + rot) % (Math.PI * 2);
     if (Math.sin(orbAngle) > 0) {
       const ox = cx + Math.cos(orbAngle) * rx * 0.92;
@@ -447,7 +478,6 @@
       ctx.fillText(`AZ:${String(((Math.round(deg) % 360) + 360) % 360).padStart(3, '0')}°`, ox + 8, oy + 4);
     }
 
-    // 2. Vertical holographic laser scanner sweep during morphs & 360° spins
     if (u < 1.0 || activeSeq === 'spin') {
       const scanPhase = u < 1.0 ? u : ((t * 0.0008) % 1);
       const scanX = cx - 210 + scanPhase * 420;
@@ -460,7 +490,6 @@
       ctx.fillRect(scanX - 24, CH * 0.12, 48, CH * 0.72);
     }
 
-    // 3. Front pedestal progress arc + high-contrast telemetry pill (drawn on top of boots)
     ctx.strokeStyle = '#f2ead6';
     ctx.lineWidth = 2.6;
     ctx.beginPath();
@@ -484,17 +513,14 @@
     ctx.restore();
   }
 
-  // ---- 4. Volumetric Pose & Particle Vortex Renderer ----
   function renderCharacterFrame(curEntry, curStep, prevEntry, prevStep, u, t) {
     if (!curEntry || !ctx) return;
     const bobY = Math.sin(t * 0.0035) * 4.5;
-    // Continuous 3D turntable parallax sway + pointer tilt
     const spinSwayX = Math.sin(t * 0.0028) * (activeSeq === 'spin' ? 14 : 7);
     const tiltX = (mouse.x - 0.5) * 18 + spinSwayX;
     const tiltY = (mouse.y - 0.5) * 10;
     const isMorphing = prevEntry && u < 1.0;
 
-    // 1. Ambient background floating embers / code stream
     ctx.font = '11px ui-monospace, "JetBrains Mono", monospace';
     for (let i = 0; i < AMBIENT_PARTICLES.length; i++) {
       const p = AMBIENT_PARTICLES[i];
@@ -517,20 +543,16 @@
       }
     }
 
-    // 2. When morphing between two poses, swirl 1,400 point-cloud particles along a 3D helical vortex path!
     if (isMorphing) {
       const ease = u * u * (3 - 2 * u);
-      const vortexAmp = Math.sin(u * Math.PI); // peaks at u = 0.5
+      const vortexAmp = Math.sin(u * Math.PI);
       const srcCells = prevEntry.cells;
       const dstCells = curEntry.cells;
       const count = Math.min(srcCells.length, dstCells.length);
 
-      // Draw incoming base layer with expanding wavefront clip
       drawSinglePoseShader(curEntry, curStep.flip, ease, t, bobY, tiltX, tiltY, vortexAmp * 0.55);
-      // Draw outgoing base layer fading through Bayer dissolve
       drawSinglePoseShader(prevEntry, prevStep.flip, (1 - ease) * 0.65, t, bobY, tiltX, tiltY, vortexAmp * 0.85);
 
-      // Helical 3D particle bridge connecting outgoing pose -> incoming pose
       ctx.save();
       ctx.font = 'bold 13px ui-monospace, "JetBrains Mono", monospace';
       for (let i = 0; i < count; i++) {
@@ -541,7 +563,6 @@
         const bx = (curStep.flip ? CW - b.x - CELL_W : b.x) + tiltX * 0.5;
         const by = b.y + bobY + tiltY * 0.5;
 
-        // Swirl arc around character spine (cx = CW * 0.45)
         const angle = vortexAmp * Math.PI * (0.95 + a.seed * 1.1) * (i % 2 === 0 ? 1 : -1);
         const midX = ax + (bx - ax) * ease + Math.sin(angle) * (55 + a.seed * 115) * vortexAmp;
         const midY = ay + (by - ay) * ease + Math.cos(angle) * 28 * vortexAmp;
@@ -556,7 +577,6 @@
         }
       }
 
-      // Golden scanline shockwave ring at the morph wavefront
       const waveY = curEntry.dy + curEntry.dh * ease;
       const waveGrad = ctx.createLinearGradient(0, waveY - 32, 0, waveY + 32);
       waveGrad.addColorStop(0, 'rgba(245, 184, 46, 0)');
@@ -569,7 +589,6 @@
       drawSinglePoseShader(curEntry, curStep.flip, 1.0, t, bobY, tiltX, tiltY, 0);
     }
 
-    // 3. Pose-specific kinetic micro-VFX (e.g. holographic code stream rising from laptop in TYPE pose)
     if (curStep.pose === 'type') {
       ctx.save();
       ctx.font = 'bold 13px ui-monospace, "JetBrains Mono", monospace';
@@ -589,11 +608,9 @@
     ctx.save();
     ctx.globalAlpha = alpha;
 
-    // MODE 1: HYBRID (High-def sprite + dynamic cursor rim-light + dissolving U+2800 Braille & Bayer ember vortex)
     if (activeFx === 'hybrid') {
       const dissolveFront = 0.58 + 0.14 * Math.sin(t * 0.0018) - extraTurbulence * 0.35;
 
-      // Composite sprite + rim-light + right-side dissolve mask on isolated scratchOff canvas
       sctx.clearRect(0, 0, CW, CH);
       sctx.save();
       if (flip) {
@@ -619,7 +636,6 @@
 
       ctx.drawImage(scratchOff, 0, 0);
 
-      // Streaming U+2800 Braille + Bayer voxel wake
       ctx.font = 'bold 13px ui-monospace, "JetBrains Mono", monospace';
       for (let i = 0; i < entry.cells.length; i++) {
         const c = entry.cells[i];
@@ -640,10 +656,7 @@
           ctx.fillText(c.ch, baseX + curlX + tiltX * 0.5, c.y + curlY + tiltY * 0.5);
         }
       }
-    }
-
-    // MODE 2: BRAILLE (Sub-pixel phosphor dot matrix + Sobel edge glow + curl-noise Braille wake)
-    else if (activeFx === 'braille') {
+    } else if (activeFx === 'braille') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -667,10 +680,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillText(c.ch, baseX + dx + tiltX * 0.5, c.y + dy + tiltY * 0.5);
       }
-    }
-
-    // MODE 3: DITHER (4-Tone Ordered Bayer 4x4 Pixel Shader + Specular Rim + Disintegrating Voxel Blocks)
-    else if (activeFx === 'dither') {
+    } else if (activeFx === 'dither') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -691,10 +701,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillRect(vx | 0, vy | 0, 4.5, 4.5);
       }
-    }
-
-    // MODE 4: ASCII (Sobel Edge-Aware TrueColor Matrix + Streaming Hex/Code Wake)
-    else if (activeFx === 'ascii') {
+    } else if (activeFx === 'ascii') {
       ctx.save();
       if (flip) {
         ctx.translate(CW, 0);
@@ -716,10 +723,7 @@
         ctx.fillStyle = c.tone === 2 ? '#f2ead6' : c.tone === 1 ? '#f5b82e' : '#8a6514';
         ctx.fillText(glyph, baseX + dx + tiltX * 0.5, c.y + dy + tiltY * 0.5);
       }
-    }
-
-    // MODE 5: 3D VOXEL LATTICE (True 3D Perspective Point-Cloud + Wireframe Depth Relief)
-    else if (activeFx === 'lattice') {
+    } else if (activeFx === 'lattice') {
       const yaw = Math.sin(t * 0.0022) * 0.42 + (mouse.x - 0.5) * 0.85 + turntableYaw * 0.6;
       const pitch = (mouse.y - 0.5) * 0.45;
       const cosY = Math.cos(yaw), sinY = Math.sin(yaw);
@@ -731,7 +735,6 @@
         const c = vox[i];
         const bx = (flip ? CW - c.x - CELL_W : c.x) - cx;
         const by = c.y - CH * 0.46;
-        // Extrude Z depth from luminance + Sobel edge + wave ripple
         const bz = (c.lum - 0.22) * 165 + (c.edge ? 26 : 0) + Math.sin(t * 0.004 + c.gr * 0.18) * 10;
 
         const rx = bx * cosY - bz * sinY;
@@ -786,7 +789,6 @@
       seqIndex = (seqIndex + 1) % seq.length;
       seqSwitchTime = t;
     } else if (manualCurStep && !isPaused && elapsed >= 2600) {
-      // Resume choreography smoothly after manual pose inspection
       manualCurStep = null;
       manualPrevStep = null;
       seqSwitchTime = t;
@@ -806,19 +808,14 @@
       ? prevStep.deg + (curStep.deg - prevStep.deg) * u
       : curStep.deg;
 
-    // 1. Draw 3D rotating holo-pedestal & rear orbital rings underneath boots
-    drawPedestal(t, interpDeg, curStep.tag, progressRatio);
-
-    // 2. Draw volumetric character & helical particle vortex
+    drawPedestal(t, interpDeg);
     if (curEntry) {
       renderCharacterFrame(curEntry, curStep, prevEntry, prevStep, u, t);
     }
-
-    // 3. Draw front orbital HUD arc & vertical laser scanner sweep over character
     drawFrontOrbitalHUD(t, interpDeg, u, curStep.tag, progressRatio);
   }
 
-  // ---- 5. Interactive Drag-to-Spin 360° Turntable & Click-to-Morph ----
+  // ---- 3. Interactive Drag-to-Spin 360° Turntable ----
   const spriteStage = document.getElementById('spriteStage');
   let isDragging = false;
   let dragStartX = 0;
@@ -839,7 +836,6 @@
       dragAccumX += Math.abs(dx);
       turntableYaw += dx * 0.008;
 
-      // Scrub through 360° turnaround angles every 32px of horizontal drag
       if (Math.abs(dx) > 4 && Math.abs(turntableYaw) > 0.16) {
         manualCurStep = null;
         manualPrevStep = null;
@@ -853,7 +849,6 @@
     const endDrag = () => {
       if (!isDragging) return;
       isDragging = false;
-      // If it was a clean click/tap (minimal drag), trigger immediate vortex morph to next pose!
       if (dragAccumX < 8) {
         manualCurStep = null;
         manualPrevStep = null;
@@ -871,7 +866,7 @@
       document.querySelectorAll('[data-fx]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       activeFx = btn.dataset.fx;
-      seqSwitchTime = performance.now(); // trigger crisp shader wave on switch
+      seqSwitchTime = performance.now();
     });
   });
 
@@ -915,7 +910,7 @@
     });
   }
 
-  // ---- 5b. Ecosystem Project Filter & Quickstart Command Switcher ----
+  // ---- 4. Ecosystem Project Filter & Quickstart Command Switcher ----
   const projCards = Array.from(document.querySelectorAll('#projectsGrid > .card'));
   document.querySelectorAll('[data-proj-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -946,7 +941,180 @@
     });
   });
 
-  // ---- 6. Searchable 40-Tool Picker (Real Tools from Zoth Studio v2) ----
+  // ---- 5. Genuine In-Browser U+2800 Braille & Bayer 4x4 Sigil Synth ----
+  const synthInput = document.getElementById('synthInput');
+  const synthOutput = document.getElementById('synthOutput');
+  const synthStats = document.getElementById('synthStats');
+  const synthWaveToggle = document.getElementById('synthWaveToggle');
+  let synthMode = 'braille'; // 'braille' | 'bayer' | 'ascii'
+  let synthWave = true;
+
+  const synthCanvas = document.createElement('canvas');
+  const synthCtx = synthCanvas.getContext('2d', { willReadFrequently: true });
+
+  function renderSynth() {
+    if (!synthInput || !synthOutput || !synthCtx) return;
+    const text = (synthInput.value || '1NC0GN30').toUpperCase().slice(0, 18);
+    const cols = Math.min(76, Math.max(36, text.length * 7 + 8));
+    const rows = 11;
+    const pw = cols * 2;
+    const ph = rows * 4;
+
+    synthCanvas.width = pw;
+    synthCanvas.height = ph;
+    synthCtx.fillStyle = '#000';
+    synthCtx.fillRect(0, 0, pw, ph);
+
+    // Draw crisp geometric text + corner frame onto pixel buffer
+    synthCtx.fillStyle = '#fff';
+    synthCtx.textAlign = 'center';
+    synthCtx.textBaseline = 'middle';
+    const fontSize = Math.max(14, Math.min(28, Math.floor((pw * 0.88) / Math.max(4, text.length * 0.68))));
+    synthCtx.font = `900 ${fontSize}px "Syne", "Space Grotesk", sans-serif`;
+    synthCtx.fillText(text, pw / 2, ph / 2 + 1);
+
+    const img = synthCtx.getImageData(0, 0, pw, ph).data;
+    const lines = [];
+
+    if (synthMode === 'braille') {
+      for (let r = 0; r < rows; r++) {
+        let rowStr = '';
+        for (let c = 0; c < cols; c++) {
+          let mask = 0;
+          for (let dy = 0; dy < 4; dy++) {
+            for (let dx = 0; dx < 2; dx++) {
+              const x = c * 2 + dx;
+              const y = r * 4 + dy;
+              const lum = img[(y * pw + x) * 4] / 255;
+              const wave = synthWave
+                ? 0.22 * Math.exp(-Math.abs((y / ph) * 2 - 1) * 2.2) * (0.5 + 0.5 * Math.sin(x * 0.28 + y * 0.35))
+                : 0;
+              const bayer = BAYER[(y & 3) * 4 + (x & 3)];
+              if (lum * 0.95 + wave > bayer * 0.62) {
+                mask |= BIT[dy][dx];
+              }
+            }
+          }
+          rowStr += String.fromCharCode(0x2800 + mask);
+        }
+        lines.push(rowStr);
+      }
+    } else if (synthMode === 'bayer') {
+      const BLOCKS = [' ', '░', '▒', '▓', '█'];
+      for (let r = 0; r < rows; r++) {
+        let rowStr = '';
+        for (let c = 0; c < cols; c++) {
+          let sum = 0;
+          for (let dy = 0; dy < 4; dy++) {
+            for (let dx = 0; dx < 2; dx++) {
+              const x = c * 2 + dx;
+              const y = r * 4 + dy;
+              sum += img[(y * pw + x) * 4] / 255;
+            }
+          }
+          let avg = sum / 8;
+          if (synthWave) {
+            avg += 0.16 * (0.5 + 0.5 * Math.sin(c * 0.45 + r * 0.8));
+          }
+          const bayer = BAYER[(r & 3) * 4 + (c & 3)] * 0.22;
+          const idx = Math.min(4, Math.max(0, Math.floor((avg + bayer) * 4.2)));
+          rowStr += BLOCKS[idx];
+        }
+        lines.push(rowStr);
+      }
+    } else {
+      const RAMP = ' .:-=+*#%@';
+      for (let r = 0; r < rows; r++) {
+        let rowStr = '';
+        for (let c = 0; c < cols; c++) {
+          const x = c * 2 + 1;
+          const y = r * 4 + 2;
+          const lum = img[(y * pw + x) * 4] / 255;
+          const lumL = x > 1 ? img[(y * pw + (x - 2)) * 4] / 255 : lum;
+          const lumU = y > 2 ? img[((y - 2) * pw + x) * 4] / 255 : lum;
+          const edge = Math.hypot(lum - lumL, lum - lumU);
+          if (edge > 0.45) {
+            rowStr += Math.abs(lum - lumL) > Math.abs(lum - lumU) ? '|' : '=';
+          } else {
+            const v = lum + (synthWave ? 0.14 * (0.5 + 0.5 * Math.cos(c * 0.4 - r * 0.7)) : 0);
+            rowStr += RAMP[Math.min(RAMP.length - 1, Math.floor(v * (RAMP.length - 1)))];
+          }
+        }
+        lines.push(rowStr);
+      }
+    }
+
+    synthOutput.textContent = lines.join('\n');
+    if (synthStats) {
+      synthStats.textContent = `CELLS: ${cols}×${rows} (${pw}×${ph} SUB-PX) · MODE: ${synthMode.toUpperCase()}`;
+    }
+  }
+
+  if (synthInput) {
+    synthInput.addEventListener('input', renderSynth);
+    document.querySelectorAll('[data-synth-preset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-synth-preset]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        synthInput.value = btn.dataset.synthPreset;
+        renderSynth();
+      });
+    });
+    document.querySelectorAll('[data-synth-mode]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-synth-mode]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        synthMode = btn.dataset.synthMode;
+        renderSynth();
+      });
+    });
+    if (synthWaveToggle) {
+      synthWaveToggle.addEventListener('click', () => {
+        synthWave = !synthWave;
+        synthWaveToggle.setAttribute('aria-pressed', String(synthWave));
+        synthWaveToggle.textContent = `≈ Wave Field: ${synthWave ? 'ON' : 'OFF'}`;
+        synthWaveToggle.classList.toggle('active', synthWave);
+        renderSynth();
+      });
+    }
+    const copyBrailleBtn = document.getElementById('copyBrailleOutBtn');
+    if (copyBrailleBtn) {
+      copyBrailleBtn.addEventListener('click', () => {
+        if (!navigator.clipboard || !synthOutput) return;
+        navigator.clipboard.writeText(synthOutput.textContent).then(() => {
+          const orig = copyBrailleBtn.textContent;
+          copyBrailleBtn.textContent = '✓ Copied Unicode!';
+          setTimeout(() => { copyBrailleBtn.textContent = orig; }, 1500);
+        }).catch(() => {});
+      });
+    }
+    const dlSvgBtn = document.getElementById('downloadBrailleSvgBtn');
+    if (dlSvgBtn) {
+      dlSvgBtn.addEventListener('click', () => {
+        if (!synthOutput) return;
+        const rows = synthOutput.textContent.split('\n');
+        const charW = 8;
+        const lineH = 15;
+        const w = Math.max(240, (rows[0]?.length || 40) * charW + 32);
+        const h = rows.length * lineH + 28;
+        const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const nodes = rows.map((r, idx) =>
+          `<text x="16" y="${22 + idx * lineH}" fill="#f5b82e" font-family="'JetBrains Mono', monospace" font-size="12px" xml:space="preserve">${esc(r)}</text>`
+        ).join('\n  ');
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">\n  <rect width="100%" height="100%" rx="8" fill="#050401"/>\n  ${nodes}\n</svg>`;
+        const blob = new Blob([svg], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `1nc0gn30-sigil-${synthMode}.svg`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+    }
+    renderSynth();
+  }
+
+  // ---- 6. Searchable 40-Tool Picker (Real Tools from 80-Tool Zoth Studio v2) ----
   const TOOLS_BY_CAT = {
     popular: [
       ['Zoth ASCII Magic', 'image / video → braille & ascii', 'Convert images, video, or 3D models into sub-pixel Unicode Braille and 24-bit ANSI/HTML/SVG.', 'zoth-ascii-magic', 'zoth-ascii-magic'],
@@ -1034,10 +1202,10 @@
     if (!list.length) {
       toolGrid.innerHTML = `
         <div class="tool-empty">
-          <p>no featured workstation matched "<strong>${q.replace(/[<>&"]/g, '')}</strong>" — search all 77 tools directly in zoth studio v2.</p>
+          <p>No featured workstation matched "<strong>${q.replace(/[<>&"]/g, '')}</strong>" — search all 80 tools directly in Zoth Studio v2.</p>
           <div class="tool-empty-actions">
             <button type="button" class="chip" id="resetToolSearchBtn">reset filter</button>
-            <a class="btn ghost-gold" href="https://zoth.nullai.tech">open all 77 tools →</a>
+            <a class="btn ghost-gold" href="https://zoth.nullai.tech">Open All 80 Tools →</a>
           </div>
         </div>
       `;
@@ -1062,7 +1230,7 @@
           <p>${desc}</p>
         </div>
         <div class="tool-foot">
-          <a href="https://zoth.nullai.tech/tools/${id}">open studio →</a>
+          <a href="https://zoth.nullai.tech/tools/${id}">Open Studio →</a>
           <div class="tool-foot-meta">
             <button type="button" class="tool-copy-btn" data-tool-copy="https://zoth.nullai.tech/tools/${id}" title="Copy direct tool URL">copy url</button>
             <a class="repo-link" href="https://github.com/1nc0gn30/${repo}">github ↗</a>
@@ -1112,6 +1280,10 @@
       renderTools();
     });
   }
+
+  const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
+  const reelDialog = document.getElementById('reelDialog'), reelPlayer = document.getElementById('reelPlayer');
+
   addEventListener('keydown', e => {
     const tag = document.activeElement ? document.activeElement.tagName : '';
     if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && (!dlg || !dlg.open) && toolSearch) {
@@ -1126,18 +1298,42 @@
       if (!navigator.clipboard) return;
       navigator.clipboard.writeText(btn.dataset.copy).then(() => {
         const orig = btn.textContent;
-        btn.textContent = '✓ copied command';
+        btn.textContent = '✓ copied';
         setTimeout(() => { btn.textContent = orig; }, 1600);
       }).catch(() => {});
     });
   });
 
-  // ---- 7. 60fps Master Loop ----
+  // ---- 7. Showreel Theater Modal ----
+  const openShowreelBtn = document.getElementById('openShowreelBtn');
+  const reelCloseBtn = document.getElementById('reelCloseBtn');
+  if (openShowreelBtn && reelDialog) {
+    openShowreelBtn.addEventListener('click', () => {
+      reelDialog.showModal();
+      if (reelPlayer) reelPlayer.play().catch(() => {});
+    });
+  }
+  if (reelCloseBtn && reelDialog) {
+    reelCloseBtn.addEventListener('click', () => {
+      if (reelPlayer) reelPlayer.pause();
+      reelDialog.close();
+    });
+  }
+  if (reelDialog) {
+    reelDialog.addEventListener('click', e => {
+      if (e.target === reelDialog) {
+        if (reelPlayer) reelPlayer.pause();
+        reelDialog.close();
+      }
+    });
+  }
+
+  // ---- 8. 60fps Master Loop ----
   let visible = true, lastLat = 0;
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
 
   function frame(t) {
-    if (visible && scrollY < innerHeight * 1.2) {
+    if (visible && scrollY < innerHeight * 1.25) {
       updateStage(t);
       if (t - lastLat > 36) {
         lastLat = t;
@@ -1158,25 +1354,41 @@
   });
   requestAnimationFrame(frame);
 
-  // ---- 8. Solana Tip Copy & Shell (`>_` / backtick) ----
+  // ---- 9. Solana Tip Copy & Interactive Sovereign Shell ----
   const copySolBtn = document.getElementById('copySolBtn');
   if (copySolBtn) {
     copySolBtn.addEventListener('click', () => {
       const addr = copySolBtn.dataset.sol;
       if (!navigator.clipboard) return;
       navigator.clipboard.writeText(addr).then(() => {
-        const orig = copySolBtn.textContent;
-        copySolBtn.textContent = '✓ copied ' + addr.slice(0, 8) + '...' + addr.slice(-4);
-        setTimeout(() => { copySolBtn.textContent = orig; }, 1600);
+        const orig = copySolBtn.innerHTML;
+        copySolBtn.innerHTML = '<span>✓ Copied Solana Address!</span><span class="link-arrow">OK</span>';
+        setTimeout(() => { copySolBtn.innerHTML = orig; }, 1700);
       }).catch(() => {});
     });
   }
 
-  const dlg = document.getElementById('term'), out = document.getElementById('termOut'), inp = document.getElementById('termIn');
-  const say = s => { out.textContent += s + '\n'; out.scrollTop = out.scrollHeight; };
+  const say = s => {
+    if (!out) return;
+    out.textContent += s + '\n';
+    out.scrollTop = out.scrollHeight;
+  };
+
+  const NEOFETCH = [
+    '  ⣀⣤⣶⣿⣿⣿⣿⣶⣤⣀      1nc0gn30@nullai.tech',
+    ' ⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷     ──────────────────────────────',
+    ' ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿     OS:      ZothOS v3.4.0 (Debian 13 KDE 6)',
+    ' ⢿⣿⣿⡿⠋⠀⠀⠙⢿⣿⣿⡿     Lite:    ZothOS-Lite v1.2 (56 Models · toram)',
+    '  ⠻⣿⣷⣤⣀⣀⣤⣾⣿⠟      Studio:  Zoth Studio v2 (80 Free Tools)',
+    '    ⠉⠛⠿⠿⠿⠛⠉        Agents:  Zoth Civilization v3.0 (23 Pantheon)',
+    '                    Mesh:    ZothNet 3-Hop Sphinx Mixnet',
+    '                    Access:  100% Free · Zero Paywalls · Zero Egress'
+  ].join('\n');
+
   const CMD = {
-    help: () => 'cmds: whoami ls apk game rpg fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> zoth zothos lite civ zothnet hermes nullai links tip clear exit',
-    whoami: () => '1nc0gn30 (@1nc0gn30) · NullAI Platform · free tools for ai, security & the web.',
+    help: () => 'cmds: neofetch whoami ls apk game fx <hybrid|braille|dither|ascii|lattice> loop <auto|spin|action> theme zoth zothos lite civ zothnet hermes fieldkit links tip clear exit',
+    neofetch: () => NEOFETCH,
+    whoami: () => '1nc0gn30 (@1nc0gn30) · Neal Frazier Tech · NullAI Platform.',
     apk: () => {
       window.location.href = '/world-of-zoth.apk';
       return 'downloading world-of-zoth.apk (2.1MB)...';
@@ -1185,11 +1397,7 @@
       window.location.href = '/game.html';
       return 'launching world-of-zoth v2.0 in browser...';
     },
-    rpg: () => {
-      window.location.href = '/world-of-zoth.apk';
-      return 'World of Zoth v2.0: 3D lattice RPG (6 acts, 20 districts, 22 crew, 22 mini-games) → downloading APK...';
-    },
-    ls: () => 'world-of-zoth.apk (2.1MB)  zoth-studio-v2/ (77 tools, 74 public repos)  zothos-v3.4/ (23 daemons)  zothos-lite-v1.2/ (56 models)  zoth-civilization-v3.0/ (23 pantheon)  zothnet/  hermes-zoth/  nullai/',
+    ls: () => 'world-of-zoth.apk (2.1MB)  zoth-studio-v2/ (80 tools, 79 public repos)  zothos-v3.4/ (23 daemons)  zothos-lite-v1.2/ (56 models)  zoth-civilization-v3.0/ (23 pantheon)  zothnet/  hermes-zoth/  fieldkit/',
     fx: arg => {
       if (['hybrid', 'braille', 'dither', 'ascii', 'lattice'].includes(arg)) {
         activeFx = arg;
@@ -1208,28 +1416,58 @@
       }
       return 'usage: loop <auto|spin|action>';
     },
-    zoth: () => 'zoth studio v2: 77 free tools (55 in-browser, 22 cli/daemon, 74 public github repos) → https://zoth.nullai.tech',
-    zothos: () => 'zothos v3.4.0: sovereign ai linux workstation · debian 13 · kde plasma 6 · 23 daemons · 77 cli tools · agent bridge (:8102) · neuro-memory (:8094) → https://zothos.nullai.tech',
-    lite: () => 'zothos-lite v1.2: amnesic monotone (#F7F7F4/#000000) live usb/iso · 56 curated models · 8 providers · toram ram-only · universal x86_64 → https://zothos-lite.nullai.tech',
-    civ: () => 'zoth civilization v3.0: 23 pantheon agents · 22-key sanctuary · imperator quests · deepseek flash × hermes agent byok → https://zoth-civilization.netlify.app',
-    zothnet: () => 'zothnet: zero-cloud encrypted mesh & 3-hop sphinx mixnet → https://zothnet.nullai.tech',
-    hermes: () => 'hermes-zoth (nous hermes + deepseek flash byok): git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
-    nullai: () => 'https://nullai.tech · NullAI Platform · everything free.',
-    links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech · zoth-civilization.netlify.app',
+    theme: () => {
+      const next = currentReality === 'obsidian' ? 'vellum' : 'obsidian';
+      applyReality(next);
+      return 'reality switched to ' + next;
+    },
+    zoth: () => 'zoth studio v2: 80 free tools (56 web/webgpu + 24 cli, 79 public github repos) -> https://zoth.nullai.tech',
+    zothos: () => 'zothos v3.4.0: debian 13 · kde plasma 6 · 23 daemons · 80 cli tools · agent bridge (:8102) -> https://zothos.nullai.tech',
+    lite: () => 'zothos-lite v1.2: amnesic monotone (#F7F7F4/#000000) live usb/iso · 56 curated models · toram -> https://zothos-lite.nullai.tech',
+    civ: () => 'zoth civilization v3.0: 23 pantheon agents · 22-key sanctuary · deepseek flash x hermes -> https://zoth-civilization.netlify.app',
+    zothnet: () => 'zothnet: zero-cloud encrypted mesh & 3-hop sphinx mixnet -> https://zothnet.nullai.tech',
+    hermes: () => 'hermes-zoth: git clone https://github.com/1nc0gn30/hermes-zoth && cd hermes-zoth && ./install.sh',
+    fieldkit: () => 'fieldkit: physical ai & smart-glasses standard coined by 1nc0gn30 -> /fieldkit.html',
+    nullai: () => 'https://nullai.tech · NullAI Platform · 100% open-access.',
+    links: () => 'x.com/1nc0gn30 · github.com/1nc0gn30 · github.com/NullAITech · nullai.tech',
     tip: () => 'stripe: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X · sol: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK',
     sudo: () => 'nice try.',
-    clear: () => { out.textContent = ''; return null; },
-    exit: () => { dlg.close(); return null; }
+    clear: () => { if (out) out.textContent = ''; return null; },
+    exit: () => { if (dlg) dlg.close(); return null; }
   };
 
-  function openTerm() {
-    if (dlg.open) return;
-    out.textContent = '1nc0gn30 shell · type help\n';
-    dlg.showModal();
-    inp.focus();
+  function runCommand(raw) {
+    const v = (raw || '').trim().toLowerCase();
+    if (!v) return;
+    say('$ ' + v);
+    const parts = v.split(/\s+/);
+    const f = CMD[parts[0]];
+    const r = f ? f(parts[1]) : 'command not found: ' + v + ' (try help)';
+    if (r) say(r);
   }
+
+  function openTerm() {
+    if (!dlg || dlg.open) return;
+    out.textContent = NEOFETCH + '\n\nType "help" or click any command chip above.\n';
+    dlg.showModal();
+    if (inp) inp.focus();
+  }
+
   const termBtn = document.getElementById('termBtn');
+  const termCloseBtn = document.getElementById('termCloseBtn');
   if (termBtn) termBtn.addEventListener('click', openTerm);
+  if (termCloseBtn && dlg) termCloseBtn.addEventListener('click', () => dlg.close());
+  if (dlg) {
+    dlg.addEventListener('click', e => {
+      if (e.target === dlg) dlg.close();
+    });
+  }
+  document.querySelectorAll('[data-term-run]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      runCommand(chip.dataset.termRun);
+    });
+  });
+
   addEventListener('keydown', e => {
     if (e.key === '`' && document.activeElement !== inp) {
       e.preventDefault();
@@ -1237,25 +1475,26 @@
     }
   });
 
-  // ---- Dynamic Braille Scramble & Kinetic Glow on Nav Tabs ----
+  // ---- Dynamic Braille Scramble on Nav Tabs ----
   const BRAILLE_CHARS = '⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏⠋⠙▦⬡⠿⠾⠽⠻';
   document.querySelectorAll('.nav-tab').forEach(tab => {
     const glyphEl = tab.querySelector('.tab-glyph');
     const labelEl = tab.querySelector('.tab-label');
+    if (!labelEl) return;
     const origGlyph = glyphEl ? glyphEl.textContent : '';
-    const origText = tab.getAttribute('data-txt') || (labelEl ? labelEl.textContent : '');
+    const origText = tab.getAttribute('data-txt') || labelEl.textContent;
     let scrambleInterval = null;
 
     tab.addEventListener('mouseenter', () => {
+      if (reduced) return;
       let step = 0;
       clearInterval(scrambleInterval);
       scrambleInterval = setInterval(() => {
         step++;
         if (glyphEl) {
-          const randBraille = BRAILLE_CHARS[Math.floor(Math.random() * BRAILLE_CHARS.length)];
-          glyphEl.textContent = randBraille;
+          glyphEl.textContent = BRAILLE_CHARS[Math.floor(Math.random() * BRAILLE_CHARS.length)];
         }
-        if (labelEl && origText) {
+        if (origText) {
           labelEl.textContent = origText.split('').map((ch, idx) => {
             if (idx < step / 2) return origText[idx];
             return BRAILLE_CHARS[Math.floor(Math.random() * BRAILLE_CHARS.length)];
@@ -1264,27 +1503,25 @@
         if (step > 12) {
           clearInterval(scrambleInterval);
           if (glyphEl) glyphEl.textContent = origGlyph;
-          if (labelEl) labelEl.textContent = origText;
+          labelEl.textContent = origText;
         }
-      }, 35);
+      }, 32);
     });
 
     tab.addEventListener('mouseleave', () => {
       clearInterval(scrambleInterval);
       if (glyphEl) glyphEl.textContent = origGlyph;
-      if (labelEl) labelEl.textContent = origText;
+      labelEl.textContent = origText;
     });
   });
+
   const termForm = document.getElementById('termForm');
-  if (termForm) termForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const v = inp.value.trim().toLowerCase();
-    inp.value = '';
-    if (!v) return;
-    say('$ ' + v);
-    const parts = v.split(/\s+/);
-    const f = CMD[parts[0]];
-    const r = f ? f(parts[1]) : 'command not found: ' + v + ' (try help)';
-    if (r) say(r);
-  });
+  if (termForm) {
+    termForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const v = inp.value;
+      inp.value = '';
+      runCommand(v);
+    });
+  }
 })();

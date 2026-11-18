@@ -1,10 +1,10 @@
 # 1nc0gn30 · NullAI Platform (https://1nc0gn30.si)
 
-> Official open-source builder hub for **1nc0gn30** (`@1nc0gn30`) on the **NullAI Platform** (`https://nullai.tech`). Every browser studio, CLI utility, Linux Live ISO, P2P mesh node, autonomous Pantheon simulation, and 3D RPG is 100% free and open-access with zero paywalls, zero logins, and zero telemetry.
+> Official open-source builder hub for **1nc0gn30** (`@1nc0gn30`, Neal Frazier Tech) on the **NullAI Platform** (`https://nullai.tech`). Every browser studio, CLI utility, Linux Live ISO, P2P mesh node, autonomous Pantheon simulation, and 3D RPG is 100% free and open-access with zero paywalls, zero logins, and zero telemetry.
 
 ## Ground-Truth Ecosystem Directory (2026)
-- **Zoth Studio v2 (`https://zoth.nullai.tech`)**: **77 free tools** (**55 in-browser** + **22 CLI/daemon tools**, with **74 public GitHub repositories**), Adytum 22 Tarot architecture planner, 100% open-access, zero paywalls.
-- **ZothOS v3.4.0 (`https://zothos.nullai.tech`)**: Sovereign AI Linux Workstation on Debian 13 (Trixie) with KDE Plasma 6, **23 daemons**, preloaded 77-tool arsenal, Sovereign Agent Bridge (`:8102`), and Neuro-Memory (`:8094`).
+- **Zoth Studio v2 (`https://zoth.nullai.tech`)**: **80 free tools** (**56 in-browser/WebGPU** + **24 CLI/daemon tools**, with **79 public GitHub repositories**), Adytum 22 Tarot architecture planner, 100% open-access, zero paywalls.
+- **ZothOS v3.4.0 (`https://zothos.nullai.tech`)**: Sovereign AI Linux Workstation on Debian 13 (Trixie) with KDE Plasma 6, **23 daemons**, preloaded 80-tool arsenal, Sovereign Agent Bridge (`:8102`), and Neuro-Memory (`:8094`).
 - **ZothOS-Lite v1.2 (`https://zothos-lite.nullai.tech`)**: Amnesic Live USB/ISO OS (`#F7F7F4` / `#000000` Tails-style Monotone) supporting **56 curated models across 8 providers**, `toram` RAM-only option, universal x86_64, interactive onboarding wizard, ZothNet P2P mesh, and optional external USB/cloud persistence.
 - **Zoth Civilization v3.0 (`https://zoth-civilization.netlify.app`)**: **23 Pantheon Agents**, 22-Key Sanctuary, Imperator Quests, autonomous simulation, plus a lightweight BYOK path via **DeepSeek Flash through Hermes Agent by Nous Research**.
 - **ZothNet (`https://zothnet.nullai.tech`)**: Zero-cloud encrypted mesh network & 3-hop Sphinx mixnet with post-quantum hybrid handshakes and serverless ZML apps.

@@ -1,123 +1,133 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-reality="obsidian">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FieldKit · Terminology &amp; Standard by 1nc0gn30 · NullAI</title>
-<meta name="description" content="FieldKit: A foundational AI terminology and architecture coined and invented by 1nc0gn30 to guide developers in bridging AI into the real, physical world.">
+<title>FieldKit · Physical AI &amp; Smart Glasses Standard by 1nc0gn30 · NullAI</title>
+<meta name="description" content="FieldKit: Foundational Physical AI terminology and hands-free wearable architecture coined by 1nc0gn30 (@1nc0gn30) at NullAI to bridge AI out of desktop screens into real physical environments.">
 <link rel="canonical" href="https://1nc0gn30.si/fieldkit.html">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#040301">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://1nc0gn30.si/fieldkit.html">
-<meta property="og:title" content="FieldKit · Real-World AI Architecture by 1nc0gn30">
-<meta property="og:description" content="Invented by 1nc0gn30 to help developers build AI that operates hands-free, proactively, and securely in physical environments.">
+<meta property="og:title" content="FieldKit · Physical AI &amp; Smart Glasses Standard by 1nc0gn30">
+<meta property="og:description" content="Coined by 1nc0gn30 at NullAI to guide developers in building proactive, sub-130ms hands-free AI co-pilots for smart glasses and edge hardware.">
 <meta property="og:image" content="https://1nc0gn30.si/assets/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@1nc0gn30">
 <meta name="twitter:creator" content="@1nc0gn30">
-<meta name="twitter:title" content="FieldKit · Real-World AI Architecture by 1nc0gn30">
-<meta name="twitter:description" content="Invented by 1nc0gn30 at NullAI to help developers build AI that operates hands-free, proactively, and securely in physical environments.">
+<meta name="twitter:title" content="FieldKit · Physical AI Architecture by 1nc0gn30">
+<meta name="twitter:description" content="Invented by 1nc0gn30 at NullAI to deploy proactive, hands-free multimodal intelligence into physical reality.">
 <meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
-<link rel="icon" href="assets/avatar.jpg">
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="/assets/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
 <style>
-.doc-wrap {
-  max-width: 860px;
-  margin: 40px auto 80px;
-  padding: 0 24px;
+.fk-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 56px) clamp(16px, 5vw, 48px) 80px;
 }
-.kicker-tag {
-  display: inline-block;
-  font-family: monospace;
-  font-size: 0.82rem;
-  letter-spacing: 0.12em;
-  color: #ffb800;
-  text-transform: uppercase;
-  margin-bottom: 12px;
+.fk-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  align-items: center;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border-light);
 }
-.doc-title {
-  font-size: 2.75rem;
-  font-weight: 800;
-  line-height: 1.15;
-  color: #fff;
-  margin-bottom: 16px;
+.fk-title {
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 1.02;
+  margin: 12px 0 16px;
+  color: var(--bone);
 }
-.doc-subtitle {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #a0a5b5;
-  margin-bottom: 32px;
+.fk-sub {
+  font-size: 1.08rem;
+  line-height: 1.68;
+  color: var(--fg);
+  margin: 0 0 22px;
+  max-width: 56ch;
 }
-.badge-row {
+.fk-badges {
   display: flex;
   flex-wrap: wrap;
+  gap: 8px;
+}
+.fk-hud-box {
+  border: 1px solid rgba(245, 184, 46, 0.36);
+  border-radius: 10px;
+  background: #050401;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.fk-hud-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(245, 184, 46, 0.18);
+  font: 700 0.68rem/1.2 var(--mono);
+  color: #f5b82e;
+}
+#fkBrailleHud {
+  margin: 0;
+  padding: 14px;
+  font: 11px/12px var(--mono);
+  color: #f8f3e6;
+  overflow: hidden;
+  white-space: pre;
+  text-align: center;
+  min-height: 210px;
+}
+.fk-hud-foot {
+  padding: 9px 14px;
+  border-top: 1px solid rgba(245, 184, 46, 0.18);
+  font: 600 0.72rem/1.3 var(--mono);
+  color: #6af2ff;
+}
+.fk-sec {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.fk-sec:last-of-type {
+  border-bottom: 0;
+}
+.fk-pillars {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 24px;
+}
+.fk-matrix {
+  display: grid;
   gap: 12px;
-  margin-bottom: 40px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 184, 0, 0.2);
+  margin-top: 22px;
 }
-.badge-chip {
-  font-family: monospace;
-  font-size: 0.8rem;
-  padding: 6px 12px;
-  background: rgba(255, 184, 0, 0.08);
-  border: 1px solid rgba(255, 184, 0, 0.3);
-  color: #fceea7;
-  border-radius: 4px;
-}
-.doc-card {
-  background: rgba(15, 18, 28, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.fk-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 1.15fr;
+  gap: 16px;
+  padding: 16px 20px;
   border-radius: 8px;
-  padding: 24px 28px;
-  margin: 24px 0;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 0.92rem;
 }
-.doc-card h3 {
-  color: #ffb800;
-  margin-top: 0;
-  font-size: 1.25rem;
-  margin-bottom: 8px;
+.fk-row strong.dim {
+  color: var(--bone);
+  font-family: var(--mono);
+  font-size: 0.8rem;
 }
-.doc-card p {
-  color: #cbd5e1;
-  line-height: 1.65;
-  margin-bottom: 12px;
+.fk-row .fk-win {
+  color: var(--g);
+  font-weight: 600;
 }
-.doc-card pre {
-  background: #080a10;
-  border: 1px solid rgba(255, 184, 0, 0.2);
-  padding: 16px;
-  border-radius: 6px;
-  color: #64d2ff;
-  font-family: monospace;
-  overflow-x: auto;
-  font-size: 0.88rem;
-}
-.doc-sec {
-  margin-top: 48px;
-}
-.doc-sec h2 {
-  font-size: 1.8rem;
-  color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-}
-.doc-sec p {
-  color: #94a3b8;
-  line-height: 1.7;
-  font-size: 1.05rem;
-  margin-bottom: 16px;
-}
-.back-link {
-  display: inline-block;
-  margin-top: 40px;
-  color: #ffb800;
-  text-decoration: none;
-  font-family: monospace;
-}
-.back-link:hover {
-  text-decoration: underline;
+@media (max-width: 860px) {
+  .fk-hero, .fk-pillars, .fk-row {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 <script type="application/ld+json">
@@ -126,13 +136,14 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FieldKit — Real-World AI Framework & Standard",
+      "headline": "FieldKit — Physical AI Framework & Smart-Glasses Standard",
       "author": {
         "@type": "Person",
-        "name": "1nc0gn30",
+        "name": "Neal Frazier",
+        "alternateName": "1nc0gn30",
         "url": "https://1nc0gn30.si/"
       },
-      "description": "FieldKit is an AI terminology and architectural paradigm invented by 1nc0gn30 to guide developers in deploying proactive, hands-free multimodal intelligence into physical reality.",
+      "description": "FieldKit is a Physical AI terminology and architectural paradigm coined by 1nc0gn30 to guide developers in deploying proactive, hands-free multimodal intelligence into physical reality.",
       "publisher": {
         "@type": "Organization",
         "name": "NullAI Platform",
@@ -166,111 +177,233 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">skip to content</a>
 <div class="crt" aria-hidden="true"></div>
+
 <header class="bar">
-  <a href="/" class="logo glitch" data-t="1nc0gn30">1nc0gn30</a>
-  <nav aria-label="sections">
-    <a href="/#build" class="nav-tab" data-txt="projects"><span class="tab-glyph">⠋</span><span class="tab-label">projects</span></a>
-    <a href="/#tools" class="nav-tab" data-txt="tools"><span class="tab-glyph">▦</span><span class="tab-label">tools</span></a>
-    <a href="/fieldkit.html" class="nav-tab active" data-txt="fieldkit"><span class="tab-glyph">⬡</span><span class="tab-label">fieldkit</span></a>
-    <a href="/#links" class="nav-tab" data-txt="links"><span class="tab-glyph">⠿</span><span class="tab-label">links</span></a>
+  <a href="/" class="logo glitch" data-t="1NC0GN30">
+    <span class="logo-dot" aria-hidden="true">⣿</span>1NC0GN30<span class="logo-ver">FIELDKIT</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    <a href="/#build" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⠋</span><span class="tab-label">projects</span></a>
+    <a href="/#synth" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⣿</span><span class="tab-label">braille</span></a>
+    <a href="/#tools" class="nav-tab"><span class="tab-glyph" aria-hidden="true">▦</span><span class="tab-label">tools</span></a>
+    <a href="/fieldkit.html" class="nav-tab active"><span class="tab-glyph" aria-hidden="true">⬡</span><span class="tab-label">fieldkit</span></a>
+    <button id="fkRealityBtn" class="nav-tab nav-icon-btn" type="button" aria-label="Toggle Obsidian and Vellum theme"><span class="tab-glyph" id="fkRealityGlyph">◐</span></button>
   </nav>
 </header>
 
-<main class="doc-wrap">
-  <span class="kicker-tag">Coined &amp; Engineered by 1nc0gn30</span>
-  <h1 class="doc-title">FieldKit</h1>
-  <p class="doc-subtitle">
-    The sovereign terminology, operational framework, and open standard for bridging artificial intelligence into physical, real-world reality.
-  </p>
-
-  <div class="badge-row">
-    <span class="badge-chip">Origin: Invented by 1nc0gn30</span>
-    <span class="badge-chip">Entity: NullAI Platform</span>
-    <span class="badge-chip">Paradigm: Physical AI (Non-Desktop)</span>
-    <span class="badge-chip">Flagship Project: Spotter</span>
-    <span class="badge-chip">License: MIT Open Access</span>
-  </div>
-
-  <section class="doc-sec">
-    <h2>1. The Definition: What is "FieldKit"?</h2>
-    <p>
-      In this era of massive, rapid AI developments, virtually all frontier models (LLMs, VLMs, code agents) remain confined to static desktop screens, chat windows, and browser tabs. They presuppose an office desk, two free hands to type, and an unmetered fiber internet connection.
-    </p>
-    <p>
-      <strong>FieldKit</strong> is a specialized term and foundational paradigm invented by <strong>1nc0gn30</strong> to give developers a clear roadmap for breaking AI out of the browser and into the physical world. 
-    </p>
-    <p>
-      FieldKit defines how smart glasses, bodycams, edge drones, and handheld sensors must be designed so AI can act as a <em>hands-free, proactive co-pilot</em> in messy physical environments—where hands are greasy or holding tools, ambient noise is loud, and the AI must anticipate the user's next step before they have to stop and ask.
-    </p>
-  </section>
-
-  <section class="doc-sec">
-    <h2>2. Why 1nc0gn30 Coined FieldKit</h2>
-    <p>
-      As frontier multimodal models advance at breakneck speed, developers often fall into <strong>"The Passive Earpiece Trap"</strong>—wrapping an API call into a mobile app and expecting users to verbally prompt the AI while trying to solder a circuit board or fix an engine.
-    </p>
-    <p>
-      1nc0gn30 established FieldKit to serve as a beacon and architectural rubric for developers navigating this shift:
-    </p>
-    
-    <div class="doc-card">
-      <h3>I. Proactive Anticipation (The Anti-Prompt)</h3>
-      <p>Standard AI waits for queries. FieldKit-compliant systems observe physical state milestones over time and speak guidance proactively when a physical step is completed.</p>
-    </div>
-
-    <div class="doc-card">
-      <h3>II. Sub-130ms Spatial Grounding</h3>
-      <p>Bypassing high-latency cloud round trips with tight edge vision bounding boxes and skeletal hand tracking that verify touch before advancing state.</p>
-    </div>
-
-    <div class="doc-card">
-      <h3>III. Wearer-Only Acoustic Isolation</h3>
-      <p>Near-field vocal gating that rejects loud workshop machinery and bystander chatter, ensuring only the verified wearer can instruct the system.</p>
-    </div>
-
-    <div class="doc-card">
-      <h3>IV. On-Device Biometric People Vault</h3>
-      <p>Hardware-enclave AES-256-GCM encryption for facial and body landmark vectors. Real-world privacy with zero centralized biometric storage.</p>
-    </div>
-  </section>
-
-  <section class="doc-sec">
-    <h2>3. FieldKit in Action: Spotter</h2>
-    <p>
-      The primary reference implementation of FieldKit is <strong>Spotter</strong>, created by 1nc0gn30 for the <strong>Meta Global AI Developer Hackathon 2026</strong>. 
-    </p>
-    <p>
-      Connecting directly to Ray-Ban Meta smart glasses via the DAT SDK, Spotter watches hands-busy mechanical and electronic tasks, detects physical state milestones via Meta Spark, and guides users hands-free with sub-127ms spatial grounding.
-    </p>
-    <div class="doc-card">
-      <pre id="fkClonePre">git clone https://github.com/NullAITech/nullai-fieldkit
-git clone https://github.com/NullAITech/fieldkit</pre>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;">
-        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/nullai-fieldkit">copy nullai-fieldkit clone</button>
-        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/fieldkit">copy fieldkit spec clone</button>
-        <a href="https://nullai.tech/fieldkit" class="sub-link" style="align-self:center;">interactive fieldkit architecture on nullai.tech →</a>
+<main id="main" class="fk-main">
+  <div class="fk-hero">
+    <div>
+      <span class="kicker-pill">⬡ COINED &amp; ENGINEERED BY 1NC0GN30 · NULLAI</span>
+      <h1 class="fk-title">FieldKit: <span class="gold-shimmer">Physical AI</span></h1>
+      <p class="fk-sub">
+        The sovereign terminology, operational framework, and open architectural specification for taking artificial intelligence out of static desktop screens and embedding it into hands-free physical reality.
+      </p>
+      <div class="fk-badges">
+        <span class="kicker-pill subtle">Origin: 1nc0gn30</span>
+        <span class="kicker-pill subtle">Flagship: Spotter (118ms)</span>
+        <span class="kicker-pill subtle">MIT Open Standard</span>
       </div>
     </div>
-  </section>
 
-  <a href="/" class="back-link">← Back to 1nc0gn30.si</a>
+    <div class="fk-hud-box" aria-label="Live Braille Smart-Glasses Spatial Grounding Visualizer">
+      <div class="fk-hud-bar">
+        <span>SPOTTER // SUB-PIXEL BRAILLE OPTIC FEED</span>
+        <span id="fkLatencyReadout">116ms LOCK</span>
+      </div>
+      <pre id="fkBrailleHud" aria-hidden="true"></pre>
+      <div class="fk-hud-foot" id="fkCueReadout">▶ ANTI-PROMPT READY: 21-JOINT HAND VECTOR LOCKED</div>
+    </div>
+  </div>
+
+  <div class="fk-sec">
+    <p class="sec-eyebrow">01 // LEXICON DEFINITION</p>
+    <h2>What is &ldquo;FieldKit&rdquo;?</h2>
+    <p class="sec-note" style="max-width:74ch;color:var(--fg);line-height:1.72;">
+      Virtually all frontier models remain confined to chat boxes and IDE tabs that presuppose a desk and two free hands on a keyboard. <strong>FieldKit</strong> is the paradigm coined by <strong>1nc0gn30</strong> defining how smart glasses, bodycams, and edge sensors act as a <em>proactive, hands-free co-pilot</em> in messy real-world workshops, field diagnostics, and hardware engineering.
+    </p>
+  </div>
+
+  <div class="fk-sec">
+    <p class="sec-eyebrow">02 // ARCHITECTURAL RUBRIC</p>
+    <h2>The 4 Pillars of FieldKit</h2>
+    <div class="fk-pillars">
+      <article class="card conic-gold">
+        <div>
+          <div class="card-head"><h3>I. Proactive Anticipation</h3><span class="badge-accent">ANTI-PROMPT</span></div>
+          <p class="n">Zero Wake-Word Interruption</p>
+          <p>Standard AI waits passively for queries. FieldKit systems observe physical state milestones continuously and speak or project guidance the moment a real-world step completes.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div>
+          <div class="card-head"><h3>II. Sub-130ms Grounding</h3><span>EDGE VISION</span></div>
+          <p class="n">21-Joint Skeletal Hand Raycasts</p>
+          <p>Replaces slow cloud round trips with tight on-device object bounding boxes and finger ray vectors that confirm physical touch before advancing state.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div>
+          <div class="card-head"><h3>III. Wearer-Only Voice Gate</h3><span>SPECTRAL ISOLATION</span></div>
+          <p class="n">Near-Field Acoustic Rejection</p>
+          <p>Rejects loud shop machinery, wind, and bystander speech so only the physical wearer can command or interrupt the co-pilot.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div>
+          <div class="card-head"><h3>IV. On-Device Biometric Vault</h3><span>AES-256-GCM</span></div>
+          <p class="n">Zero-Cloud Spatial Privacy</p>
+          <p>Hardware-backed AES-256-GCM encryption for facial and skeletal landmark vectors — zero centralized biometric storage or telemetry.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="fk-sec">
+    <p class="sec-eyebrow">03 // PARADIGM COMPARISON</p>
+    <h2>Screen Chat AI vs. FieldKit Physical AI</h2>
+    <div class="fk-matrix">
+      <div class="fk-row">
+        <strong class="dim">INTERFACE</strong>
+        <span>Screen AI: Browser tab, phone screen, or desktop IDE</span>
+        <span class="fk-win">FieldKit: Smart glasses, helmet optics &amp; edge wearables</span>
+      </div>
+      <div class="fk-row">
+        <strong class="dim">TRIGGER</strong>
+        <span>Screen AI: Reactive (waits for human prompt)</span>
+        <span class="fk-win">FieldKit: Proactive (tracks physical task milestones)</span>
+      </div>
+      <div class="fk-row">
+        <strong class="dim">POSTURE</strong>
+        <span>Screen AI: Seated with both hands occupied typing</span>
+        <span class="fk-win">FieldKit: Hands-free on tools, wiring, and diagnostics</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fk-sec">
+    <p class="sec-eyebrow">04 // REFERENCE IMPLEMENTATION</p>
+    <h2>Spotter (Ray-Ban Meta DAT SDK)</h2>
+    <p class="sec-note" style="max-width:72ch;color:var(--fg);margin-bottom:20px;">
+      Engineered by 1nc0gn30 for the <strong>Meta Global AI Developer Hackathon 2026</strong>, <strong>Spotter</strong> connects to Ray-Ban Meta smart glasses to watch mechanical and electronic tasks and guide operators hands-free with sub-127ms spatial grounding.
+    </p>
+    <div class="quickstart-bar">
+      <div class="qs-shell">
+        <code>$ git clone https://github.com/NullAITech/nullai-fieldkit</code>
+        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/nullai-fieldkit">copy clone</button>
+      </div>
+      <div class="qs-shell">
+        <code>$ git clone https://github.com/NullAITech/fieldkit</code>
+        <button type="button" class="copy-cmd" data-fk-copy="git clone https://github.com/NullAITech/fieldkit">copy spec</button>
+      </div>
+    </div>
+    <div class="cta">
+      <a class="btn" href="https://nullai.tech/fieldkit">Interactive Simulator on nullai.tech ↗</a>
+      <a class="btn ghost" href="/">← Back to 1nc0gn30.si</a>
+    </div>
+  </div>
 </main>
 
 <footer>
-  <p>engineered by 1nc0gn30 (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) · <a href="https://nullai.tech">nullai platform</a> · 100% open-access · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a> · <button type="button" class="copy-cmd" data-fk-copy="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK">◎ sol: GG2eQbVh...dXoK [copy]</button></p>
+  <div class="footer-inner">
+    <p>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) • <a href="https://nullai.tech">NullAI Platform</a></p>
+    <p>100% Open-Access · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ Buy Us a Coffee</a> · <button type="button" class="copy-cmd" data-fk-copy="GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK">◎ SOL Tip [copy]</button></p>
+  </div>
 </footer>
+
 <script>
-document.querySelectorAll('[data-fk-copy]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (!navigator.clipboard) return;
-    navigator.clipboard.writeText(btn.dataset.fkCopy).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = '✓ copied';
-      setTimeout(() => { btn.textContent = orig; }, 1500);
-    }).catch(() => {});
+(() => {
+  // Theme sync
+  const saved = localStorage.getItem('1nc0gn30-reality') || 'obsidian';
+  document.documentElement.setAttribute('data-reality', saved);
+  const btn = document.getElementById('fkRealityBtn');
+  const glyph = document.getElementById('fkRealityGlyph');
+  if (glyph) glyph.textContent = saved === 'vellum' ? '☀' : '◐';
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-reality') === 'obsidian' ? 'vellum' : 'obsidian';
+      document.documentElement.setAttribute('data-reality', next);
+      localStorage.setItem('1nc0gn30-reality', next);
+      if (glyph) glyph.textContent = next === 'vellum' ? '☀' : '◐';
+    });
+  }
+
+  // Copy buttons
+  document.querySelectorAll('[data-fk-copy]').forEach(b => {
+    b.addEventListener('click', () => {
+      navigator.clipboard?.writeText(b.dataset.fkCopy).then(() => {
+        const orig = b.textContent;
+        b.textContent = '✓ copied';
+        setTimeout(() => { b.textContent = orig; }, 1500);
+      });
+    });
   });
-});
+
+  // 60fps Sub-Pixel Braille Smart-Glasses Optic Visualizer
+  const hud = document.getElementById('fkBrailleHud');
+  const BIT = [[0x01, 0x08], [0x02, 0x10], [0x04, 0x20], [0x40, 0x80]];
+  const cols = 42, rows = 14, W = cols * 2, H = rows * 4;
+  const buf = new Uint8Array(W * H);
+
+  function line(x0, y0, x1, y1) {
+    const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0)));
+    for (let i = 0; i <= n; i++) {
+      const x = Math.round(x0 + (x1 - x0) * (i / n));
+      const y = Math.round(y0 + (y1 - y0) * (i / n));
+      if (x >= 0 && x < W && y >= 0 && y < H) buf[y * W + x] = 1;
+    }
+  }
+
+  function tick(now) {
+    if (!hud) return;
+    const t = now * 0.001;
+    buf.fill(0);
+
+    // Target bounding box (right-center)
+    const tx = Math.round(W * 0.66 + Math.sin(t * 1.4) * 5);
+    const ty = Math.round(H * 0.40 + Math.cos(t * 1.1) * 4);
+    line(tx - 12, ty - 9, tx + 12, ty - 9);
+    line(tx + 12, ty - 9, tx + 12, ty + 9);
+    line(tx + 12, ty + 9, tx - 12, ty + 9);
+    line(tx - 12, ty + 9, tx - 12, ty - 9);
+
+    // Hand palm + 5 finger rays (bottom-left)
+    const wx = Math.round(W * 0.22 + Math.sin(t * 1.8) * 3);
+    const wy = H - 5;
+    const angles = [-1.2, -0.82, -0.55, -0.32, -0.1];
+    const lens = [16, 26, 25, 22, 17];
+    angles.forEach((a, idx) => {
+      const fx = Math.round(wx + Math.cos(a) * lens[idx]);
+      const fy = Math.round(wy + Math.sin(a) * lens[idx]);
+      line(wx, wy, fx, fy);
+      if (idx === 1) {
+        // Raycast to target center
+        for (let s = 0; s <= 12; s += 2) {
+          const rx = Math.round(fx + (tx - fx) * (s / 12));
+          const ry = Math.round(fy + (ty - fy) * (s / 12));
+          if (rx >= 0 && rx < W && ry >= 0 && ry < H) buf[ry * W + rx] = 1;
+        }
+      }
+    });
+
+    let out = '';
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        let b = 0;
+        for (let dy = 0; dy < 4; dy++)
+          for (let dx = 0; dx < 2; dx++)
+            if (buf[(r * 4 + dy) * W + c * 2 + dx]) b |= BIT[dy][dx];
+        out += String.fromCharCode(0x2800 + b);
+      }
+      if (r < rows - 1) out += '\n';
+    }
+    hud.textContent = out;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
 </script>
 </body>
 </html>

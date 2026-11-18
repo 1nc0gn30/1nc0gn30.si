@@ -1,21 +1,85 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>credits · 1nc0gn30</title><link rel="stylesheet" href="style.css"></head><body>
+<!doctype html>
+<html lang="en" data-reality="obsidian">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Colophon &amp; Credits · 1nc0gn30 · NullAI</title>
+<meta name="description" content="Engineering colophon, algorithmic references, and typography credits for 1nc0gn30.si on the NullAI Platform.">
+<link rel="canonical" href="https://1nc0gn30.si/credits.html">
+<link rel="icon" href="/assets/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
 <div class="crt" aria-hidden="true"></div>
+
 <header class="bar">
-  <a href="/" class="logo glitch" data-t="1nc0gn30">1nc0gn30</a>
-  <nav aria-label="sections">
-    <a href="/#build" class="nav-tab" data-txt="projects"><span class="tab-glyph">⠋</span><span class="tab-label">projects</span></a>
-    <a href="/#tools" class="nav-tab" data-txt="tools"><span class="tab-glyph">▦</span><span class="tab-label">tools</span></a>
-    <a href="/fieldkit.html" class="nav-tab" data-txt="fieldkit"><span class="tab-glyph">⬡</span><span class="tab-label">fieldkit</span></a>
-    <a href="/#links" class="nav-tab" data-txt="links"><span class="tab-glyph">⠿</span><span class="tab-label">links</span></a>
+  <a href="/" class="logo glitch" data-t="1NC0GN30">
+    <span class="logo-dot" aria-hidden="true">⣿</span>1NC0GN30<span class="logo-ver">COLOPHON</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    <a href="/#build" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⠋</span><span class="tab-label">projects</span></a>
+    <a href="/#synth" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⣿</span><span class="tab-label">braille</span></a>
+    <a href="/#tools" class="nav-tab"><span class="tab-glyph" aria-hidden="true">▦</span><span class="tab-label">tools</span></a>
+    <a href="/fieldkit.html" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⬡</span><span class="tab-label">fieldkit</span></a>
   </nav>
 </header>
-<main id="main"><section>
-<h1 style="font-size:2rem">credits</h1>
-<ul>
-<li>field guide: <a href="https://webdev.teknium.io">webdev.teknium.io</a> (uncommon web) for technique references. no code or assets copied.</li>
-<li>braille 2×4 dot packing follows the approach of <a href="https://github.com/asciimoo/drawille">drawille</a> (MIT) and drawille-canvas (MIT). reimplemented here.</li>
-<li>ordered dithering: classic 4×4 bayer matrix (public domain algorithm).</li>
-<li>crt scanlines, datamosh hover and the shell: hand-written css/js.</li>
-<li>character art: original 1nc0gn30 character board.</li>
-<li>fonts: Syne, Space Grotesk &amp; JetBrains Mono with instant system monospace fallbacks. zero trackers, zero telemetry.</li>
-</ul><p><a href="/">← back to 1nc0gn30.si</a></p></section></main><footer><p>engineered by 1nc0gn30 (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) · <a href="https://nullai.tech">nullai platform</a> · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ buy us a coffee</a></p></footer></body></html>
+
+<main id="main">
+  <section style="max-width:960px;">
+    <p class="sec-eyebrow">00 // ENGINEERING COLOPHON &amp; ALGORITHMS</p>
+    <h1 class="hero-title" style="font-size:clamp(2.2rem,4vw,3.4rem);">Credits &amp; <span class="gold-shimmer">Craft</span></h1>
+    <p class="lede">1nc0gn30.si runs on zero runtime dependencies, zero tracking scripts, and deterministic client-side shaders.</p>
+
+    <div class="cards-bento" style="margin-top:28px;">
+      <article class="card card-span-6">
+        <div>
+          <div class="card-head"><h3>Sub-Pixel Braille Engine</h3><span>U+2800 · 2×4</span></div>
+          <p class="n">8× Character Cell Density</p>
+          <p>Unicode Braille bitmask packing follows the classic 2×4 sub-pixel geometry pioneered by <a href="https://github.com/asciimoo/drawille">drawille</a> (MIT), written from scratch in vanilla JavaScript for both the 360° volumetric rig and the live in-browser Sigil Synth.</p>
+        </div>
+      </article>
+      <article class="card card-span-6">
+        <div>
+          <div class="card-head"><h3>Ordered Bayer Dither</h3><span>4×4 MATRIX</span></div>
+          <p class="n">Deterministic 4-Tone Palette</p>
+          <p>Continuous luminance is quantized through a classic 4×4 Bayer threshold matrix with Sobel horizontal/vertical edge extraction for specular gold rim highlights.</p>
+        </div>
+      </article>
+      <article class="card card-span-6">
+        <div>
+          <div class="card-head"><h3>Uncommon Web Inspiration</h3><span>FIELD GUIDE</span></div>
+          <p class="n">Zero Cookie-Cutter Templates</p>
+          <p>Technique inspiration from <a href="https://webdev.teknium.io">webdev.teknium.io</a> (Uncommon Web). Every line of CSS, Canvas 2D, and WebAudio code on this domain is original and hand-authored.</p>
+        </div>
+      </article>
+      <article class="card card-span-6">
+        <div>
+          <div class="card-head"><h3>Typography &amp; Privacy</h3><span>ZERO EGRESS</span></div>
+          <p class="n">Syne · Space Grotesk · JetBrains Mono</p>
+          <p>Set in Syne (800 Display), Space Grotesk (Body), and JetBrains Mono (Telemetry), with Obsidian Gold and Alabaster Vellum themes. Zero cookies, zero analytics.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="cta" style="margin-top:32px;">
+      <a class="btn" href="/">← Back to 1nc0gn30.si</a>
+      <a class="btn ghost" href="https://nullai.tech">Visit nullai.tech ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) • <a href="https://nullai.tech">NullAI Platform</a></p>
+    <p>100% Open-Access · <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer">☕ Buy Us a Coffee</a></p>
+  </div>
+</footer>
+<script>
+document.documentElement.setAttribute('data-reality', localStorage.getItem('1nc0gn30-reality') || 'obsidian');
+</script>
+</body>
+</html>
