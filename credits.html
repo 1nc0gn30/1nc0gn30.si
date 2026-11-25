@@ -4,8 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Colophon &amp; Credits · 1nc0gn30 · NullAI</title>
-<meta name="description" content="Engineering colophon, algorithmic references, and typography credits for 1nc0gn30.si on the NullAI Platform.">
+<meta name="description" content="Engineering colophon, Unicode U+2800 Braille & Ordered Bayer 4x4/8x8 algorithmic references, and typography credits for 1nc0gn30.si on the NullAI Platform.">
 <link rel="canonical" href="https://1nc0gn30.si/credits.html">
+<meta name="theme-color" content="#040301">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://1nc0gn30.si/credits.html">
+<meta property="og:title" content="Colophon &amp; Credits · 1nc0gn30 · NullAI">
+<meta property="og:description" content="Engineering colophon, Unicode U+2800 Braille &amp; Ordered Bayer 4x4/8x8 algorithmic references, and typography credits for 1nc0gn30.si.">
+<meta property="og:image" content="https://1nc0gn30.si/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@1nc0gn30">
+<meta name="twitter:creator" content="@1nc0gn30">
+<meta name="twitter:image" content="https://1nc0gn30.si/assets/og.jpg">
 <link rel="icon" href="/assets/avatar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +35,7 @@
     <a href="/#synth" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⣿</span><span class="tab-label">braille</span></a>
     <a href="/#tools" class="nav-tab"><span class="tab-glyph" aria-hidden="true">▦</span><span class="tab-label">tools</span></a>
     <a href="/fieldkit.html" class="nav-tab"><span class="tab-glyph" aria-hidden="true">⬡</span><span class="tab-label">fieldkit</span></a>
+    <button id="crRealityBtn" class="nav-tab nav-icon-btn" type="button" aria-label="Toggle Obsidian and Vellum theme"><span class="tab-glyph" id="crRealityGlyph" aria-hidden="true">◐</span></button>
   </nav>
 </header>
 
@@ -44,9 +55,9 @@
       </article>
       <article class="card card-span-6">
         <div>
-          <div class="card-head"><h3>Ordered Bayer Dither</h3><span>4×4 MATRIX</span></div>
-          <p class="n">Deterministic 4-Tone Palette</p>
-          <p>Continuous luminance is quantized through a classic 4×4 Bayer threshold matrix with Sobel horizontal/vertical edge extraction for specular gold rim highlights.</p>
+          <div class="card-head"><h3>Ordered Bayer Dither</h3><span>4×4 &amp; 8×8 MATRICES</span></div>
+          <p class="n">Recursive Threshold Quantization</p>
+          <p>Continuous Rec. 709 luminance is quantized through recursive 4×4 and 8×8 Bayer threshold matrices in <code>dither-engine.js</code> alongside Sobel gradient extraction for specular gold rim highlights and Edge ASCII.</p>
         </div>
       </article>
       <article class="card card-span-6">
@@ -79,7 +90,21 @@
   </div>
 </footer>
 <script>
-document.documentElement.setAttribute('data-reality', localStorage.getItem('1nc0gn30-reality') || 'obsidian');
+(() => {
+  const saved = localStorage.getItem('1nc0gn30-reality') || 'obsidian';
+  document.documentElement.setAttribute('data-reality', saved);
+  const btn = document.getElementById('crRealityBtn');
+  const glyph = document.getElementById('crRealityGlyph');
+  if (glyph) glyph.textContent = saved === 'vellum' ? '☀' : '◐';
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-reality') === 'obsidian' ? 'vellum' : 'obsidian';
+      document.documentElement.setAttribute('data-reality', next);
+      localStorage.setItem('1nc0gn30-reality', next);
+      if (glyph) glyph.textContent = next === 'vellum' ? '☀' : '◐';
+    });
+  }
+})();
 </script>
 </body>
 </html>

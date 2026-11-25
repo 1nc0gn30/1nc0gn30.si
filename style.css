@@ -420,7 +420,7 @@ html[data-reality='vellum'] .btn:not(.ghost):not(.ghost-subtle):not(.ghost-gold)
   margin: 0 auto;
   width: 100%;
   max-width: 500px;
-  aspect-ratio: 920 / 820;
+  aspect-ratio: 920 / 860;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -875,55 +875,134 @@ html[data-reality='vellum'] .apk-download-btn { color: #ffffff; }
   color: var(--fg-muted);
 }
 
-/* ================= LIVE IN-BROWSER BRAILLE & BAYER SYNTH ================= */
+/* ================= LIVE IN-BROWSER BRAILLE & BAYER LAB ================= */
 .synth-presets { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .synth-workbench {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   gap: 20px;
   align-items: stretch;
 }
 .synth-controls {
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 22px;
+  padding: 20px;
   background: var(--bg-card);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 16px;
+  min-width: 0;
 }
-.synth-field label {
+.synth-field-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.synth-field label,
+.synth-group-label {
   display: block;
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--g);
-  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
+.synth-group-label {
+  margin-bottom: 7px;
+}
+.synth-source-badge {
+  font: 600 0.66rem/1.2 var(--mono);
+  color: var(--fg-muted);
+  border: 1px solid var(--border-light);
+  background: var(--bg-elev);
+  padding: 2px 7px;
+  border-radius: 4px;
+  max-width: 54%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.synth-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
 #synthInput {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: 44px;
   background: var(--bg);
   border: 1px solid var(--border-light);
   border-radius: 6px;
   padding: 10px 14px;
   color: var(--bone);
-  font: 700 1rem/1.3 var(--mono);
+  font: 700 0.96rem/1.3 var(--mono);
+}
+.synth-upload-btn {
+  min-height: 44px;
+  padding: 0 13px;
+  border-color: var(--border-light);
+  color: var(--g);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.synth-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 .synth-mode-row {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
+.synth-sliders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elev);
+}
+.synth-slider-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.synth-slider-item label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+  font: 600 0.68rem/1.2 var(--mono);
+  color: var(--fg-muted);
+}
+.synth-slider-item label strong {
+  color: var(--g);
+}
+.synth-slider-item input[type='range'] {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--g);
+  cursor: pointer;
+}
 .synth-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+}
+.synth-actions .btn.ghost-gold {
+  padding: 10px 13px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
 }
 .synth-output-wrap {
   border: 1px solid rgba(245, 184, 46, 0.34);
@@ -932,30 +1011,38 @@ html[data-reality='vellum'] .apk-download-btn { color: #ffffff; }
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+.synth-output-wrap.drag-active {
+  border-color: #6af2ff;
+  box-shadow: 0 0 0 2px rgba(106, 242, 255, 0.28);
 }
 .synth-output-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
   padding: 9px 14px;
   border-bottom: 1px solid rgba(245, 184, 46, 0.18);
-  font: 0.68rem/1.2 var(--mono);
+  font: 0.66rem/1.25 var(--mono);
   color: #f5b82e;
 }
 .synth-output {
   margin: 0;
-  padding: 18px;
+  padding: 16px;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font: 12px/13px var(--mono);
+  font: 11px/12px var(--mono);
   color: #f8f3e6;
   text-shadow: 0 0 10px rgba(245, 184, 46, 0.35);
-  overflow-x: auto;
+  overflow: auto;
   white-space: pre;
-  min-height: 170px;
+  min-height: 230px;
+  max-width: 100%;
 }
 
 /* ================= SEARCHABLE 40-TOOL GRID ================= */
@@ -1327,7 +1414,9 @@ dialog::backdrop {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-right: 2px;
+    padding-right: 14px;
+    -webkit-mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 88%, transparent 100%);
   }
   nav::-webkit-scrollbar {
     display: none;
@@ -1346,6 +1435,9 @@ dialog::backdrop {
   }
   .stage-hint {
     display: none;
+  }
+  .synth-sliders {
+    grid-template-columns: 1fr;
   }
 }
 

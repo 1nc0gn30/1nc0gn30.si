@@ -26,6 +26,16 @@
   status = 200
 
 [[redirects]]
+  from = "/fieldkit"
+  to = "/fieldkit.html"
+  status = 200
+
+[[redirects]]
+  from = "/credits"
+  to = "/credits.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

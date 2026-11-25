@@ -59,9 +59,37 @@
     requestAnimationFrame(step);
   });
 
-  const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + 0.5) / 16);
-  const BIT = [[0x01, 0x08], [0x02, 0x10], [0x04, 0x20], [0x40, 0x80]];
+  const Engine = window.BrailleBayerEngine || null;
+  const BAYER = Engine ? Engine.BAYER_4X4 : [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + 0.5) / 16);
+  const BIT = Engine ? Engine.BRAILLE_BITS : [[0x01, 0x08], [0x02, 0x10], [0x04, 0x20], [0x40, 0x80]];
   const ASCII_CHARS = ' .:-=+*#%@⣿';
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    }
+    return fallbackCopy(text);
+  }
+
+  function fallbackCopy(text) {
+    return new Promise((resolve, reject) => {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        if (ok) resolve();
+        else reject(new Error('copy failed'));
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
   const mouse = { x: 0.5, y: 0.5, vx: 0, vy: 0 };
   addEventListener('pointermove', e => {
@@ -160,6 +188,20 @@
   const CELL_W = 6, CELL_H = 9;
   const GCOLS = Math.floor(CW / CELL_W);
   const GROWS = Math.floor(CH / CELL_H);
+
+  let heroDpr = 1;
+  function setupHeroCanvasDpr() {
+    if (!canvas || !ctx) return;
+    heroDpr = Math.min(window.devicePixelRatio || 1, 2);
+    const targetW = Math.round(CW * heroDpr);
+    const targetH = Math.round(CH * heroDpr);
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width = targetW;
+      canvas.height = targetH;
+    }
+    ctx.setTransform(heroDpr, 0, 0, heroDpr, 0, 0);
+  }
+  setupHeroCanvasDpr();
 
   const POSE_NAMES = ['hero', 'idle', 'front', 'three-quarter', 'side', 'back', 'walk', 'type', 'dissolve'];
 
@@ -378,7 +420,10 @@
 
   POSE_NAMES.forEach(name => {
     const im = new Image();
-    im.onload = () => poseBank.set(name, buildPoseEntry(name, im));
+    im.onload = () => {
+      poseBank.set(name, buildPoseEntry(name, im));
+      if (reduced) updateStage(performance.now());
+    };
     im.src = `/assets/${name}.jpg`;
   });
 
@@ -779,6 +824,7 @@
 
   function updateStage(t) {
     if (!ctx) return;
+    ctx.setTransform(heroDpr, 0, 0, heroDpr, 0, 0);
     ctx.clearRect(0, 0, CW, CH);
 
     const seq = SEQUENCES[activeSeq] || SEQUENCES.auto;
@@ -867,6 +913,7 @@
       btn.classList.add('active');
       activeFx = btn.dataset.fx;
       seqSwitchTime = performance.now();
+      if (reduced) updateStage(seqSwitchTime);
     });
   });
 
@@ -879,6 +926,7 @@
       manualPrevStep = null;
       seqIndex = 0;
       seqSwitchTime = performance.now();
+      if (reduced) updateStage(seqSwitchTime);
     });
   });
 
@@ -898,6 +946,7 @@
       };
       seqSwitchTime = performance.now();
       syncPoseChipHighlight(manualCurStep);
+      if (reduced) updateStage(seqSwitchTime);
     });
   });
 
@@ -941,176 +990,369 @@
     });
   });
 
-  // ---- 5. Genuine In-Browser U+2800 Braille & Bayer 4x4 Sigil Synth ----
+  // ---- 5. Genuine In-Browser U+2800 Braille & Ordered Bayer 4x4/8x8 Character Lab ----
   const synthInput = document.getElementById('synthInput');
+  const synthFileInput = document.getElementById('synthFileInput');
+  const synthUploadBtn = document.getElementById('synthUploadBtn');
   const synthOutput = document.getElementById('synthOutput');
+  const synthOutputWrap = document.getElementById('synthOutputWrap');
   const synthStats = document.getElementById('synthStats');
+  const synthSourceBadge = document.getElementById('synthSourceBadge');
   const synthWaveToggle = document.getElementById('synthWaveToggle');
-  let synthMode = 'braille'; // 'braille' | 'bayer' | 'ascii'
+  const synthInvertToggle = document.getElementById('synthInvertToggle');
+  const synthColsInput = document.getElementById('synthCols');
+  const synthColsVal = document.getElementById('synthColsVal');
+  const synthThresholdInput = document.getElementById('synthThreshold');
+  const synthThresholdVal = document.getElementById('synthThresholdVal');
+  const synthContrastInput = document.getElementById('synthContrast');
+  const synthContrastVal = document.getElementById('synthContrastVal');
+
+  let synthSource = 'text'; // 'text' | 'sentinel' | 'torus' | 'rings' | 'cymatic' | 'upload'
+  let synthMode = 'braille'; // 'braille' | 'bayer4' | 'bayer8' | 'ascii'
+  let synthMatrix = 'bayer4'; // 'bayer4' | 'bayer8' | 'threshold'
   let synthWave = true;
+  let synthInvert = false;
+  let synthCols = synthColsInput ? Number(synthColsInput.value) || 58 : 58;
+  let synthThreshold = synthThresholdInput ? Number(synthThresholdInput.value) || 0.5 : 0.5;
+  let synthContrast = synthContrastInput ? Number(synthContrastInput.value) || 1.15 : 1.15;
+  let uploadedImage = null;
+  let uploadedImageName = '';
+  let sentinelImage = null;
+
+  const sentinelPreload = new Image();
+  sentinelPreload.onload = () => {
+    sentinelImage = sentinelPreload;
+    if (synthSource === 'sentinel') renderSynth();
+  };
+  sentinelPreload.src = '/assets/hero.jpg';
 
   const synthCanvas = document.createElement('canvas');
   const synthCtx = synthCanvas.getContext('2d', { willReadFrequently: true });
 
-  function renderSynth() {
-    if (!synthInput || !synthOutput || !synthCtx) return;
-    const text = (synthInput.value || '1NC0GN30').toUpperCase().slice(0, 18);
-    const cols = Math.min(76, Math.max(36, text.length * 7 + 8));
-    const rows = 11;
-    const pw = cols * 2;
-    const ph = rows * 4;
+  function triggerDownload(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 
+  function updateSynthBadges() {
+    if (synthColsVal) synthColsVal.textContent = String(synthCols);
+    if (synthThresholdVal) synthThresholdVal.textContent = synthThreshold.toFixed(2);
+    if (synthContrastVal) synthContrastVal.textContent = synthContrast.toFixed(2);
+    if (synthSourceBadge) {
+      if (synthSource === 'upload' && uploadedImageName) {
+        synthSourceBadge.textContent = 'IMG: ' + uploadedImageName;
+      } else if (synthSource === 'text') {
+        synthSourceBadge.textContent = 'SOURCE: TEXT';
+      } else {
+        synthSourceBadge.textContent = 'PRESET: ' + synthSource.toUpperCase();
+      }
+    }
+  }
+
+  function drawImageAspectFit(img, pw, ph) {
     synthCanvas.width = pw;
     synthCanvas.height = ph;
     synthCtx.fillStyle = '#000';
     synthCtx.fillRect(0, 0, pw, ph);
+    const scale = Math.min(pw / Math.max(1, img.naturalWidth), ph / Math.max(1, img.naturalHeight));
+    const dw = img.naturalWidth * scale;
+    const dh = img.naturalHeight * scale;
+    synthCtx.drawImage(img, (pw - dw) * 0.5, (ph - dh) * 0.5, dw, dh);
+    return synthCtx.getImageData(0, 0, pw, ph).data;
+  }
 
-    // Draw crisp geometric text + corner frame onto pixel buffer
-    synthCtx.fillStyle = '#fff';
-    synthCtx.textAlign = 'center';
-    synthCtx.textBaseline = 'middle';
-    const fontSize = Math.max(14, Math.min(28, Math.floor((pw * 0.88) / Math.max(4, text.length * 0.68))));
-    synthCtx.font = `900 ${fontSize}px "Syne", "Space Grotesk", sans-serif`;
-    synthCtx.fillText(text, pw / 2, ph / 2 + 1);
+  function renderSynth() {
+    if (!synthInput || !synthOutput || !synthCtx || !Engine) return;
+    const t0 = performance.now();
+    updateSynthBadges();
 
-    const img = synthCtx.getImageData(0, 0, pw, ph).data;
-    const lines = [];
+    const cols = Math.max(28, Math.min(92, synthCols));
+    let rows = 14;
+    let pw = cols * 2;
+    let ph = rows * 4;
+    let rgba;
 
-    if (synthMode === 'braille') {
-      for (let r = 0; r < rows; r++) {
-        let rowStr = '';
-        for (let c = 0; c < cols; c++) {
-          let mask = 0;
-          for (let dy = 0; dy < 4; dy++) {
-            for (let dx = 0; dx < 2; dx++) {
-              const x = c * 2 + dx;
-              const y = r * 4 + dy;
-              const lum = img[(y * pw + x) * 4] / 255;
-              const wave = synthWave
-                ? 0.22 * Math.exp(-Math.abs((y / ph) * 2 - 1) * 2.2) * (0.5 + 0.5 * Math.sin(x * 0.28 + y * 0.35))
-                : 0;
-              const bayer = BAYER[(y & 3) * 4 + (x & 3)];
-              if (lum * 0.95 + wave > bayer * 0.62) {
-                mask |= BIT[dy][dx];
-              }
-            }
-          }
-          rowStr += String.fromCharCode(0x2800 + mask);
-        }
-        lines.push(rowStr);
-      }
-    } else if (synthMode === 'bayer') {
-      const BLOCKS = [' ', '░', '▒', '▓', '█'];
-      for (let r = 0; r < rows; r++) {
-        let rowStr = '';
-        for (let c = 0; c < cols; c++) {
-          let sum = 0;
-          for (let dy = 0; dy < 4; dy++) {
-            for (let dx = 0; dx < 2; dx++) {
-              const x = c * 2 + dx;
-              const y = r * 4 + dy;
-              sum += img[(y * pw + x) * 4] / 255;
-            }
-          }
-          let avg = sum / 8;
-          if (synthWave) {
-            avg += 0.16 * (0.5 + 0.5 * Math.sin(c * 0.45 + r * 0.8));
-          }
-          const bayer = BAYER[(r & 3) * 4 + (c & 3)] * 0.22;
-          const idx = Math.min(4, Math.max(0, Math.floor((avg + bayer) * 4.2)));
-          rowStr += BLOCKS[idx];
-        }
-        lines.push(rowStr);
-      }
+    if (synthSource === 'text') {
+      const text = (synthInput.value || '1NC0GN30').toUpperCase().slice(0, 24);
+      rows = Math.max(11, Math.min(18, Math.round(cols * 0.24)));
+      pw = cols * 2;
+      ph = rows * 4;
+      synthCanvas.width = pw;
+      synthCanvas.height = ph;
+      synthCtx.fillStyle = '#000';
+      synthCtx.fillRect(0, 0, pw, ph);
+      synthCtx.fillStyle = '#fff';
+      synthCtx.textAlign = 'center';
+      synthCtx.textBaseline = 'middle';
+      const fontSize = Math.max(16, Math.min(Math.floor(ph * 0.80), Math.floor((pw * 0.94) / Math.max(3.5, text.length * 0.64))));
+      synthCtx.font = `900 ${fontSize}px "Syne", "Space Grotesk", sans-serif`;
+      synthCtx.fillText(text, pw / 2, ph / 2 + 1);
+      rgba = synthCtx.getImageData(0, 0, pw, ph).data;
+    } else if (synthSource === 'upload' && uploadedImage) {
+      const aspect = uploadedImage.naturalHeight / Math.max(1, uploadedImage.naturalWidth);
+      rows = Math.max(10, Math.min(34, Math.round(cols * aspect * 0.52)));
+      pw = cols * 2;
+      ph = rows * 4;
+      rgba = drawImageAspectFit(uploadedImage, pw, ph);
+    } else if (synthSource === 'sentinel' && sentinelImage) {
+      const aspect = sentinelImage.naturalHeight / Math.max(1, sentinelImage.naturalWidth);
+      rows = Math.max(12, Math.min(30, Math.round(cols * aspect * 0.52)));
+      pw = cols * 2;
+      ph = rows * 4;
+      rgba = drawImageAspectFit(sentinelImage, pw, ph);
     } else {
-      const RAMP = ' .:-=+*#%@';
-      for (let r = 0; r < rows; r++) {
-        let rowStr = '';
-        for (let c = 0; c < cols; c++) {
-          const x = c * 2 + 1;
-          const y = r * 4 + 2;
-          const lum = img[(y * pw + x) * 4] / 255;
-          const lumL = x > 1 ? img[(y * pw + (x - 2)) * 4] / 255 : lum;
-          const lumU = y > 2 ? img[((y - 2) * pw + x) * 4] / 255 : lum;
-          const edge = Math.hypot(lum - lumL, lum - lumU);
-          if (edge > 0.45) {
-            rowStr += Math.abs(lum - lumL) > Math.abs(lum - lumU) ? '|' : '=';
-          } else {
-            const v = lum + (synthWave ? 0.14 * (0.5 + 0.5 * Math.cos(c * 0.4 - r * 0.7)) : 0);
-            rowStr += RAMP[Math.min(RAMP.length - 1, Math.floor(v * (RAMP.length - 1)))];
-          }
-        }
-        lines.push(rowStr);
-      }
+      rows = Math.max(12, Math.min(28, Math.round(cols * 0.42)));
+      pw = cols * 2;
+      ph = rows * 4;
+      const presetKey = synthSource === 'rings' || synthSource === 'cymatic' ? synthSource : 'torus';
+      rgba = Engine.generateProceduralRGBA(presetKey, pw, ph);
     }
 
-    synthOutput.textContent = lines.join('\n');
+    const opts = {
+      matrix: synthMode === 'bayer8' ? 'bayer8' : synthMode === 'bayer4' ? 'bayer4' : synthMatrix,
+      threshold: synthThreshold,
+      contrast: synthContrast,
+      invert: synthInvert,
+      waveField: synthWave,
+      blankChar: 'braille'
+    };
+
+    let result;
+    if (synthMode === 'braille') {
+      result = Engine.rasterizeToBraille(rgba, pw, ph, opts);
+    } else if (synthMode === 'bayer4' || synthMode === 'bayer8') {
+      result = Engine.rasterizeToBayerBlocks(rgba, pw, ph, opts);
+    } else {
+      result = Engine.rasterizeToEdgeAscii(rgba, pw, ph, opts);
+    }
+
+    synthOutput.textContent = result.text;
+    const fitPx = cols > 76 ? 8.5 : cols > 64 ? 10.5 : 12.5;
+    synthOutput.style.fontSize = `${fitPx}px`;
+    synthOutput.style.lineHeight = `${Math.round(fitPx * 1.14)}px`;
+
+    const elapsedMs = (performance.now() - t0).toFixed(1);
     if (synthStats) {
-      synthStats.textContent = `CELLS: ${cols}×${rows} (${pw}×${ph} SUB-PX) · MODE: ${synthMode.toUpperCase()}`;
+      const matLabel = synthMode === 'ascii' ? 'SOBEL' : opts.matrix.toUpperCase();
+      synthStats.textContent = `CELLS: ${result.cols}×${result.rows} (${result.pixelWidth}×${result.pixelHeight} SUB-PX) · ${synthMode.toUpperCase()} · ${matLabel} · ${elapsedMs}ms`;
     }
   }
 
+  function loadLocalImageFile(file) {
+    if (!file || !file.type || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        uploadedImage = img;
+        uploadedImageName = file.name.slice(0, 22);
+        synthSource = 'upload';
+        synthWave = false;
+        if (synthWaveToggle) {
+          synthWaveToggle.setAttribute('aria-pressed', 'false');
+          synthWaveToggle.textContent = '≈ Wave: OFF';
+          synthWaveToggle.classList.remove('active');
+        }
+        document.querySelectorAll('[data-synth-preset],[data-synth-source]').forEach(b => b.classList.remove('active'));
+        renderSynth();
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
   if (synthInput) {
-    synthInput.addEventListener('input', renderSynth);
+    synthInput.addEventListener('input', () => {
+      synthSource = 'text';
+      document.querySelectorAll('[data-synth-source]').forEach(b => b.classList.remove('active'));
+      renderSynth();
+    });
+
     document.querySelectorAll('[data-synth-preset]').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('[data-synth-preset]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('[data-synth-preset],[data-synth-source]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        synthSource = 'text';
         synthInput.value = btn.dataset.synthPreset;
         renderSynth();
       });
     });
+
+    document.querySelectorAll('[data-synth-source]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-synth-preset],[data-synth-source]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        synthSource = btn.dataset.synthSource;
+        synthWave = false;
+        if (synthWaveToggle) {
+          synthWaveToggle.setAttribute('aria-pressed', 'false');
+          synthWaveToggle.textContent = '≈ Wave: OFF';
+          synthWaveToggle.classList.remove('active');
+        }
+        renderSynth();
+      });
+    });
+
+    if (synthUploadBtn && synthFileInput) {
+      synthUploadBtn.addEventListener('click', () => synthFileInput.click());
+      synthFileInput.addEventListener('change', () => {
+        if (synthFileInput.files && synthFileInput.files[0]) {
+          loadLocalImageFile(synthFileInput.files[0]);
+        }
+      });
+    }
+
+    if (synthOutputWrap) {
+      ['dragenter', 'dragover'].forEach(evName => {
+        synthOutputWrap.addEventListener(evName, e => {
+          e.preventDefault();
+          synthOutputWrap.classList.add('drag-active');
+        });
+      });
+      ['dragleave', 'drop'].forEach(evName => {
+        synthOutputWrap.addEventListener(evName, e => {
+          e.preventDefault();
+          synthOutputWrap.classList.remove('drag-active');
+        });
+      });
+      synthOutputWrap.addEventListener('drop', e => {
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) loadLocalImageFile(file);
+      });
+    }
+
     document.querySelectorAll('[data-synth-mode]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-synth-mode]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         synthMode = btn.dataset.synthMode;
+        if (synthMode === 'bayer4' || synthMode === 'bayer8') {
+          synthMatrix = synthMode;
+          document.querySelectorAll('[data-synth-matrix]').forEach(m => m.classList.toggle('active', m.dataset.synthMatrix === synthMatrix));
+        }
         renderSynth();
       });
     });
+
+    document.querySelectorAll('[data-synth-matrix]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-synth-matrix]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        synthMatrix = btn.dataset.synthMatrix;
+        renderSynth();
+      });
+    });
+
+    if (synthInvertToggle) {
+      synthInvertToggle.addEventListener('click', () => {
+        synthInvert = !synthInvert;
+        synthInvertToggle.setAttribute('aria-pressed', String(synthInvert));
+        synthInvertToggle.classList.toggle('active', synthInvert);
+        renderSynth();
+      });
+    }
+
     if (synthWaveToggle) {
       synthWaveToggle.addEventListener('click', () => {
         synthWave = !synthWave;
         synthWaveToggle.setAttribute('aria-pressed', String(synthWave));
-        synthWaveToggle.textContent = `≈ Wave Field: ${synthWave ? 'ON' : 'OFF'}`;
+        synthWaveToggle.textContent = `≈ Wave: ${synthWave ? 'ON' : 'OFF'}`;
         synthWaveToggle.classList.toggle('active', synthWave);
         renderSynth();
       });
     }
+
+    if (synthColsInput) {
+      synthColsInput.addEventListener('input', () => {
+        synthCols = Number(synthColsInput.value) || 58;
+        renderSynth();
+      });
+    }
+    if (synthThresholdInput) {
+      synthThresholdInput.addEventListener('input', () => {
+        synthThreshold = Number(synthThresholdInput.value) || 0.5;
+        renderSynth();
+      });
+    }
+    if (synthContrastInput) {
+      synthContrastInput.addEventListener('input', () => {
+        synthContrast = Number(synthContrastInput.value) || 1.15;
+        renderSynth();
+      });
+    }
+
     const copyBrailleBtn = document.getElementById('copyBrailleOutBtn');
     if (copyBrailleBtn) {
       copyBrailleBtn.addEventListener('click', () => {
-        if (!navigator.clipboard || !synthOutput) return;
-        navigator.clipboard.writeText(synthOutput.textContent).then(() => {
+        if (!synthOutput) return;
+        copyText(synthOutput.textContent).then(() => {
           const orig = copyBrailleBtn.textContent;
-          copyBrailleBtn.textContent = '✓ Copied Unicode!';
+          copyBrailleBtn.textContent = '✓ Copied!';
           setTimeout(() => { copyBrailleBtn.textContent = orig; }, 1500);
         }).catch(() => {});
       });
     }
+
+    const dlTxtBtn = document.getElementById('downloadBrailleTxtBtn');
+    if (dlTxtBtn) {
+      dlTxtBtn.addEventListener('click', () => {
+        if (!synthOutput) return;
+        const blob = new Blob([synthOutput.textContent + '\n'], { type: 'text/plain;charset=utf-8' });
+        triggerDownload(blob, `1nc0gn30-${synthMode}-${synthMatrix}.txt`);
+      });
+    }
+
     const dlSvgBtn = document.getElementById('downloadBrailleSvgBtn');
     if (dlSvgBtn) {
       dlSvgBtn.addEventListener('click', () => {
-        if (!synthOutput) return;
-        const rows = synthOutput.textContent.split('\n');
-        const charW = 8;
-        const lineH = 15;
-        const w = Math.max(240, (rows[0]?.length || 40) * charW + 32);
-        const h = rows.length * lineH + 28;
-        const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const nodes = rows.map((r, idx) =>
-          `<text x="16" y="${22 + idx * lineH}" fill="#f5b82e" font-family="'JetBrains Mono', monospace" font-size="12px" xml:space="preserve">${esc(r)}</text>`
-        ).join('\n  ');
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">\n  <rect width="100%" height="100%" rx="8" fill="#050401"/>\n  ${nodes}\n</svg>`;
-        const blob = new Blob([svg], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `1nc0gn30-sigil-${synthMode}.svg`;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (!synthOutput || !Engine) return;
+        const svg = Engine.buildSvgExport(synthOutput.textContent, {
+          bg: currentReality === 'vellum' ? '#faf8f3' : '#050401',
+          fg: currentReality === 'vellum' ? '#101828' : '#f5b82e'
+        });
+        triggerDownload(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }), `1nc0gn30-${synthMode}-${synthMatrix}.svg`);
       });
     }
+
+    const dlPngBtn = document.getElementById('downloadBraillePngBtn');
+    if (dlPngBtn) {
+      dlPngBtn.addEventListener('click', () => {
+        if (!synthOutput) return;
+        const lines = synthOutput.textContent.split('\n');
+        const maxCols = lines.reduce((m, s) => Math.max(m, s.length), 1);
+        const scale = 2;
+        const fontSize = 14;
+        const lineH = 17;
+        const pad = 24;
+        const outCanvas = document.createElement('canvas');
+        const octx = outCanvas.getContext('2d');
+        octx.font = `600 ${fontSize}px "JetBrains Mono", ui-monospace, monospace`;
+        const charW = octx.measureText('⣿').width || 8.4;
+        const logicalW = Math.max(320, Math.ceil(maxCols * charW + pad * 2));
+        const logicalH = Math.max(120, Math.ceil(lines.length * lineH + pad * 2));
+        outCanvas.width = logicalW * scale;
+        outCanvas.height = logicalH * scale;
+        octx.scale(scale, scale);
+        octx.fillStyle = currentReality === 'vellum' ? '#faf8f3' : '#050401';
+        octx.fillRect(0, 0, logicalW, logicalH);
+        octx.fillStyle = currentReality === 'vellum' ? '#101828' : '#f5b82e';
+        octx.font = `600 ${fontSize}px "JetBrains Mono", ui-monospace, monospace`;
+        octx.textBaseline = 'top';
+        lines.forEach((line, idx) => {
+          octx.fillText(line, pad, pad + idx * lineH);
+        });
+        outCanvas.toBlob(blob => {
+          if (blob) triggerDownload(blob, `1nc0gn30-${synthMode}-${synthMatrix}.png`);
+        }, 'image/png');
+      });
+    }
+
     renderSynth();
   }
 
@@ -1295,8 +1537,7 @@
 
   document.querySelectorAll('.copy-cmd[data-copy]').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!navigator.clipboard) return;
-      navigator.clipboard.writeText(btn.dataset.copy).then(() => {
+      copyText(btn.dataset.copy).then(() => {
         const orig = btn.textContent;
         btn.textContent = '✓ copied';
         setTimeout(() => { btn.textContent = orig; }, 1600);
@@ -1328,7 +1569,7 @@
     });
   }
 
-  // ---- 8. 60fps Master Loop ----
+  // ---- 8. 60fps Master Loop (Single-frame static mode under prefers-reduced-motion) ----
   let visible = true, lastLat = 0;
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
 
@@ -1340,7 +1581,9 @@
         drawLattice(t);
       }
     }
-    requestAnimationFrame(frame);
+    if (!reduced) {
+      requestAnimationFrame(frame);
+    }
   }
 
   setupLattice();
@@ -1348,19 +1591,27 @@
   addEventListener('resize', () => {
     clearTimeout(rt);
     rt = setTimeout(() => {
+      setupHeroCanvasDpr();
       setupLattice();
-      if (reduced) drawLattice(0);
+      if (reduced) {
+        drawLattice(0);
+        updateStage(performance.now());
+      }
     }, 150);
   });
-  requestAnimationFrame(frame);
+  if (reduced) {
+    drawLattice(0);
+    updateStage(performance.now());
+  } else {
+    requestAnimationFrame(frame);
+  }
 
   // ---- 9. Solana Tip Copy & Interactive Sovereign Shell ----
   const copySolBtn = document.getElementById('copySolBtn');
   if (copySolBtn) {
     copySolBtn.addEventListener('click', () => {
       const addr = copySolBtn.dataset.sol;
-      if (!navigator.clipboard) return;
-      navigator.clipboard.writeText(addr).then(() => {
+      copyText(addr).then(() => {
         const orig = copySolBtn.innerHTML;
         copySolBtn.innerHTML = '<span>✓ Copied Solana Address!</span><span class="link-arrow">OK</span>';
         setTimeout(() => { copySolBtn.innerHTML = orig; }, 1700);

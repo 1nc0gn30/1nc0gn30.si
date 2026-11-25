@@ -78,8 +78,9 @@
     {
       "@type": "WebApplication",
       "@id": "https://1nc0gn30.si/#webapp",
-      "name": "1nc0gn30 · NullAI Platform",
+      "name": "1nc0gn30 · Unicode U+2800 Braille & Ordered Bayer Dither Lab · NullAI Platform",
       "url": "https://1nc0gn30.si/",
+      "description": "Client-side Unicode U+2800 2x4 sub-pixel Braille & Ordered Bayer 4x4/8x8 dither character lab with local image upload, 60fps 360-degree volumetric sentinel rig, and direct entry to 80 free Zoth Studio v2 tools.",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web Browser, Linux, macOS, Windows",
       "creator": { "@id": "https://1nc0gn30.si/#person" },
@@ -99,6 +100,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "1nc0gn30 (@1nc0gn30) builds free, local-first software on the NullAI Platform: Zoth Studio v2 (80 free tools: 56 in-browser/WebGPU utilities and 24 CLI/daemon tools, with 79 public GitHub repositories), ZothOS v3.4.0 (Sovereign AI Linux Workstation on Debian 13 Trixie with KDE Plasma 6, 23 daemons, preloaded 80-tool arsenal, Sovereign Agent Bridge :8102, and Neuro-Memory :8094), ZothOS-Lite v1.2 (Amnesic Live USB/ISO OS in #F7F7F4 / #000000 Tails-style Monotone supporting 56 curated models across 8 providers, toram RAM-only boot, universal x86_64, ZothNet P2P mesh, and optional USB/cloud persistence), Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, Imperator Quests, and lightweight BYOK via DeepSeek Flash through Hermes Agent by Nous Research), ZothNet (zero-cloud encrypted mesh & 3-hop Sphinx mixnet), Hermes-Zoth multi-agent orchestrator, FieldKit Physical AI standard, and the World of Zoth 3D cyber-RPG."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the in-browser Unicode U+2800 Braille & Ordered Bayer Dither Lab work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The lab runs 100% client-side in your browser using HTML5 Canvas and FileReader. Drop or upload any local image, type custom banner text, or choose a procedural 3D preset, then convert it in real time using Unicode U+2800 2x4 sub-pixel Braille bitmask packing, Ordered Bayer 4x4 or 8x8 dithering, or Sobel edge ASCII with column width, threshold, contrast, and invert controls. Export directly to clipboard, .txt, vector .svg, or crisp 2x .png with zero server uploads."
           }
         },
         {
@@ -129,7 +138,7 @@
 
 <header class="bar">
   <a href="#top" class="logo glitch" data-t="1NC0GN30">
-    <span class="logo-dot" aria-hidden="true">⣿</span>1NC0GN30<span class="logo-ver">v4.0</span>
+    <span class="logo-dot" aria-hidden="true">⣿</span>1NC0GN30<span class="logo-ver">v4.1</span>
   </a>
   <nav aria-label="Primary navigation">
     <a href="#build" class="nav-tab" data-txt="projects"><span class="tab-glyph" aria-hidden="true">⠋</span><span class="tab-label">projects</span></a>
@@ -397,47 +406,84 @@
     </div>
   </section>
 
-  <!-- ================= IN-BROWSER LIVE U+2800 BRAILLE & BAYER SYNTH ================= -->
+  <!-- ================= IN-BROWSER LIVE U+2800 BRAILLE & BAYER LAB ================= -->
   <section id="synth" class="synth-sec">
     <div class="sec-header">
       <div>
-        <p class="sec-eyebrow">02 // IN-BROWSER CLIENT-SIDE MICRO-WORKSTATION</p>
-        <h2><span aria-hidden="true">⣿ </span>Live Braille &amp; Bayer Sigil Synth</h2>
-        <p class="sec-note">100% client-side sub-pixel Unicode <code>U+2800</code> (2×4 dot matrix) &amp; Ordered Bayer 4×4 rasterizer. Type any banner text or select a preset and export clean Unicode or vector SVG instantaneously.</p>
+        <p class="sec-eyebrow">02 // IN-BROWSER CLIENT-SIDE CHARACTER LAB</p>
+        <h2><span aria-hidden="true">⣿ </span>Live Braille &amp; Bayer Character Lab</h2>
+        <p class="sec-note">100% client-side Unicode <code>U+2800</code> (2×4 sub-pixel matrix) &amp; Ordered Bayer <code>4×4</code> / <code>8×8</code> rasterizer. Drop any local image, pick a procedural 3D preset, or type banner text and export clean Unicode, <code>.txt</code>, vector <code>.svg</code>, or 2× <code>.png</code> instantaneously.</p>
       </div>
-      <div class="synth-presets" role="group" aria-label="Synth presets">
+      <div class="synth-presets" role="group" aria-label="Text and procedural presets">
         <button type="button" class="chip active" data-synth-preset="1NC0GN30">1NC0GN30</button>
         <button type="button" class="chip" data-synth-preset="NULLAI">NULLAI</button>
         <button type="button" class="chip" data-synth-preset="ZOTH v2">ZOTH v2</button>
-        <button type="button" class="chip" data-synth-preset="FIELDKIT">FIELDKIT</button>
+        <button type="button" class="chip" data-synth-source="sentinel">◈ Sentinel</button>
+        <button type="button" class="chip" data-synth-source="torus">◎ 3D Torus</button>
+        <button type="button" class="chip" data-synth-source="rings">◌ Fresnel</button>
+        <button type="button" class="chip" data-synth-source="cymatic">❋ Cymatic</button>
       </div>
     </div>
 
     <div class="synth-workbench">
       <div class="synth-controls">
         <div class="synth-field">
-          <label for="synthInput">Input Text / Handle (max 18 chars)</label>
-          <input id="synthInput" type="text" maxlength="18" value="1NC0GN30" autocomplete="off" spellcheck="false">
+          <div class="synth-field-top">
+            <label for="synthInput">Banner Text or Local Image</label>
+            <span id="synthSourceBadge" class="synth-source-badge">SOURCE: TEXT</span>
+          </div>
+          <div class="synth-input-row">
+            <input id="synthInput" type="text" maxlength="24" value="1NC0GN30" autocomplete="off" spellcheck="false">
+            <input id="synthFileInput" type="file" accept="image/*" hidden>
+            <button type="button" class="chip synth-upload-btn" id="synthUploadBtn" title="Load a local image (100% in-browser, never uploaded)">↑ Image</button>
+          </div>
         </div>
 
-        <div class="synth-mode-row" role="group" aria-label="Rasterizer mode">
-          <button type="button" class="chip active" data-synth-mode="braille">⣿ U+2800 Braille</button>
-          <button type="button" class="chip" data-synth-mode="bayer">▦ Bayer 4×4</button>
-          <button type="button" class="chip" data-synth-mode="ascii"># Edge ASCII</button>
-          <button type="button" class="chip" id="synthWaveToggle" aria-pressed="true">≈ Wave Field: ON</button>
+        <div class="synth-group">
+          <span class="synth-group-label">Renderer &amp; Bayer Matrix</span>
+          <div class="synth-mode-row" role="group" aria-label="Rasterizer mode">
+            <button type="button" class="chip active" data-synth-mode="braille">⣿ U+2800 Braille</button>
+            <button type="button" class="chip" data-synth-mode="bayer4">▦ Bayer 4×4</button>
+            <button type="button" class="chip" data-synth-mode="bayer8">⊞ Bayer 8×8</button>
+            <button type="button" class="chip" data-synth-mode="ascii"># Edge ASCII</button>
+          </div>
+          <div class="synth-mode-row" role="group" aria-label="Dither matrix and modifiers">
+            <button type="button" class="chip active" data-synth-matrix="bayer4" title="Ordered 4×4 Bayer threshold matrix">4×4 Matrix</button>
+            <button type="button" class="chip" data-synth-matrix="bayer8" title="Ordered 8×8 Bayer threshold matrix">8×8 Matrix</button>
+            <button type="button" class="chip" data-synth-matrix="threshold" title="Flat luminance threshold">Flat Cut</button>
+            <button type="button" class="chip" id="synthInvertToggle" aria-pressed="false">◐ Invert</button>
+            <button type="button" class="chip active" id="synthWaveToggle" aria-pressed="true">≈ Wave: ON</button>
+          </div>
+        </div>
+
+        <div class="synth-sliders" aria-label="Rasterizer geometry and tone controls">
+          <div class="synth-slider-item">
+            <label for="synthCols"><span>Columns</span><strong id="synthColsVal">58</strong></label>
+            <input id="synthCols" type="range" min="28" max="92" step="2" value="58">
+          </div>
+          <div class="synth-slider-item">
+            <label for="synthThreshold"><span>Threshold</span><strong id="synthThresholdVal">0.50</strong></label>
+            <input id="synthThreshold" type="range" min="0.15" max="0.85" step="0.01" value="0.50">
+          </div>
+          <div class="synth-slider-item">
+            <label for="synthContrast"><span>Contrast</span><strong id="synthContrastVal">1.15</strong></label>
+            <input id="synthContrast" type="range" min="0.60" max="2.40" step="0.05" value="1.15">
+          </div>
         </div>
 
         <div class="synth-actions">
-          <button type="button" class="btn" id="copyBrailleOutBtn">Copy Unicode Art</button>
-          <button type="button" class="btn ghost-gold" id="downloadBrailleSvgBtn">Download .SVG</button>
-          <a class="sub-link" href="https://zoth.nullai.tech/tools/zoth-ascii-magic">Full Image/Video Studio →</a>
+          <button type="button" class="btn" id="copyBrailleOutBtn">Copy Unicode</button>
+          <button type="button" class="btn ghost-gold" id="downloadBrailleTxtBtn">.TXT</button>
+          <button type="button" class="btn ghost-gold" id="downloadBrailleSvgBtn">.SVG</button>
+          <button type="button" class="btn ghost-gold" id="downloadBraillePngBtn">.PNG</button>
+          <a class="sub-link" href="https://zoth.nullai.tech/tools/zoth-ascii-magic">Full Video Studio →</a>
         </div>
       </div>
 
-      <div class="synth-output-wrap">
+      <div class="synth-output-wrap" id="synthOutputWrap">
         <div class="synth-output-head">
           <span id="synthStats">CELLS: 0×0 · ENCODING: U+2800 SUB-PIXEL</span>
-          <span>ZERO SERVER · 0MS</span>
+          <span id="synthDropHint">DROP IMAGE HERE · 0 SERVER</span>
         </div>
         <pre id="synthOutput" class="synth-output" aria-live="polite"></pre>
       </div>
@@ -555,6 +601,7 @@
   <video id="reelPlayer" src="/assets/world-of-zoth-trailer.mp4" poster="/assets/motion_edit_contact_sheet.jpg" controls playsinline></video>
 </dialog>
 
+<script src="/dither-engine.js" defer></script>
 <script src="/main.js" defer></script>
 </body>
 </html>
